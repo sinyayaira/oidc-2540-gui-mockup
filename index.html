@@ -531,13 +531,21 @@
             <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
             <div class="field" style="margin:12px 0;">
               <label class="label">Допустимые bindingMessage</label>
-              <input class="control" placeholder="Текст сообщения" />
               <div class="hint">Значения, которые клиент вправе передавать в параметре</div>
+              <div class="repeat" data-kind="text" style="margin-top:8px;">
+                <div class="repeat-rows"></div>
+                <p class="hint repeat-empty">Список пуст</p>
+                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              </div>
             </div>
             <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
             <div class="field" style="margin-top:12px;">
               <label class="label">Допустимые context</label>
-              <input class="control" placeholder="Значение context" />
+              <div class="repeat" data-kind="text" style="margin-top:8px;">
+                <div class="repeat-rows"></div>
+                <p class="hint repeat-empty">Список пуст</p>
+                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              </div>
             </div>
           </article>
           <article class="card">
@@ -599,13 +607,18 @@
               </div>
             </div>
             <h2 style="margin-top:18px;">Контакты администраторов</h2>
-            <div class="list-row">
-              <input class="control" value="OM" placeholder="Имя" />
-              <input class="control" value="79856005144" placeholder="Телефон" />
-              <input class="control" value="om@ya.ru" placeholder="Почта" />
-              <button class="btn-icon" type="button">✕</button>
+            <div class="repeat" data-kind="contact">
+              <div class="repeat-rows">
+                <div class="list-row">
+                  <input class="control" value="OM" placeholder="Имя" />
+                  <input class="control" value="79856005144" placeholder="Телефон" />
+                  <input class="control" value="om@ya.ru" placeholder="Почта" />
+                  <button class="btn-icon" type="button">✕</button>
+                </div>
+              </div>
+              <p class="hint repeat-empty" hidden>Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
             </div>
-            <button class="btn btn-ghost" type="button">Добавить</button>
           </article>
         </section>
 
@@ -613,16 +626,24 @@
           <article class="card">
             <h2>Redirect URI</h2>
             <p class="hint">Адреса, на которые клиента можно вернуть после страницы авторизации</p>
-            <div id="redirects" style="margin-top:10px;">
-              <div class="list-row"><input class="control" value="https://nested-jwt-test-id.example.com/callback" /><button class="btn-icon" type="button">✕</button></div>
+            <div class="repeat" data-kind="uri" style="margin-top:10px;">
+              <div class="repeat-rows">
+                <div class="list-row"><input class="control" value="https://nested-jwt-test-id.example.com/callback" /><button class="btn-icon" type="button">✕</button></div>
+              </div>
+              <p class="hint repeat-empty" hidden>Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
             </div>
-            <button class="btn btn-ghost" type="button" id="addRedirect">Добавить</button>
           </article>
           <article class="card">
             <h2>Notify URI</h2>
             <p class="hint">Обратные адреса для уведомлений в режиме ServerInitiated</p>
-            <div class="list-row" style="margin-top:10px;"><input class="control" value="http://mcap-cluster.dev.m1.a1s/notify" /><button class="btn-icon" type="button">✕</button></div>
-            <button class="btn btn-ghost" type="button">Добавить</button>
+            <div class="repeat" data-kind="uri" style="margin-top:10px;">
+              <div class="repeat-rows">
+                <div class="list-row"><input class="control" value="http://mcap-cluster.dev.m1.a1s/notify" /><button class="btn-icon" type="button">✕</button></div>
+              </div>
+              <p class="hint repeat-empty" hidden>Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
           </article>
           <article class="card">
             <label class="check"><input type="checkbox" /> Доверенный сервис-провайдер (TSP)</label>
@@ -645,7 +666,11 @@
               <label><input type="radio" name="tokenAuth" /> JWT, подписанный приватным ключом</label>
               <label><input type="radio" name="tokenAuth" /> Без аутентификации</label>
             </div>
-            <label class="check"><input type="checkbox" /> Изменить секрет клиента</label>
+            <label class="check"><input type="checkbox" data-reveal="secretWrap" /> Изменить секрет клиента</label>
+            <div class="field" id="secretWrap" hidden style="margin-top:12px;">
+              <label class="label">Новый секрет клиента</label>
+              <input class="control" type="password" autocomplete="new-password" />
+            </div>
           </article>
           <article class="card">
             <h2>Набор публичных ключей</h2>
@@ -676,13 +701,17 @@
           </article>
           <article class="card">
             <h2>Набор ключей шифрования</h2>
-            <div class="seg">
-              <button type="button" class="on">По адресу</button>
-              <button type="button">Значением</button>
+            <div class="seg" data-seg="enc">
+              <button type="button" class="on" data-mode="uri">По адресу</button>
+              <button type="button" data-mode="value">Значением</button>
             </div>
-            <div class="field" style="margin-top:14px;">
+            <div class="field" style="margin-top:14px;" id="encUriWrap">
               <input class="control" value="http://idgw-load-dummy.dev.m1.a1s/jwks" />
               <div class="hint">Ключи, которыми шифруются токены для клиента</div>
+            </div>
+            <div class="field" style="margin-top:14px; display:none;" id="encValWrap">
+              <textarea class="control" placeholder='{"keys":[]}'></textarea>
+              <div class="hint">JSON в многострочном поле. На сервер уходит строка.</div>
             </div>
           </article>
         </section>
@@ -776,16 +805,32 @@
             </div>
             <h2 style="margin-top:18px;">Claims Redirect URI</h2>
             <p class="hint">Куда вернуть клиента после сбора claims</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="uri">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <h2 style="margin-top:18px;">Post-Logout Redirect URI</h2>
             <p class="hint">Куда вернуть клиента после выхода</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="uri">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <h2 style="margin-top:18px;">Request URI</h2>
             <p class="hint">Адреса объектов запроса, которые использует клиент</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="uri">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <h2 style="margin-top:18px;">Default ACR Values</h2>
             <p class="hint">Контекст аутентификации по умолчанию</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="acr">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <div class="field" style="margin-top:16px;">
               <label class="label">Default Max Age, с</label>
               <input class="control" type="number" value="60000" />
@@ -910,12 +955,20 @@
             <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
             <div class="field" style="margin:12px 0;">
               <label class="label">Допустимые bindingMessage</label>
-              <input class="control" placeholder="Текст сообщения" />
+              <div class="repeat" data-kind="text" style="margin-top:8px;">
+                <div class="repeat-rows"></div>
+                <p class="hint repeat-empty">Список пуст</p>
+                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              </div>
             </div>
             <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
             <div class="field" style="margin-top:12px;">
               <label class="label">Допустимые context</label>
-              <input class="control" placeholder="Значение context" />
+              <div class="repeat" data-kind="text" style="margin-top:8px;">
+                <div class="repeat-rows"></div>
+                <p class="hint repeat-empty">Список пуст</p>
+                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              </div>
             </div>
           </article>
           <article class="card">
@@ -969,26 +1022,31 @@
               </div>
             </div>
             <h2 style="margin-top:18px;">Контакты администраторов</h2>
-            <div class="list-row">
-              <input class="control" placeholder="Имя" />
-              <input class="control" placeholder="Телефон" />
-              <input class="control" placeholder="Почта" />
+            <div class="repeat" data-kind="contact">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
             </div>
-            <button class="btn btn-ghost" type="button">Добавить</button>
           </article>
         </section>
         <section data-cpanel="access" hidden>
           <article class="card">
             <h2>Redirect URI</h2>
             <p class="hint">Адреса, на которые клиента можно вернуть после страницы авторизации</p>
-            <div class="list-row" style="margin-top:10px;"><input class="control" placeholder="https://" /></div>
-            <button class="btn btn-ghost" type="button">Добавить</button>
+            <div class="repeat" data-kind="uri" style="margin-top:10px;">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
           </article>
           <article class="card">
             <h2>Notify URI</h2>
             <p class="hint">Обратные адреса для уведомлений в режиме ServerInitiated</p>
-            <div class="list-row" style="margin-top:10px;"><input class="control" placeholder="https://" /></div>
-            <button class="btn btn-ghost" type="button">Добавить</button>
+            <div class="repeat" data-kind="uri" style="margin-top:10px;">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
           </article>
           <article class="card">
             <label class="check"><input type="checkbox" /> Доверенный сервис-провайдер (TSP)</label>
@@ -1010,7 +1068,11 @@
               <label><input type="radio" name="newTokenAuth" /> JWT, подписанный приватным ключом</label>
               <label><input type="radio" name="newTokenAuth" /> Без аутентификации</label>
             </div>
-            <label class="check"><input type="checkbox" /> Изменить секрет клиента</label>
+            <label class="check"><input type="checkbox" data-reveal="newSecretWrap" /> Изменить секрет клиента</label>
+            <div class="field" id="newSecretWrap" hidden style="margin-top:12px;">
+              <label class="label">Новый секрет клиента</label>
+              <input class="control" type="password" autocomplete="new-password" />
+            </div>
           </article>
           <article class="card">
             <h2>Набор публичных ключей</h2>
@@ -1029,13 +1091,17 @@
           </article>
           <article class="card">
             <h2>Набор ключей шифрования</h2>
-            <div class="seg">
-              <button type="button" class="on">По адресу</button>
-              <button type="button">Значением</button>
+            <div class="seg" data-seg="newEnc">
+              <button type="button" class="on" data-mode="uri">По адресу</button>
+              <button type="button" data-mode="value">Значением</button>
             </div>
-            <div class="field" style="margin-top:14px;">
+            <div class="field" style="margin-top:14px;" id="newEncUriWrap">
               <input class="control" placeholder="https://" />
               <div class="hint">Ключи, которыми шифруются токены для клиента</div>
+            </div>
+            <div class="field" style="margin-top:14px; display:none;" id="newEncValWrap">
+              <textarea class="control" placeholder='{"keys":[]}'></textarea>
+              <div class="hint">JSON в многострочном поле. На сервер уходит строка.</div>
             </div>
           </article>
         </section>
@@ -1118,16 +1184,32 @@
             </div>
             <h2 style="margin-top:18px;">Claims Redirect URI</h2>
             <p class="hint">Куда вернуть клиента после сбора claims</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="uri">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <h2 style="margin-top:18px;">Post-Logout Redirect URI</h2>
             <p class="hint">Куда вернуть клиента после выхода</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="uri">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <h2 style="margin-top:18px;">Request URI</h2>
             <p class="hint">Адреса объектов запроса, которые использует клиент</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="uri">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <h2 style="margin-top:18px;">Default ACR Values</h2>
             <p class="hint">Контекст аутентификации по умолчанию</p>
-            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="repeat" data-kind="acr">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
             <div class="field" style="margin-top:16px;">
               <label class="label">Default Max Age, с</label>
               <input class="control" type="number" />
@@ -1475,6 +1557,46 @@
     }
     wireJwksSeg("[data-seg=jwks]", "jwksUriWrap", "jwksValWrap");
     wireJwksSeg("[data-seg=newJwks]", "newJwksUriWrap", "newJwksValWrap");
+    wireJwksSeg("[data-seg=enc]", "encUriWrap", "encValWrap");
+    wireJwksSeg("[data-seg=newEnc]", "newEncUriWrap", "newEncValWrap");
+
+    document.querySelectorAll("[data-reveal]").forEach((cb) => {
+      const wrap = document.getElementById(cb.dataset.reveal);
+      const sync = () => { wrap.hidden = !cb.checked; };
+      cb.addEventListener("change", sync);
+      sync();
+    });
+
+    function rowHtml(kind, placeholder) {
+      if (kind === "contact") {
+        return '<div class="list-row"><input class="control" placeholder="Имя" /><input class="control" placeholder="Телефон" /><input class="control" placeholder="Почта" /><button class="btn-icon" type="button">✕</button></div>';
+      }
+      const ph = placeholder || (kind === "acr" ? "" : "https://");
+      return `<div class="list-row"><input class="control" placeholder="${ph}" /><button class="btn-icon" type="button">✕</button></div>`;
+    }
+    document.querySelectorAll(".repeat").forEach((box) => {
+      const rows = box.querySelector(".repeat-rows");
+      const empty = box.querySelector(".repeat-empty");
+      const add = box.querySelector("[data-add]");
+      const kind = box.dataset.kind || "uri";
+      const placeholder = box.dataset.placeholder;
+      const dirty = Boolean(box.closest("#screen-sp"));
+      const sync = () => { if (empty) empty.hidden = rows.children.length > 0; };
+      add.addEventListener("click", () => {
+        rows.insertAdjacentHTML("beforeend", rowHtml(kind, placeholder));
+        sync();
+        if (dirty) setDirty(true);
+        const input = rows.lastElementChild.querySelector("input");
+        if (input) input.focus();
+      });
+      rows.addEventListener("click", (e) => {
+        if (!e.target.closest(".btn-icon")) return;
+        e.target.closest(".list-row").remove();
+        sync();
+        if (dirty) setDirty(true);
+      });
+      sync();
+    });
 
     document.getElementById("demoError").onclick = () => {
       document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b.dataset.tab === "keys"));
@@ -1486,17 +1608,6 @@
       hint.textContent = "Неверный формат поля";
       document.getElementById("tabKeys").classList.add("has-error");
     };
-
-    document.getElementById("addRedirect").onclick = () => {
-      const row = document.createElement("div");
-      row.className = "list-row";
-      row.innerHTML = '<input class="control" placeholder="https://" /><button class="btn-icon" type="button">✕</button>';
-      document.getElementById("redirects").appendChild(row);
-      setDirty(true);
-    };
-    document.getElementById("redirects").addEventListener("click", (e) => {
-      if (e.target.closest(".btn-icon")) { e.target.closest(".list-row").remove(); setDirty(true); }
-    });
   </script>
 </body>
 </html>
