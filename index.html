@@ -195,6 +195,61 @@
     .with-copy { display: flex; gap: 8px; }
     .with-copy .control { flex: 1; font-family: var(--mono); font-size: 13px; }
     .check { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: 600; }
+    input[type="checkbox"],
+    input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 16px; height: 16px;
+      margin: 0;
+      flex: none;
+      border: 1.5px solid #c4b8b0;
+      background: #f6f3ee;
+      cursor: pointer;
+      display: inline-grid;
+      place-content: center;
+      vertical-align: middle;
+      accent-color: var(--ink);
+    }
+    input[type="checkbox"] { border-radius: 4px; }
+    input[type="radio"] { border-radius: 50%; }
+    input[type="checkbox"]:hover:not(:disabled),
+    input[type="radio"]:hover:not(:disabled) {
+      border-color: #9a8f86;
+    }
+    input[type="checkbox"]::after {
+      content: "";
+      width: 4px;
+      height: 7px;
+      margin-bottom: 1px;
+      border: solid transparent;
+      border-width: 0 1.6px 1.6px 0;
+      transform: rotate(45deg);
+    }
+    input[type="checkbox"]:checked {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+    input[type="checkbox"]:checked::after { border-color: #fcfbf8; }
+    input[type="radio"]::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: transparent;
+    }
+    input[type="radio"]:checked { border-color: var(--ink); }
+    input[type="radio"]:checked::after { background: var(--ink); }
+    input[type="checkbox"]:focus-visible,
+    input[type="radio"]:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+    input[type="checkbox"]:disabled,
+    input[type="radio"]:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
     .seg { display: inline-flex; background: #efece7; border-radius: 8px; padding: 3px; }
     .seg button {
       border: 0; background: transparent; border-radius: 6px;
@@ -710,8 +765,6 @@
       </div>
     </section>
 
-    </section>
-
     <section id="screen-sp-create" hidden>
       <header class="page-head">
         <div class="title-row"><h1>Новый клиент</h1></div>
@@ -757,9 +810,9 @@
             <label class="check"><input type="checkbox" disabled /> Запрещена аутентификация абонентов</label>
           </article>
           <article class="card">
-            <h2>Тестовый период</h2>
-            <p class="hint">Ограничение числа запросов до перевода клиента в рабочий режим</p>
-            <div class="grid-2" style="margin-top:12px;">
+            <h2>Тестовый период <span>Ограничение числа запросов до перевода клиента в рабочий режим</span></h2>
+            <label class="check" style="margin:0 0 14px;"><input type="checkbox" /> Период обработан</label>
+            <div class="grid-2">
               <div class="field">
                 <label class="label">Начало действия</label>
                 <input class="control" type="datetime-local" />
@@ -769,18 +822,276 @@
                 <input class="control" type="datetime-local" />
                 <div class="hint">Не обязательно</div>
               </div>
+              <div class="field">
+                <label class="label">Лимит запросов AUTHORIZE</label>
+                <input class="control" type="number" />
+              </div>
+              <div class="field">
+                <label class="label">Лимит запросов USER_INFO</label>
+                <input class="control" type="number" />
+              </div>
+              <div class="field span-2">
+                <label class="label">Действие по достижению лимита</label>
+                <select class="control">
+                  <option>Заблокировать</option>
+                  <option>Перевести в PRODUCTION</option>
+                </select>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Нагрузка, приоритет и биллинг</h2>
+            <div class="grid-2">
+              <div class="field">
+                <label class="label">Входной троттлинг ServerInitiated</label>
+                <input class="control" type="number" />
+                <div class="hint">Запросов в секунду на вход</div>
+              </div>
+              <div class="field">
+                <label class="label">Выходной троттлинг ServerInitiated</label>
+                <input class="control" type="number" />
+                <div class="hint">Уведомлений в секунду на выход</div>
+              </div>
+              <div class="field">
+                <label class="label">Приоритет</label>
+                <select class="control"><option>FIRST</option><option>NORMAL</option><option>LOW</option></select>
+              </div>
+              <div class="field">
+                <label class="label">Номер абонента для биллинга</label>
+                <input class="control" />
+                <div class="hint">Используется для тарификации</div>
+              </div>
+              <div class="field span-2">
+                <label class="label">Тип биллинга</label>
+                <select class="control"><option>NONE</option><option>MSISDN</option></select>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Тексты сообщений <span>Белые списки bindingMessage и context</span></h2>
+            <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
+            <div class="field" style="margin:12px 0;">
+              <label class="label">Допустимые bindingMessage</label>
+              <input class="control" placeholder="Текст сообщения" />
+            </div>
+            <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
+            <div class="field" style="margin-top:12px;">
+              <label class="label">Допустимые context</label>
+              <input class="control" placeholder="Значение context" />
+            </div>
+          </article>
+          <article class="card">
+            <h2>Оформление страниц <span>Оператор, дизайн, маска номера и ссылки</span></h2>
+            <div class="grid-2">
+              <div class="field">
+                <label class="label">Оператор</label>
+                <select class="control"><option>Default</option><option>МегаФон</option><option>Билайн</option></select>
+              </div>
+              <div class="field">
+                <label class="label">Дизайн</label>
+                <select class="control"><option>TELE2_RUSSIA</option></select>
+              </div>
+              <div class="field">
+                <label class="label">Региональные настройки</label>
+                <select class="control"><option>--</option></select>
+              </div>
+              <div class="field">
+                <label class="label">Заголовок в дизайне</label>
+                <input class="control" />
+              </div>
+              <div class="field span-2">
+                <label class="check" style="margin:0;"><input type="checkbox" checked /> Маскировать номер на страницах входа</label>
+              </div>
+              <div class="field">
+                <label class="label">Маска номера</label>
+                <input class="control" value="+# (###) *****##" />
+              </div>
+              <div class="field">
+                <label class="label">Адрес логотипа</label>
+                <input class="control" />
+              </div>
+              <div class="field">
+                <label class="label">Адрес политики</label>
+                <input class="control" />
+              </div>
+              <div class="field">
+                <label class="label">Домашний адрес</label>
+                <input class="control" />
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Программное обеспечение и контакты</h2>
+            <div class="grid-2">
+              <div class="field"><label class="label">Идентификатор ПО</label><input class="control" /></div>
+              <div class="field"><label class="label">Версия ПО</label><input class="control" /></div>
+              <div class="field span-2">
+                <label class="label">Software Statement</label>
+                <textarea class="control" style="min-height:72px; font-family: var(--font);"></textarea>
+              </div>
+            </div>
+            <h2 style="margin-top:18px;">Контакты администраторов</h2>
+            <div class="list-row">
+              <input class="control" placeholder="Имя" />
+              <input class="control" placeholder="Телефон" />
+              <input class="control" placeholder="Почта" />
+            </div>
+            <button class="btn btn-ghost" type="button">Добавить</button>
+          </article>
+        </section>
+        <section data-cpanel="access" hidden>
+          <article class="card">
+            <h2>Redirect URI</h2>
+            <p class="hint">Адреса, на которые клиента можно вернуть после страницы авторизации</p>
+            <div class="list-row" style="margin-top:10px;"><input class="control" placeholder="https://" /></div>
+            <button class="btn btn-ghost" type="button">Добавить</button>
+          </article>
+          <article class="card">
+            <h2>Notify URI</h2>
+            <p class="hint">Обратные адреса для уведомлений в режиме ServerInitiated</p>
+            <div class="list-row" style="margin-top:10px;"><input class="control" placeholder="https://" /></div>
+            <button class="btn btn-ghost" type="button">Добавить</button>
+          </article>
+          <article class="card">
+            <label class="check"><input type="checkbox" /> Доверенный сервис-провайдер (TSP)</label>
+            <label class="check"><input type="checkbox" /> Требовать регистрацию абонента в интерфейсе</label>
+            <div class="field" style="margin-top:14px;">
+              <label class="label">URI обогащения заголовком</label>
+              <input class="control" placeholder="http://" />
+              <div class="hint">Определение номера по заголовку. Только http://</div>
             </div>
           </article>
         </section>
-        <section data-cpanel="access" hidden><article class="card"><h2>Доступ</h2><p class="hint">Заполняется после сохранения или сразу, как на карточке.</p></article></section>
-        <section data-cpanel="keys" hidden><article class="card"><h2>Учётные данные</h2></article></section>
-        <section data-cpanel="tokens" hidden><article class="card"><h2>Токены</h2></article></section>
-        <section data-cpanel="crypto" hidden><article class="card"><h2>Криптография</h2></article></section>
-        <section data-cpanel="admin" hidden><article class="card"><h2>Администрирование</h2></article></section>
-        <section data-cpanel="messages" hidden><article class="card"><h2>Сообщения</h2></article></section>
-        <section data-cpanel="userinfo" hidden><article class="card"><h2>Настройки User Info</h2></article></section>
-        <section data-cpanel="authn" hidden><article class="card"><h2>Authenticators</h2></article></section>
-        <section data-cpanel="other" hidden><article class="card"><h2>Остальное</h2></article></section>
+        <section data-cpanel="keys" hidden>
+          <article class="card">
+            <h2>Аутентификация на token endpoint</h2>
+            <div class="radios">
+              <label><input type="radio" name="newTokenAuth" checked /> Секрет через HTTP Basic</label>
+              <label><input type="radio" name="newTokenAuth" /> Секрет в теле POST-запроса</label>
+              <label><input type="radio" name="newTokenAuth" /> JWT, подписанный секретом</label>
+              <label><input type="radio" name="newTokenAuth" /> JWT, подписанный приватным ключом</label>
+              <label><input type="radio" name="newTokenAuth" /> Без аутентификации</label>
+            </div>
+            <label class="check"><input type="checkbox" /> Изменить секрет клиента</label>
+          </article>
+          <article class="card">
+            <h2>Набор публичных ключей</h2>
+            <div class="seg" data-seg="newJwks">
+              <button type="button" class="on" data-mode="uri">По адресу</button>
+              <button type="button" data-mode="value">Значением</button>
+            </div>
+            <div class="field" style="margin-top:14px;" id="newJwksUriWrap">
+              <input class="control" placeholder="https://" />
+              <div class="hint">JSON Web Key Set клиента — сервер должен иметь к нему доступ</div>
+            </div>
+            <div class="field" style="margin-top:14px; display:none;" id="newJwksValWrap">
+              <textarea class="control" placeholder='{"keys":[]}'></textarea>
+              <div class="hint">JSON в многострочном поле. На сервер уходит строка.</div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Набор ключей шифрования</h2>
+            <div class="seg">
+              <button type="button" class="on">По адресу</button>
+              <button type="button">Значением</button>
+            </div>
+            <div class="field" style="margin-top:14px;">
+              <input class="control" placeholder="https://" />
+              <div class="hint">Ключи, которыми шифруются токены для клиента</div>
+            </div>
+          </article>
+        </section>
+        <section data-cpanel="tokens" hidden>
+          <article class="card">
+            <label class="check"><input type="checkbox" /> Access-токены не истекают</label>
+            <div class="grid-2">
+              <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" /></div>
+              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
+              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+            </div>
+            <label class="check"><input type="checkbox" /> Выдавать refresh-токены</label>
+            <p class="hint">Добавляет клиенту область offline_access.</p>
+            <label class="check"><input type="checkbox" /> Refresh-токены переиспользуются</label>
+            <label class="check"><input type="checkbox" /> Отзывать активные access-токены при обновлении</label>
+            <label class="check"><input type="checkbox" /> Refresh-токены не истекают</label>
+            <div class="grid-2">
+              <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" /></div>
+              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
+              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
+              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+            </div>
+            <label class="check"><input type="checkbox" /> Передавать JWKS URI сервис-провайдеру</label>
+          </article>
+        </section>
+        <section data-cpanel="crypto" hidden>
+          <article class="card">
+            <p class="hint">«По умолчанию сервера» означает, что клиент не задаёт алгоритм и берёт общий параметр из настроек.</p>
+            <div class="grid-2" style="margin-top:12px;">
+              <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option></select></div>
+              <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>По умолчанию сервера</option><option>S256</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>По умолчанию сервера</option></select></div>
+              <div class="field span-2"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
+            </div>
+          </article>
+        </section>
+        <section data-cpanel="admin" hidden>
+          <article class="card">
+            <label class="check"><input type="checkbox" /> Административный сервис-провайдер</label>
+            <label class="check"><input type="checkbox" /> Все сервис-провайдеры</label>
+            <div class="field" style="margin-top:14px;">
+              <label class="label">Доступные клиенты</label>
+              <input class="control" placeholder="Начните вводить название" />
+              <div class="hint">Начните вводить название — список из сотен записей не листают глазами</div>
+            </div>
+            <div class="field" style="margin-top:14px;">
+              <label class="label">Разрешённые команды</label>
+              <input class="control" />
+              <div class="hint">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
+            </div>
+          </article>
+        </section>
+        <section data-cpanel="messages" hidden><article class="card"></article></section>
+        <section data-cpanel="userinfo" hidden><article class="card"></article></section>
+        <section data-cpanel="authn" hidden><article class="card"><p class="hint">Список пуст</p></article></section>
+        <section data-cpanel="other" hidden>
+          <article class="card">
+            <div class="field">
+              <label class="label">Initiate Login URI</label>
+              <input class="control" placeholder="https://" />
+              <div class="hint">Адрес, с которого сервер инициирует вход на стороне клиента</div>
+            </div>
+            <h2 style="margin-top:18px;">Claims Redirect URI</h2>
+            <p class="hint">Куда вернуть клиента после сбора claims</p>
+            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <h2 style="margin-top:18px;">Post-Logout Redirect URI</h2>
+            <p class="hint">Куда вернуть клиента после выхода</p>
+            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <h2 style="margin-top:18px;">Request URI</h2>
+            <p class="hint">Адреса объектов запроса, которые использует клиент</p>
+            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <h2 style="margin-top:18px;">Default ACR Values</h2>
+            <p class="hint">Контекст аутентификации по умолчанию</p>
+            <button class="btn btn-ghost" type="button" style="margin-top:8px;">Добавить</button>
+            <div class="field" style="margin-top:16px;">
+              <label class="label">Default Max Age, с</label>
+              <input class="control" type="number" />
+              <div class="hint">Через сколько сервер переспросит абонента</div>
+            </div>
+            <div class="field" style="margin-top:14px;">
+              <span class="label">Тип приложения</span>
+              <div class="radios">
+                <label><input type="radio" name="newAppType" checked /> Веб</label>
+                <label><input type="radio" name="newAppType" /> Мобильное</label>
+              </div>
+            </div>
+          </article>
+        </section>
       </div>
     </section>
 
@@ -1003,14 +1314,18 @@
       };
     });
 
-    document.querySelector("[data-seg=jwks]").addEventListener("click", (e) => {
-      const b = e.target.closest("button");
-      if (!b) return;
-      e.currentTarget.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
-      const uri = b.dataset.mode === "uri";
-      document.getElementById("jwksUriWrap").style.display = uri ? "flex" : "none";
-      document.getElementById("jwksValWrap").style.display = uri ? "none" : "flex";
-    });
+    function wireJwksSeg(seg, uriId, valId) {
+      document.querySelector(seg).addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        e.currentTarget.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+        const uri = b.dataset.mode === "uri";
+        document.getElementById(uriId).style.display = uri ? "flex" : "none";
+        document.getElementById(valId).style.display = uri ? "none" : "flex";
+      });
+    }
+    wireJwksSeg("[data-seg=jwks]", "jwksUriWrap", "jwksValWrap");
+    wireJwksSeg("[data-seg=newJwks]", "newJwksUriWrap", "newJwksValWrap");
 
     document.getElementById("demoError").onclick = () => {
       document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b.dataset.tab === "keys"));
