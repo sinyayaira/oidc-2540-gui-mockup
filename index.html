@@ -215,6 +215,12 @@
     .with-copy { display: flex; gap: 8px; }
     .with-copy .control { flex: 1; font-family: var(--mono); font-size: 13px; }
     .check { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: 600; }
+    [hidden] { display: none !important; }
+    .is-hidden { display: none !important; }
+    .field.is-locked {
+      opacity: 0.55;
+      pointer-events: none;
+    }
     input[type="checkbox"],
     input[type="radio"] {
       appearance: none;
@@ -748,7 +754,7 @@
             </div>
             <label class="check"><input type="checkbox" checked data-tok="issueRefresh" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
-            <div class="token-extra" data-tok="refreshBlock">
+            <div class="token-extra is-hidden" data-tok="refreshBlock" hidden>
               <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
               <label class="check"><input type="checkbox" checked data-tok="refreshNever" /> Refresh-токены не истекают</label>
@@ -1135,7 +1141,7 @@
             </div>
             <label class="check"><input type="checkbox" data-tok="issueRefresh" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
-            <div class="token-extra" data-tok="refreshBlock" hidden>
+            <div class="token-extra is-hidden" data-tok="refreshBlock" hidden>
               <label class="check"><input type="checkbox" /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" /> Отзывать активные access-токены при обновлении</label>
               <label class="check"><input type="checkbox" data-tok="refreshNever" /> Refresh-токены не истекают</label>
@@ -1448,6 +1454,48 @@
     document.getElementById("screen-sp").addEventListener("change", () => setDirty(snap() !== snapshot));
     const toast = document.getElementById("toast");
 
+    function syncTokens(root) {
+      const q = (name) => root.querySelector(`[data-tok="${name}"]`);
+      const accessNever = q("accessNever");
+      const accessTtl = q("accessTtl");
+      const accessUnit = q("accessUnit");
+      const issueRefresh = q("issueRefresh");
+      const refreshBlock = q("refreshBlock");
+      const refreshNever = q("refreshNever");
+      const refreshTtl = q("refreshTtl");
+      const refreshUnit = q("refreshUnit");
+      if (!accessNever || !issueRefresh || !refreshBlock) return;
+      const lockAccess = accessNever.checked;
+      accessTtl.disabled = lockAccess;
+      accessUnit.disabled = lockAccess;
+      accessTtl.closest(".field").classList.toggle("is-locked", lockAccess);
+      accessUnit.closest(".field").classList.toggle("is-locked", lockAccess);
+      const showRefresh = issueRefresh.checked;
+      refreshBlock.hidden = !showRefresh;
+      refreshBlock.classList.toggle("is-hidden", !showRefresh);
+      refreshBlock.style.display = showRefresh ? "" : "none";
+      const lockRefresh = !showRefresh || refreshNever.checked;
+      refreshTtl.disabled = lockRefresh;
+      refreshUnit.disabled = lockRefresh;
+      refreshTtl.closest(".field").classList.toggle("is-locked", lockRefresh);
+      refreshUnit.closest(".field").classList.toggle("is-locked", lockRefresh);
+    }
+    function syncAllTokens() {
+      document.querySelectorAll("[data-tokens]").forEach(syncTokens);
+    }
+    document.addEventListener("change", (e) => {
+      const root = e.target.closest && e.target.closest("[data-tokens]");
+      if (root) syncTokens(root);
+    });
+    document.addEventListener("click", (e) => {
+      const root = e.target.closest && e.target.closest("[data-tokens]");
+      if (!root) return;
+      if (e.target.closest("label.check, input[type=checkbox]")) {
+        queueMicrotask(() => syncTokens(root));
+      }
+    });
+    syncAllTokens();
+
     const COMMANDS = ["activate","deactivate","changepin","checkstatus","resetpin","reactivatepin","resetblockedpin","block","unblock","status"];
     function bindPicker({ input, suggest, chips, options, selected, onChange }) {
       const state = { selected: [...selected] };
@@ -1558,6 +1606,7 @@
       });
       document.getElementById("adminSp").dispatchEvent(new Event("change"));
       document.getElementById("adminAll").dispatchEvent(new Event("change"));
+      syncAllTokens();
       setDirty(false);
     };
 
@@ -1590,30 +1639,6 @@
       cb.addEventListener("change", sync);
       sync();
     });
-
-    function wireTokens(root) {
-      const accessNever = root.querySelector("[data-tok=accessNever]");
-      const accessTtl = root.querySelector("[data-tok=accessTtl]");
-      const accessUnit = root.querySelector("[data-tok=accessUnit]");
-      const issueRefresh = root.querySelector("[data-tok=issueRefresh]");
-      const refreshBlock = root.querySelector("[data-tok=refreshBlock]");
-      const refreshNever = root.querySelector("[data-tok=refreshNever]");
-      const refreshTtl = root.querySelector("[data-tok=refreshTtl]");
-      const refreshUnit = root.querySelector("[data-tok=refreshUnit]");
-      const sync = () => {
-        accessTtl.disabled = accessNever.checked;
-        accessUnit.disabled = accessNever.checked;
-        refreshBlock.hidden = !issueRefresh.checked;
-        const lockRefresh = !issueRefresh.checked || refreshNever.checked;
-        refreshTtl.disabled = lockRefresh;
-        refreshUnit.disabled = lockRefresh;
-      };
-      accessNever.addEventListener("change", sync);
-      issueRefresh.addEventListener("change", sync);
-      refreshNever.addEventListener("change", sync);
-      sync();
-    }
-    document.querySelectorAll("[data-tokens]").forEach(wireTokens);
 
     function rowHtml(kind, placeholder) {
       if (kind === "contact") {
