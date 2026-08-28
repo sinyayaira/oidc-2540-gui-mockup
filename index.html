@@ -103,6 +103,40 @@
       flex-direction: column;
       overflow: hidden;
     }
+    .stage-bar {
+      flex: none;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 8px 20px 0;
+      background: var(--linen-0);
+      z-index: 30;
+    }
+    .user-menu { position: relative; }
+    .user-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid var(--line); background: #fff;
+      display: grid; place-items: center; color: var(--ink);
+    }
+    .user-btn:hover, .user-btn[aria-expanded="true"] { background: #efece7; }
+    .user-drop {
+      position: absolute; right: 0; top: calc(100% + 6px);
+      min-width: 220px;
+      background: #fff;
+      border: 1px solid #ece6de;
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(54,50,47,.12);
+      padding: 6px;
+      z-index: 40;
+    }
+    .user-drop button {
+      display: block; width: 100%; text-align: left;
+      border: 0; background: transparent;
+      padding: 9px 12px; border-radius: 8px; font-weight: 600;
+    }
+    .user-drop button:hover:not(:disabled) { background: #f4efe8; }
+    .user-drop button:disabled { color: var(--muted); cursor: default; }
+    .user-drop hr { border: 0; border-top: 1px solid var(--line); margin: 4px 8px; }
     .page-head {
       display: flex; align-items: flex-start; justify-content: space-between;
       gap: 16px; padding: 22px 28px 8px;
@@ -399,9 +433,34 @@
     .st { display: inline-flex; align-items: center; gap: 8px; }
     .st i { width: 8px; height: 8px; border-radius: 50%; background: #9a938d; }
     .st.active i { background: #2c9a54; }
+    .st.blocked i { background: var(--error); }
+    .st.wait i { background: #cf7f36; }
+    .metrics {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;
+    }
+    .metric {
+      background: var(--paper); border: 1px solid #ece6de; border-radius: 16px; padding: 16px 18px;
+    }
+    .metric b { display: block; font-size: 22px; font-weight: 700; margin-top: 6px; }
+    .metric span { color: var(--muted); font-size: 13px; font-weight: 600; }
+    .chart-card { margin-bottom: 16px; }
+    .bars {
+      display: flex; align-items: flex-end; gap: 4px; height: 128px; margin-top: 12px;
+    }
+    .bars i {
+      flex: 1; background: var(--coral); border-radius: 3px 3px 0 0; opacity: .85; min-height: 4px;
+    }
+    .hour-labels {
+      display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin-top: 6px;
+    }
+    .log-event { font-family: var(--mono); font-size: 12px; }
+    @media (max-width: 1100px) {
+      .metrics { grid-template-columns: 1fr 1fr; }
+    }
     @media (max-width: 900px) {
       .grid-2, .grid-id { grid-template-columns: 1fr; }
       .span-rest { grid-column: 1 / -1; }
+      .metrics { grid-template-columns: 1fr; }
     }
   </style>
   <script>
@@ -493,7 +552,20 @@
   </aside>
 
   <main class="stage">
-    <section id="screen-sp-list">
+    <div class="stage-bar">
+      <div class="user-menu" id="userMenu">
+        <button class="user-btn" type="button" id="userBtn" aria-label="Меню пользователя" aria-haspopup="true" aria-expanded="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19c1.2-3 3.6-4.5 7-4.5S17.8 16 19 19"/></svg>
+        </button>
+        <div class="user-drop" id="userDrop" hidden>
+          <button type="button" disabled>admin</button>
+          <hr />
+          <button type="button" id="userProfile">Профиль</button>
+          <button type="button" id="userLogout">Выйти</button>
+        </div>
+      </div>
+    </div>
+    <section class="app-screen" id="screen-sp-list">
       <header class="page-head">
         <h1>Сервис-провайдеры</h1>
         <button class="btn btn-primary" type="button" id="createBtn">Создать клиента</button>
@@ -522,7 +594,7 @@
       </div>
     </section>
 
-    <section id="screen-sp" hidden>
+    <section class="app-screen" id="screen-sp" hidden>
       <div class="card-toolbar">
       <header class="page-head">
         <div class="title-row">
@@ -907,13 +979,32 @@
         </section>
 
         <section data-panel="messages" hidden>
-          <article class="card"></article>
+          <article class="card">
+            <h2>Сообщения</h2>
+            <div class="field">
+              <label class="label">Заголовок согласия</label>
+              <input class="control" value="Разрешить доступ к данным?" />
+            </div>
+          </article>
         </section>
         <section data-panel="userinfo" hidden>
-          <article class="card"></article>
+          <article class="card">
+            <h2>Настройки User Info</h2>
+            <div class="field">
+              <label class="label">Endpoint</label>
+              <input class="control" value="/userinfo" />
+            </div>
+          </article>
         </section>
         <section data-panel="authn" hidden>
-          <article class="card"><p class="hint">Список пуст</p></article>
+          <article class="card">
+            <h2>Authenticators</h2>
+            <div class="repeat" data-kind="text" data-placeholder="">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список не задан.</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
         </section>
 
         <section data-panel="other" hidden>
@@ -968,7 +1059,7 @@
       </div>
     </section>
 
-    <section id="screen-sp-create" hidden>
+    <section class="app-screen" id="screen-sp-create" hidden>
       <div class="card-toolbar">
       <header class="page-head">
         <div class="title-row"><h1>Новый клиент</h1></div>
@@ -1299,9 +1390,34 @@
             </div>
           </article>
         </section>
-        <section data-cpanel="messages" hidden><article class="card"></article></section>
-        <section data-cpanel="userinfo" hidden><article class="card"></article></section>
-        <section data-cpanel="authn" hidden><article class="card"><p class="hint">Список пуст</p></article></section>
+        <section data-cpanel="messages" hidden>
+          <article class="card">
+            <h2>Сообщения</h2>
+            <div class="field">
+              <label class="label">Заголовок согласия</label>
+              <input class="control" />
+            </div>
+          </article>
+        </section>
+        <section data-cpanel="userinfo" hidden>
+          <article class="card">
+            <h2>Настройки User Info</h2>
+            <div class="field">
+              <label class="label">Endpoint</label>
+              <input class="control" value="/userinfo" />
+            </div>
+          </article>
+        </section>
+        <section data-cpanel="authn" hidden>
+          <article class="card">
+            <h2>Authenticators</h2>
+            <div class="repeat" data-kind="text" data-placeholder="">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список не задан.</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
+        </section>
         <section data-cpanel="other" hidden>
           <article class="card">
             <div class="field">
@@ -1354,9 +1470,253 @@
       </div>
     </section>
 
-    <section id="screen-other" hidden>
-      <header class="page-head"><h1 id="otherTitle"></h1></header>
-      <div class="page"><div class="card stub"><h2 id="otherLead"></h2><p>Раздел открывается отдельной страницей. Состав подразделов — заготовка для обсуждения.</p></div></div>
+    <section class="app-screen" id="screen-subs" hidden>
+      <header class="page-head">
+        <h1>Абоненты</h1>
+      </header>
+      <div class="toolbar">
+        <input class="control" id="subSearch" placeholder="Номер абонента" />
+        <div class="pager">
+          <span id="subPageInfo"></span>
+          <button class="btn-icon" type="button" id="subPrev" disabled>‹</button>
+          <button class="btn-icon" type="button" id="subNext">›</button>
+        </div>
+      </div>
+      <div class="page" style="padding-top:0;">
+        <table class="sp-table">
+          <thead>
+            <tr>
+              <th>Номер</th>
+              <th>Оператор</th>
+              <th>Статус</th>
+              <th>Последний вход</th>
+            </tr>
+          </thead>
+          <tbody id="subRows"></tbody>
+        </table>
+        <p class="hint" id="subEmpty" hidden>Абонент не найден</p>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-sub-card" hidden>
+      <div class="card-toolbar">
+        <header class="page-head">
+          <h1 id="subCardTitle">Абонент</h1>
+          <div class="head-actions">
+            <button class="btn btn-ghost" type="button" id="subCancel">Отменить</button>
+            <button class="btn btn-primary" type="button" id="subSave">Сохранить</button>
+          </div>
+        </header>
+      </div>
+      <div class="page">
+        <article class="card">
+          <div class="grid-2">
+            <div class="field">
+              <label class="label" for="subPhone">Номер</label>
+              <div class="with-copy">
+                <input class="control" id="subPhone" readonly tabindex="-1" />
+                <button class="btn-icon" type="button" data-copy="subPhone" title="Копировать">⧉</button>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="subOperator">Оператор</label>
+              <select class="control" id="subOperator">
+                <option>TELE2</option>
+                <option>МегаФон</option>
+                <option>Билайн</option>
+                <option>MTS</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="subStatus">Статус</label>
+              <select class="control" id="subStatus">
+                <option>Активен</option>
+                <option>Заблокирован</option>
+                <option>Ожидает подтверждения</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="subLast">Последний вход</label>
+              <input class="control" id="subLast" type="text" readonly tabindex="-1" />
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-logs" hidden>
+      <header class="page-head"><h1 id="logsTitle">Аудит</h1></header>
+      <div class="toolbar">
+        <input class="control" id="logSearch" placeholder="Поиск" />
+      </div>
+      <div class="page" style="padding-top:0;">
+        <table class="sp-table">
+          <thead>
+            <tr>
+              <th>Время</th>
+              <th>Событие</th>
+              <th>Клиент</th>
+              <th>Абонент</th>
+              <th>Результат</th>
+            </tr>
+          </thead>
+          <tbody id="logRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-analytics" hidden>
+      <header class="page-head"><h1 id="anTitle">Сводка</h1></header>
+      <div class="page">
+        <div id="anSummary">
+          <div class="metrics">
+            <div class="metric"><span>Авторизации по клиентам</span><b>12 480</b></div>
+            <div class="metric"><span>Отказы аутентификации</span><b>214</b></div>
+            <div class="metric"><span>Активные абоненты</span><b>3 902</b></div>
+            <div class="metric"><span>Выданные токены</span><b>18 731</b></div>
+          </div>
+          <article class="card chart-card">
+            <h2>Авторизации по часам</h2>
+            <p class="hint">Пик приходится на 19:00, спад после полуночи.</p>
+            <div class="bars" id="anBars"></div>
+            <div class="hour-labels"><span>0</span><span>6</span><span>12</span><span>18</span><span>23</span></div>
+          </article>
+          <article class="card">
+            <h2>Отзыв refresh-токенов</h2>
+            <div class="grid-2">
+              <div class="field">
+                <label class="label">За период</label>
+                <select class="control" id="anPeriod">
+                  <option>Сегодня</option>
+                  <option selected>7 дней</option>
+                  <option>30 дней</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label">Клиентов</label>
+                <input class="control" type="number" value="42" />
+              </div>
+            </div>
+          </article>
+        </div>
+        <div id="anBySp" hidden>
+          <table class="sp-table">
+            <thead>
+              <tr>
+                <th>Клиент</th>
+                <th>Авторизации</th>
+                <th>Отказы</th>
+                <th>Токены</th>
+              </tr>
+            </thead>
+            <tbody id="anSpRows"></tbody>
+          </table>
+        </div>
+        <div id="anBySubs" hidden>
+          <table class="sp-table">
+            <thead>
+              <tr>
+                <th>Номер</th>
+                <th>Оператор</th>
+                <th>Входы</th>
+                <th>Последний вход</th>
+              </tr>
+            </thead>
+            <tbody id="anSubRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-settings" hidden>
+      <header class="page-head">
+        <h1 id="setTitle">Платформа</h1>
+        <div class="head-actions">
+          <button class="btn btn-primary" type="button" id="setSave">Сохранить</button>
+        </div>
+      </header>
+      <div class="page">
+        <div id="setPlatform">
+          <article class="card">
+            <h2>Параметры сервера <span>Действуют на всех клиентов. Клиент может сузить их у себя, но не расширить.</span></h2>
+            <div class="grid-2">
+              <div class="field span-2">
+                <label class="label" for="issuer">Издатель (issuer)</label>
+                <input class="control" id="issuer" value="https://oidc.a1s.ru" />
+                <div class="hint">Значение поля iss в выдаваемых токенах. Издатель — только https-адрес.</div>
+              </div>
+              <div class="field">
+                <label class="label" for="signAlg">Алгоритм подписи по умолчанию</label>
+                <select class="control" id="signAlg">
+                  <option selected>RS256</option>
+                  <option>ES256</option>
+                  <option>PS256</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label" for="jwksTtl">Кэш JWKS, с</label>
+                <input class="control" id="jwksTtl" type="number" value="3600" />
+              </div>
+              <div class="field">
+                <label class="label" for="sessTtl">Время жизни сессии, с</label>
+                <input class="control" id="sessTtl" type="number" value="1800" />
+              </div>
+              <div class="field">
+                <label class="label" for="supportMail">Почта поддержки</label>
+                <input class="control" id="supportMail" type="email" />
+                <div class="hint">Показывается абоненту на экране ошибки</div>
+              </div>
+            </div>
+            <div class="note">Смена издателя разорвёт действующие сессии: клиентам придётся заново пройти авторизацию.</div>
+            <h2 style="margin-top:18px;">Требования безопасности</h2>
+            <label class="check"><input type="checkbox" id="reqPkce" /> Требовать PKCE от всех клиентов</label>
+            <label class="check"><input type="checkbox" id="allowDevice" /> Разрешить device flow</label>
+          </article>
+        </div>
+        <div id="setTemplates" hidden>
+          <article class="card">
+            <h2>Шаблоны сообщений</h2>
+            <div class="field">
+              <label class="label">Заголовок согласия</label>
+              <input class="control" value="Разрешить доступ к данным?" />
+            </div>
+          </article>
+        </div>
+        <div id="setIntegrations" hidden>
+          <article class="card">
+            <h2>Интеграции</h2>
+            <p class="hint">Внешние интеграции</p>
+            <div class="repeat" data-kind="uri">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-profile" hidden>
+      <header class="page-head">
+        <h1>Профиль</h1>
+        <div class="head-actions">
+          <button class="btn btn-primary" type="button" id="profileSave">Сохранить</button>
+        </div>
+      </header>
+      <div class="page">
+        <article class="card">
+          <div class="grid-2">
+            <div class="field">
+              <label class="label" for="profileName">Имя</label>
+              <input class="control" id="profileName" value="Администратор" />
+            </div>
+            <div class="field">
+              <label class="label" for="profileLogin">Логин</label>
+              <input class="control" id="profileLogin" value="admin" readonly tabindex="-1" />
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
   </div>
@@ -1417,29 +1777,12 @@
     }
     renderList();
 
-    const screens = {
-      subs: ["Абоненты", "Список абонентов"],
-      "j-audit": ["Аудит", "Журнал аудита"],
-      "j-auth": ["Авторизация", "Журнал авторизации"],
-      "j-err": ["Ошибки", "Журнал ошибок"],
-      "a-summary": ["Сводка", "Сводная аналитика"],
-      "a-sp": ["По сервис-провайдерам", "Аналитика по СП"],
-      "a-subs": ["По абонентам", "Аналитика по абонентам"],
-      "s-platform": ["Платформа", "Настройки платформы"],
-      "s-templates": ["Шаблоны сообщений", "Шаблоны"],
-      "s-integrations": ["Интеграции", "Внешние интеграции"]
-    };
-
     const listEl = document.getElementById("screen-sp-list");
     const cardEl = document.getElementById("screen-sp");
     const createEl = document.getElementById("screen-sp-create");
-    const otherEl = document.getElementById("screen-other");
 
     function hideAll() {
-      listEl.hidden = true;
-      cardEl.hidden = true;
-      createEl.hidden = true;
-      otherEl.hidden = true;
+      document.querySelectorAll(".app-screen").forEach((s) => { s.hidden = true; });
     }
     function showList() {
       hideAll();
@@ -1480,11 +1823,17 @@
       document.querySelectorAll("#createTabs button").forEach((b) => b.classList.toggle("active", b.dataset.ctab === "general"));
       document.querySelectorAll("[data-cpanel]").forEach((p) => { p.hidden = p.dataset.cpanel !== "general"; });
     }
-    function showOther(title, lead) {
-      hideAll();
-      otherEl.hidden = false;
-      document.getElementById("otherTitle").textContent = title;
-      document.getElementById("otherLead").textContent = lead;
+    function showOther(screen) {
+      if (screen === "subs") showSubs();
+      else if (screen === "j-audit") showLogs("audit");
+      else if (screen === "j-auth") showLogs("auth");
+      else if (screen === "j-err") showLogs("err");
+      else if (screen === "a-summary") showAnalytics("summary");
+      else if (screen === "a-sp") showAnalytics("sp");
+      else if (screen === "a-subs") showAnalytics("subs");
+      else if (screen === "s-platform") showSettings("platform");
+      else if (screen === "s-templates") showSettings("templates");
+      else if (screen === "s-integrations") showSettings("integrations");
     }
 
     const appNav = document.getElementById("appNav");
@@ -1509,8 +1858,7 @@
         showList();
         return;
       }
-      const [title, lead] = screens[screen];
-      showOther(title, lead);
+      showOther(screen);
     });
 
     document.getElementById("spRows").addEventListener("click", (e) => {
@@ -1532,9 +1880,7 @@
       document.getElementById("createSave").disabled = !document.getElementById("newName").value.trim();
     });
     document.getElementById("createSave").onclick = () => {
-      toast.style.display = "block";
-      toast.textContent = "Клиент сохранён (макет)";
-      setTimeout(() => { toast.style.display = "none"; toast.textContent = "Изменения сохранены"; }, 1600);
+      showToast("Клиент сохранён (макет)");
       showList();
     };
     document.getElementById("createTabs").addEventListener("click", (e) => {
@@ -1566,6 +1912,227 @@
     document.getElementById("screen-sp").addEventListener("input", () => setDirty(snap() !== snapshot));
     document.getElementById("screen-sp").addEventListener("change", () => setDirty(snap() !== snapshot));
     const toast = document.getElementById("toast");
+    let toastTimer = 0;
+    function showToast(msg) {
+      toast.style.display = "block";
+      toast.textContent = msg;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+        toast.textContent = "Изменения сохранены";
+      }, 1600);
+    }
+
+    const OPERATORS = ["TELE2", "МегаФон", "Билайн", "MTS"];
+    const SUB_STATUSES = ["Активен", "Заблокирован", "Ожидает подтверждения"];
+    const SUBS = Array.from({ length: 24 }, (_, t) => ({
+      id: `s${pad(t + 1)}`,
+      phone: `7903${String(1000000 + t * 17).slice(0, 7)}`,
+      operator: OPERATORS[t % OPERATORS.length],
+      status: SUB_STATUSES[t % 3],
+      lastLogin: `${pad((t % 27) + 1)}.0${(t % 8) + 1}.2026 ${pad(8 + (t % 12))}:${pad((t * 7) % 60)}`
+    }));
+    const SUB_PAGE = 12;
+    let subPage = 0;
+    let subQuery = "";
+    function filteredSubs() {
+      const q = subQuery.replace(/\s/g, "");
+      return SUBS.filter((s) => !q || s.phone.includes(q));
+    }
+    function statusClass(st) {
+      if (st === "Активен") return "active";
+      if (st === "Заблокирован") return "blocked";
+      return "wait";
+    }
+    function renderSubs() {
+      const rows = filteredSubs();
+      const total = rows.length;
+      const start = subPage * SUB_PAGE;
+      const slice = rows.slice(start, start + SUB_PAGE);
+      document.getElementById("subRows").innerHTML = slice.map((s) => `
+        <tr data-id="${s.id}">
+          <td class="id">${s.phone}</td>
+          <td>${s.operator}</td>
+          <td><span class="st ${statusClass(s.status)}"><i></i>${s.status}</span></td>
+          <td>${s.lastLogin}</td>
+        </tr>`).join("");
+      document.getElementById("subEmpty").hidden = total > 0;
+      const from = total ? start + 1 : 0;
+      const to = Math.min(start + SUB_PAGE, total);
+      document.getElementById("subPageInfo").textContent = `${from}–${to} из ${total}`;
+      document.getElementById("subPrev").disabled = subPage === 0;
+      document.getElementById("subNext").disabled = start + SUB_PAGE >= total;
+    }
+    function showSubs() {
+      hideAll();
+      document.getElementById("screen-subs").hidden = false;
+      renderSubs();
+    }
+    function showSubCard(s) {
+      hideAll();
+      document.getElementById("screen-sub-card").hidden = false;
+      document.getElementById("subCardTitle").textContent = s.phone;
+      document.getElementById("subPhone").value = s.phone;
+      document.getElementById("subOperator").value = s.operator;
+      document.getElementById("subStatus").value = s.status;
+      document.getElementById("subLast").value = s.lastLogin;
+    }
+
+    const LOG_EVENTS = ["authorization_request", "token_issued", "token_refresh", "userinfo", "logout"];
+    const LOG_OK = ["Успешно", "Успешно", "Успешно", "Отказ"];
+    const LOGS = Array.from({ length: 36 }, (_, t) => ({
+      time: `2026-08-${pad((t % 27) + 1)} ${pad(t % 24)}:${pad((t * 11) % 60)}:${pad((t * 3) % 60)}`,
+      event: LOG_EVENTS[t % LOG_EVENTS.length],
+      client: CLIENTS[t % CLIENTS.length].name,
+      phone: SUBS[t % SUBS.length].phone,
+      result: LOG_OK[t % LOG_OK.length],
+      kind: t % 9 === 0 ? "err" : (t % 2 === 0 ? "auth" : "audit")
+    }));
+    let logKind = "audit";
+    let logQuery = "";
+    function renderLogs() {
+      const q = logQuery.toLowerCase();
+      const rows = LOGS.filter((r) => {
+        if (logKind === "err") return r.kind === "err" || r.result === "Отказ";
+        if (logKind === "auth") return r.kind === "auth" || r.event === "authorization_request";
+        return true;
+      }).filter((r) => !q || r.event.includes(q) || r.client.toLowerCase().includes(q) || r.phone.includes(q));
+      document.getElementById("logRows").innerHTML = rows.slice(0, 18).map((r) => `
+        <tr>
+          <td>${r.time}</td>
+          <td class="log-event">${r.event}</td>
+          <td>${r.client}</td>
+          <td class="id">${r.phone}</td>
+          <td><span class="st ${r.result === "Успешно" ? "active" : "blocked"}"><i></i>${r.result}</span></td>
+        </tr>`).join("");
+    }
+    function showLogs(kind) {
+      logKind = kind;
+      hideAll();
+      document.getElementById("screen-logs").hidden = false;
+      document.getElementById("logsTitle").textContent = kind === "err" ? "Ошибки" : kind === "auth" ? "Авторизация" : "Аудит";
+      renderLogs();
+    }
+
+    function renderAnBars() {
+      document.getElementById("anBars").innerHTML = Array.from({ length: 24 }, (_, h) => {
+        const n = h === 19 ? 100 : Math.max(8, Math.round(28 + 48 * Math.sin((h - 5) / 24 * Math.PI * 2)));
+        return `<i style="height:${n}%"></i>`;
+      }).join("");
+    }
+    function showAnalytics(kind) {
+      hideAll();
+      document.getElementById("screen-analytics").hidden = false;
+      document.getElementById("anTitle").textContent = kind === "sp" ? "По сервис-провайдерам" : kind === "subs" ? "По абонентам" : "Сводка";
+      document.getElementById("anSummary").hidden = kind !== "summary";
+      document.getElementById("anBySp").hidden = kind !== "sp";
+      document.getElementById("anBySubs").hidden = kind !== "subs";
+      if (kind === "summary") renderAnBars();
+      if (kind === "sp") {
+        document.getElementById("anSpRows").innerHTML = CLIENTS.slice(0, 12).map((c, i) => `
+          <tr data-id="${c.id}">
+            <td>${c.name}</td>
+            <td>${840 - i * 37}</td>
+            <td>${12 + (i % 9)}</td>
+            <td>${1200 - i * 41}</td>
+          </tr>`).join("");
+      }
+      if (kind === "subs") {
+        document.getElementById("anSubRows").innerHTML = SUBS.slice(0, 12).map((s, i) => `
+          <tr data-id="${s.id}">
+            <td class="id">${s.phone}</td>
+            <td>${s.operator}</td>
+            <td>${3 + (i % 11)}</td>
+            <td>${s.lastLogin}</td>
+          </tr>`).join("");
+      }
+    }
+
+    function showSettings(kind) {
+      hideAll();
+      document.getElementById("screen-settings").hidden = false;
+      document.getElementById("setTitle").textContent = kind === "templates" ? "Шаблоны сообщений" : kind === "integrations" ? "Интеграции" : "Платформа";
+      document.getElementById("setPlatform").hidden = kind !== "platform";
+      document.getElementById("setTemplates").hidden = kind !== "templates";
+      document.getElementById("setIntegrations").hidden = kind !== "integrations";
+    }
+    function showProfile() {
+      hideAll();
+      document.getElementById("screen-profile").hidden = false;
+    }
+
+    const userBtn = document.getElementById("userBtn");
+    const userDrop = document.getElementById("userDrop");
+    function closeUserMenu() {
+      userDrop.hidden = true;
+      userBtn.setAttribute("aria-expanded", "false");
+    }
+    userBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = userDrop.hidden;
+      userDrop.hidden = !open;
+      userBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    document.addEventListener("click", (e) => {
+      if (!document.getElementById("userMenu").contains(e.target)) closeUserMenu();
+    });
+    document.getElementById("userProfile").onclick = () => {
+      closeUserMenu();
+      showProfile();
+    };
+    document.getElementById("userLogout").onclick = () => {
+      closeUserMenu();
+      showToast("Вы вышли из учётной записи (макет)");
+    };
+    document.getElementById("subSearch").addEventListener("input", (e) => {
+      subQuery = e.target.value;
+      subPage = 0;
+      renderSubs();
+    });
+    document.getElementById("subPrev").onclick = () => { if (subPage > 0) { subPage--; renderSubs(); } };
+    document.getElementById("subNext").onclick = () => { subPage++; renderSubs(); };
+    document.getElementById("subRows").addEventListener("click", (e) => {
+      const row = e.target.closest("tr[data-id]");
+      if (!row) return;
+      const s = SUBS.find((x) => x.id === row.dataset.id);
+      if (s) showSubCard(s);
+    });
+    document.getElementById("subCancel").onclick = showSubs;
+    document.getElementById("subSave").onclick = () => {
+      const id = SUBS.find((x) => x.phone === document.getElementById("subPhone").value);
+      if (id) {
+        id.operator = document.getElementById("subOperator").value;
+        id.status = document.getElementById("subStatus").value;
+      }
+      showToast("Изменения сохранены");
+      showSubs();
+    };
+    document.getElementById("logSearch").addEventListener("input", (e) => {
+      logQuery = e.target.value;
+      renderLogs();
+    });
+    document.getElementById("setSave").onclick = () => showToast("Изменения сохранены");
+    document.getElementById("profileSave").onclick = () => showToast("Изменения сохранены");
+    document.getElementById("anSpRows").addEventListener("click", (e) => {
+      const row = e.target.closest("tr[data-id]");
+      if (!row) return;
+      const c = CLIENTS.find((x) => x.id === row.dataset.id);
+      if (c) {
+        document.querySelectorAll("#appNav .nav-item, #appNav .nav-sub").forEach((el) => el.classList.remove("active"));
+        document.querySelector('#appNav [data-screen="sp"]').classList.add("active");
+        showCard(c);
+      }
+    });
+    document.getElementById("anSubRows").addEventListener("click", (e) => {
+      const row = e.target.closest("tr[data-id]");
+      if (!row) return;
+      const s = SUBS.find((x) => x.id === row.dataset.id);
+      if (s) {
+        document.querySelectorAll("#appNav .nav-item, #appNav .nav-sub").forEach((el) => el.classList.remove("active"));
+        document.querySelector('#appNav [data-screen="subs"]').classList.add("active");
+        showSubCard(s);
+      }
+    });
 
     function syncTokens(root) {
       oidcTok(root);
@@ -1685,8 +2252,7 @@
     saveBtn.onclick = () => {
       snapshot = snap();
       setDirty(false);
-      toast.style.display = "block";
-      setTimeout(() => toast.style.display = "none", 1600);
+      showToast("Изменения сохранены");
     };
     cancelBtn.onclick = () => {
       const vals = snapshot.split("\n");
@@ -1734,7 +2300,9 @@
       if (kind === "contact") {
         return '<div class="list-row"><input class="control" placeholder="Имя" /><input class="control" placeholder="Телефон" /><input class="control" placeholder="Почта" /><button class="btn-icon" type="button">✕</button></div>';
       }
-      const ph = placeholder || (kind === "acr" ? "" : "https://");
+      const ph = placeholder != null && placeholder !== ""
+        ? placeholder
+        : (kind === "acr" || kind === "text" ? "" : "https://");
       return `<div class="list-row"><input class="control" placeholder="${ph}" /><button class="btn-icon" type="button">✕</button></div>`;
     }
     document.querySelectorAll(".repeat").forEach((box) => {
