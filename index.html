@@ -35,8 +35,9 @@
       display: flex;
       flex-direction: column;
       min-height: 100%;
+      overflow: hidden;
     }
-    .shell { display: flex; flex: 1; min-height: 0; }
+    .shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
     button, input, select, textarea { font: inherit; color: inherit; }
     button { cursor: pointer; }
 
@@ -96,11 +97,16 @@
       min-width: 0;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
+      overflow: hidden;
     }
     .page-head {
       display: flex; align-items: flex-start; justify-content: space-between;
       gap: 16px; padding: 22px 28px 8px;
+    }
+    .card-toolbar {
+      flex: none;
+      background: var(--linen-0);
+      box-shadow: 0 1px 0 var(--line);
     }
     h1 { margin: 0; font-size: 26px; font-weight: 700; }
     .title-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -145,14 +151,20 @@
     }
     .tabs button.has-error .err-dot { display: block; }
 
-    .stage {
+    .stage > section {
       flex: 1;
-      min-width: 0;
+      min-height: 0;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
+      overflow: hidden;
     }
-    .page { padding: 20px 28px 40px; width: 100%; }
+    .page {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 20px 28px 40px;
+      width: 100%;
+    }
     .card {
       background: var(--paper);
       border: 1px solid #ece6de;
@@ -473,6 +485,7 @@
     </section>
 
     <section id="screen-sp" hidden>
+      <div class="card-toolbar">
       <header class="page-head">
         <div class="title-row">
           <h1 id="cardTitle">nested-jwt-test-idgw</h1>
@@ -497,6 +510,7 @@
         <button type="button" data-tab="authn">Authenticators</button>
         <button type="button" data-tab="other">Остальное</button>
       </nav>
+      </div>
 
       <div class="page" id="panels">
         <section data-panel="general">
@@ -910,6 +924,7 @@
     </section>
 
     <section id="screen-sp-create" hidden>
+      <div class="card-toolbar">
       <header class="page-head">
         <div class="title-row"><h1>Новый клиент</h1></div>
         <div class="head-actions">
@@ -929,6 +944,7 @@
         <button type="button" data-ctab="authn">Authenticators</button>
         <button type="button" data-ctab="other">Остальное</button>
       </nav>
+      </div>
       <div class="page">
         <section data-cpanel="general">
           <article class="card">
