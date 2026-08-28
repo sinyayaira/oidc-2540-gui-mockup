@@ -260,6 +260,32 @@
     .radios label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
     .list-row { display: flex; gap: 8px; margin-bottom: 8px; }
     .list-row .control { flex: 1; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 0; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #eee9e3; border-radius: 999px;
+      padding: 4px 8px 4px 10px; font-size: 13px; font-weight: 600;
+    }
+    .chip button {
+      width: 18px; height: 18px; border: 0; border-radius: 50%;
+      background: transparent; color: var(--ink-soft); padding: 0; line-height: 1;
+    }
+    .search-wrap { position: relative; }
+    .suggest {
+      position: absolute; left: 0; right: 0; top: calc(100% - 2px); z-index: 8;
+      background: #fff; border: 1px solid #e5ded6; border-radius: 0 0 8px 8px;
+      max-height: 220px; overflow: auto; box-shadow: 0 8px 20px rgba(54,50,47,.08);
+    }
+    .suggest button {
+      display: block; width: 100%; text-align: left; border: 0;
+      background: #fff; padding: 8px 10px; font-weight: 600;
+    }
+    .suggest button:hover, .suggest button.active { background: #f4efe8; }
+    .note {
+      margin-top: 14px; padding: 10px 12px; border-radius: 8px;
+      background: #f4ebe0; color: #6a3b08; font-size: 13px;
+    }
+    .note.info { background: #eee9e3; color: var(--ink-soft); }
     .toast {
       position: fixed; right: 24px; bottom: 24px;
       background: var(--ok); color: #fff; padding: 10px 14px;
@@ -487,7 +513,7 @@
               </div>
               <div class="field">
                 <label class="label">Приоритет</label>
-                <select class="control"><option>FIRST</option><option>NORMAL</option><option>LOW</option></select>
+                <select class="control"><option>FIRST</option><option>SECOND</option><option>THIRD</option></select>
               </div>
               <div class="field">
                 <label class="label">Номер абонента для биллинга</label>
@@ -496,7 +522,7 @@
               </div>
               <div class="field span-2">
                 <label class="label">Тип биллинга</label>
-                <select class="control"><option>NONE</option><option>MSISDN</option></select>
+                <select class="control"><option>NONE</option><option>PER_REQUEST</option><option>SUBSCRIPTION</option></select>
               </div>
             </div>
           </article>
@@ -519,16 +545,16 @@
             <div class="grid-2">
               <div class="field">
                 <label class="label">Оператор</label>
-                <select class="control"><option>Default</option><option>МегаФон</option><option>Билайн</option></select>
+                <select class="control"><option>Default</option><option>TELE2</option><option>MEGAFON</option><option>MTS</option><option>BEELINE</option></select>
               </div>
               <div class="field">
                 <label class="label">Дизайн</label>
-                <select class="control"><option>TELE2_RUSSIA</option></select>
+                <select class="control"><option>TELE2_RUSSIA</option><option>MEGAFON_RUSSIA</option><option>DEFAULT</option></select>
                 <div class="hint">Зависит от оператора</div>
               </div>
               <div class="field">
                 <label class="label">Региональные настройки</label>
-                <select class="control"><option>--</option></select>
+                <select class="control"><option>--</option><option>RU-CENTRAL</option><option>RU-NORTH-WEST</option><option>RU-SIBERIA</option></select>
               </div>
               <div class="field">
                 <label class="label">Заголовок в дизайне</label>
@@ -666,9 +692,9 @@
             <label class="check"><input type="checkbox" /> Access-токены не истекают</label>
             <div class="grid-2">
               <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
             <label class="check"><input type="checkbox" checked /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
@@ -677,11 +703,11 @@
             <label class="check"><input type="checkbox" checked /> Refresh-токены не истекают</label>
             <div class="grid-2">
               <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" disabled /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
             <label class="check"><input type="checkbox" checked /> Передавать JWKS URI сервис-провайдеру</label>
           </article>
@@ -691,30 +717,42 @@
           <article class="card">
             <p class="hint">«По умолчанию сервера» означает, что клиент не задаёт алгоритм и берёт общий параметр из настроек.</p>
             <div class="grid-2" style="margin-top:12px;">
-              <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option></select></div>
-              <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>По умолчанию сервера</option><option>S256</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>По умолчанию сервера</option></select></div>
-              <div class="field span-2"><label class="label">Дополнительный ключ хеширования</label><input class="control" readonly /></div>
+              <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RSA-OAEP</option><option>RSA-OAEP-256</option><option>ECDH-ES</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>A128CBC-HS256</option><option>A192CBC-HS384</option><option>A256GCM</option></select></div>
+              <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>Не использовать</option><option>plain</option><option>S256</option></select></div>
+              <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>Не использовать</option><option>SHA-256</option><option>SHA-512</option><option>HMAC-SHA-256</option></select></div>
+              <div class="field span-2"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
             </div>
           </article>
         </section>
 
         <section data-panel="admin" hidden>
           <article class="card">
-            <label class="check"><input type="checkbox" /> Административный сервис-провайдер</label>
-            <label class="check"><input type="checkbox" /> Все сервис-провайдеры</label>
-            <div class="field" style="margin-top:14px;">
-              <label class="label">Доступные клиенты</label>
-              <input class="control" placeholder="Начните вводить название" />
-              <div class="hint">Начните вводить название — список из сотен записей не листают глазами</div>
-            </div>
-            <div class="field" style="margin-top:14px;">
-              <label class="label">Разрешённые команды</label>
-              <input class="control" />
-              <div class="hint">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
+            <label class="check"><input type="checkbox" id="adminSp" checked /> Административный сервис-провайдер</label>
+            <div id="adminEmpty" class="note info" hidden>Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
+            <div id="adminBlock">
+              <label class="check"><input type="checkbox" id="adminAll" /> Все сервис-провайдеры</label>
+              <div class="field" style="margin-top:14px;">
+                <label class="label" for="clientSearch">Доступные клиенты</label>
+                <div class="chips" id="clientChips"></div>
+                <div class="search-wrap">
+                  <input class="control" id="clientSearch" placeholder="Начните вводить название" autocomplete="off" />
+                  <div class="suggest" id="clientSuggest" hidden></div>
+                </div>
+                <div class="hint">Начните вводить название</div>
+              </div>
+              <div class="field" style="margin-top:14px;">
+                <label class="label" for="cmdSearch">Разрешённые команды</label>
+                <div class="chips" id="cmdChips"></div>
+                <div class="search-wrap">
+                  <input class="control" id="cmdSearch" placeholder="Начните вводить название" autocomplete="off" />
+                  <div class="suggest" id="cmdSuggest" hidden></div>
+                </div>
+                <div class="hint">Начните вводить название</div>
+              </div>
+              <div class="note">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
             </div>
           </article>
         </section>
@@ -854,7 +892,7 @@
               </div>
               <div class="field">
                 <label class="label">Приоритет</label>
-                <select class="control"><option>FIRST</option><option>NORMAL</option><option>LOW</option></select>
+                <select class="control"><option>FIRST</option><option>SECOND</option><option>THIRD</option></select>
               </div>
               <div class="field">
                 <label class="label">Номер абонента для биллинга</label>
@@ -863,7 +901,7 @@
               </div>
               <div class="field span-2">
                 <label class="label">Тип биллинга</label>
-                <select class="control"><option>NONE</option><option>MSISDN</option></select>
+                <select class="control"><option>NONE</option><option>PER_REQUEST</option><option>SUBSCRIPTION</option></select>
               </div>
             </div>
           </article>
@@ -885,15 +923,15 @@
             <div class="grid-2">
               <div class="field">
                 <label class="label">Оператор</label>
-                <select class="control"><option>Default</option><option>МегаФон</option><option>Билайн</option></select>
+                <select class="control"><option>Default</option><option>TELE2</option><option>MEGAFON</option><option>MTS</option><option>BEELINE</option></select>
               </div>
               <div class="field">
                 <label class="label">Дизайн</label>
-                <select class="control"><option>TELE2_RUSSIA</option></select>
+                <select class="control"><option>TELE2_RUSSIA</option><option>MEGAFON_RUSSIA</option><option>DEFAULT</option></select>
               </div>
               <div class="field">
                 <label class="label">Региональные настройки</label>
-                <select class="control"><option>--</option></select>
+                <select class="control"><option>--</option><option>RU-CENTRAL</option><option>RU-NORTH-WEST</option><option>RU-SIBERIA</option></select>
               </div>
               <div class="field">
                 <label class="label">Заголовок в дизайне</label>
@@ -1006,9 +1044,9 @@
             <label class="check"><input type="checkbox" /> Access-токены не истекают</label>
             <div class="grid-2">
               <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
             <label class="check"><input type="checkbox" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
@@ -1017,11 +1055,11 @@
             <label class="check"><input type="checkbox" /> Refresh-токены не истекают</label>
             <div class="grid-2">
               <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control"><option>секунды</option></select></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
             <label class="check"><input type="checkbox" /> Передавать JWKS URI сервис-провайдеру</label>
           </article>
@@ -1030,29 +1068,41 @@
           <article class="card">
             <p class="hint">«По умолчанию сервера» означает, что клиент не задаёт алгоритм и берёт общий параметр из настроек.</p>
             <div class="grid-2" style="margin-top:12px;">
-              <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option></select></div>
-              <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>По умолчанию сервера</option><option>S256</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>По умолчанию сервера</option></select></div>
+              <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RSA-OAEP</option><option>RSA-OAEP-256</option><option>ECDH-ES</option><option>Не использовать</option></select></div>
+              <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>A128CBC-HS256</option><option>A192CBC-HS384</option><option>A256GCM</option></select></div>
+              <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>Не использовать</option><option>plain</option><option>S256</option></select></div>
+              <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>Не использовать</option><option>SHA-256</option><option>SHA-512</option><option>HMAC-SHA-256</option></select></div>
               <div class="field span-2"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
             </div>
           </article>
         </section>
         <section data-cpanel="admin" hidden>
           <article class="card">
-            <label class="check"><input type="checkbox" /> Административный сервис-провайдер</label>
-            <label class="check"><input type="checkbox" /> Все сервис-провайдеры</label>
-            <div class="field" style="margin-top:14px;">
-              <label class="label">Доступные клиенты</label>
-              <input class="control" placeholder="Начните вводить название" />
-              <div class="hint">Начните вводить название — список из сотен записей не листают глазами</div>
-            </div>
-            <div class="field" style="margin-top:14px;">
-              <label class="label">Разрешённые команды</label>
-              <input class="control" />
-              <div class="hint">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
+            <label class="check"><input type="checkbox" id="newAdminSp" /> Административный сервис-провайдер</label>
+            <div id="newAdminEmpty" class="note info">Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
+            <div id="newAdminBlock" hidden>
+              <label class="check"><input type="checkbox" id="newAdminAll" /> Все сервис-провайдеры</label>
+              <div class="field" style="margin-top:14px;">
+                <label class="label" for="newClientSearch">Доступные клиенты</label>
+                <div class="chips" id="newClientChips"></div>
+                <div class="search-wrap">
+                  <input class="control" id="newClientSearch" placeholder="Начните вводить название" autocomplete="off" />
+                  <div class="suggest" id="newClientSuggest" hidden></div>
+                </div>
+                <div class="hint">Начните вводить название</div>
+              </div>
+              <div class="field" style="margin-top:14px;">
+                <label class="label" for="newCmdSearch">Разрешённые команды</label>
+                <div class="chips" id="newCmdChips"></div>
+                <div class="search-wrap">
+                  <input class="control" id="newCmdSearch" placeholder="Начните вводить название" autocomplete="off" />
+                  <div class="suggest" id="newCmdSuggest" hidden></div>
+                </div>
+                <div class="hint">Начните вводить название</div>
+              </div>
+              <div class="note">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
             </div>
           </article>
         </section>
@@ -1291,6 +1341,103 @@
     document.getElementById("screen-sp").addEventListener("input", () => setDirty(snap() !== snapshot));
     document.getElementById("screen-sp").addEventListener("change", () => setDirty(snap() !== snapshot));
     const toast = document.getElementById("toast");
+
+    const COMMANDS = ["activate","deactivate","changepin","checkstatus","resetpin","reactivatepin","resetblockedpin","block","unblock","status"];
+    function bindPicker({ input, suggest, chips, options, selected, onChange }) {
+      const state = { selected: [...selected] };
+      const renderChips = () => {
+        chips.innerHTML = state.selected.map((v, i) => `<span class="chip">${v}<button type="button" data-i="${i}" aria-label="Убрать">✕</button></span>`).join("");
+      };
+      const showSuggest = (q) => {
+        if (input.disabled) { suggest.hidden = true; return; }
+        const needle = q.trim().toLowerCase();
+        const hits = options.filter((o) => !state.selected.includes(o) && (!needle || o.toLowerCase().includes(needle))).slice(0, 12);
+        suggest.innerHTML = hits.map((h) => `<button type="button" class="suggest-item">${h}</button>`).join("");
+        suggest.hidden = !hits.length;
+      };
+      input.addEventListener("input", () => showSuggest(input.value));
+      input.addEventListener("focus", () => showSuggest(input.value));
+      suggest.addEventListener("mousedown", (e) => {
+        const btn = e.target.closest(".suggest-item");
+        if (!btn) return;
+        e.preventDefault();
+        state.selected.push(btn.textContent);
+        input.value = "";
+        renderChips();
+        showSuggest("");
+        onChange?.();
+      });
+      chips.addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-i]");
+        if (!b) return;
+        state.selected.splice(+b.dataset.i, 1);
+        renderChips();
+        onChange?.();
+      });
+      document.addEventListener("click", (e) => {
+        if (!input.closest(".search-wrap").contains(e.target)) suggest.hidden = true;
+      });
+      renderChips();
+      return state;
+    }
+    function bindAdmin(ids) {
+      const sync = () => {
+        ids.block.hidden = !ids.flag.checked;
+        ids.empty.hidden = ids.flag.checked;
+        ids.search.disabled = ids.all.checked;
+        if (ids.all.checked) ids.suggest.hidden = true;
+      };
+      ids.flag.addEventListener("change", sync);
+      ids.all.addEventListener("change", sync);
+      sync();
+    }
+    const clientNames = () => CLIENTS.map((c) => c.name);
+    bindPicker({
+      input: document.getElementById("clientSearch"),
+      suggest: document.getElementById("clientSuggest"),
+      chips: document.getElementById("clientChips"),
+      options: clientNames(),
+      selected: ["nested-jwt-test-idgw", "AggregatorTest"],
+      onChange: () => setDirty(true)
+    });
+    bindPicker({
+      input: document.getElementById("cmdSearch"),
+      suggest: document.getElementById("cmdSuggest"),
+      chips: document.getElementById("cmdChips"),
+      options: COMMANDS,
+      selected: ["activate", "deactivate", "checkstatus", "status"],
+      onChange: () => setDirty(true)
+    });
+    bindPicker({
+      input: document.getElementById("newClientSearch"),
+      suggest: document.getElementById("newClientSuggest"),
+      chips: document.getElementById("newClientChips"),
+      options: clientNames(),
+      selected: []
+    });
+    bindPicker({
+      input: document.getElementById("newCmdSearch"),
+      suggest: document.getElementById("newCmdSuggest"),
+      chips: document.getElementById("newCmdChips"),
+      options: COMMANDS,
+      selected: []
+    });
+    bindAdmin({
+      flag: document.getElementById("adminSp"),
+      all: document.getElementById("adminAll"),
+      block: document.getElementById("adminBlock"),
+      empty: document.getElementById("adminEmpty"),
+      search: document.getElementById("clientSearch"),
+      suggest: document.getElementById("clientSuggest")
+    });
+    bindAdmin({
+      flag: document.getElementById("newAdminSp"),
+      all: document.getElementById("newAdminAll"),
+      block: document.getElementById("newAdminBlock"),
+      empty: document.getElementById("newAdminEmpty"),
+      search: document.getElementById("newClientSearch"),
+      suggest: document.getElementById("newClientSuggest")
+    });
     saveBtn.onclick = () => {
       snapshot = snap();
       setDirty(false);
@@ -1303,6 +1450,8 @@
         if (el.type === "checkbox") el.checked = vals[i] === "true";
         else el.value = vals[i] ?? el.value;
       });
+      document.getElementById("adminSp").dispatchEvent(new Event("change"));
+      document.getElementById("adminAll").dispatchEvent(new Event("change"));
       setDirty(false);
     };
 
