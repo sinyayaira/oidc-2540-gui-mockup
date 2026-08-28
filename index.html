@@ -169,6 +169,7 @@
       gap: 16px 20px; align-items: start;
     }
     .span-2 { grid-column: 1 / -1; }
+    .span-rest { grid-column: 2 / -1; }
     .logo {
       width: 88px; height: 88px; border-radius: 12px;
       background: #efe4dc; border: 1px solid #eadfd8;
@@ -183,7 +184,26 @@
       padding: 10px 8px; outline: none;
     }
     .control:focus { border-bottom-color: var(--focus); background: #fff; }
-    .control[readonly] { color: var(--ink-soft); }
+    .control[readonly] {
+      color: var(--ink-soft);
+      cursor: default;
+    }
+    .control[readonly]:focus {
+      background: #f6f3ee;
+      border-bottom-color: #cfc6bc;
+    }
+    .control:disabled {
+      color: var(--ink-soft);
+      background: #efece7;
+      cursor: default;
+      opacity: 0.7;
+    }
+    .control:disabled:focus {
+      background: #efece7;
+      border-bottom-color: #cfc6bc;
+    }
+    .token-extra { margin: 4px 0 8px; }
+    .token-extra .grid-2 { margin-top: 10px; }
     .control.error { border-bottom-color: var(--error); background: #fff6f4; }
     textarea.control {
       min-height: 160px; font-family: var(--mono); font-size: 12px;
@@ -324,6 +344,7 @@
     .st.active i { background: #2c9a54; }
     @media (max-width: 900px) {
       .grid-2, .grid-id { grid-template-columns: 1fr; }
+      .span-rest { grid-column: 1 / -1; }
     }
   </style>
 </head>
@@ -453,14 +474,14 @@
               </div>
               <div class="field">
                 <label class="label" for="registered">Зарегистрирован</label>
-                <input class="control" id="registered" type="datetime-local" value="2026-07-01T11:08" readonly />
+                <input class="control" id="registered" type="text" value="01.07.2026 11:08" readonly tabindex="-1" />
                 <div class="hint">Момент регистрации, изменить нельзя</div>
               </div>
               <div></div>
               <div class="field span-2">
                 <label class="label" for="clientId">Идентификатор клиента</label>
                 <div class="with-copy">
-                  <input class="control" id="clientId" value="9f10dfe9-4617-44dd-ba69-317872ff0061" readonly />
+                  <input class="control" id="clientId" value="9f10dfe9-4617-44dd-ba69-317872ff0061" readonly tabindex="-1" />
                   <button class="btn-icon" type="button" data-copy="clientId" title="Копировать">⧉</button>
                 </div>
                 <div class="hint">Назначается при создании, изменить нельзя</div>
@@ -717,22 +738,26 @@
         </section>
 
         <section data-panel="tokens" hidden>
-          <article class="card">
-            <label class="check"><input type="checkbox" /> Access-токены не истекают</label>
+          <article class="card" data-tokens>
+            <label class="check"><input type="checkbox" data-tok="accessNever" /> Access-токены не истекают</label>
             <div class="grid-2">
-              <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
-            <label class="check"><input type="checkbox" checked /> Выдавать refresh-токены</label>
+            <label class="check"><input type="checkbox" checked data-tok="issueRefresh" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
-            <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
-            <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
-            <label class="check"><input type="checkbox" checked /> Refresh-токены не истекают</label>
+            <div class="token-extra" data-tok="refreshBlock">
+              <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
+              <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
+              <label class="check"><input type="checkbox" checked data-tok="refreshNever" /> Refresh-токены не истекают</label>
+              <div class="grid-2">
+                <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
+            </div>
             <div class="grid-2">
-              <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" disabled /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
@@ -873,17 +898,11 @@
           <article class="card">
             <div class="grid-id">
               <div class="logo"></div>
-              <div class="field">
+              <div class="field span-rest">
                 <label class="label" for="newName">Название клиента <span class="req">*</span></label>
                 <input class="control" id="newName" />
                 <div class="hint">Человекочитаемое имя приложения</div>
               </div>
-              <div class="field">
-                <label class="label" for="newReg">Зарегистрирован</label>
-                <input class="control" id="newReg" value="Ещё не сохранён" readonly />
-                <div class="hint">Момент регистрации, изменить нельзя</div>
-              </div>
-              <div></div>
               <div class="field span-2">
                 <label class="label" for="newId">Идентификатор клиента</label>
                 <input class="control" id="newId" />
@@ -1106,22 +1125,26 @@
           </article>
         </section>
         <section data-cpanel="tokens" hidden>
-          <article class="card">
-            <label class="check"><input type="checkbox" /> Access-токены не истекают</label>
+          <article class="card" data-tokens>
+            <label class="check"><input type="checkbox" data-tok="accessNever" /> Access-токены не истекают</label>
             <div class="grid-2">
-              <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
+              <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
-            <label class="check"><input type="checkbox" /> Выдавать refresh-токены</label>
+            <label class="check"><input type="checkbox" data-tok="issueRefresh" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
-            <label class="check"><input type="checkbox" /> Refresh-токены переиспользуются</label>
-            <label class="check"><input type="checkbox" /> Отзывать активные access-токены при обновлении</label>
-            <label class="check"><input type="checkbox" /> Refresh-токены не истекают</label>
+            <div class="token-extra" data-tok="refreshBlock" hidden>
+              <label class="check"><input type="checkbox" /> Refresh-токены переиспользуются</label>
+              <label class="check"><input type="checkbox" /> Отзывать активные access-токены при обновлении</label>
+              <label class="check"><input type="checkbox" data-tok="refreshNever" /> Refresh-токены не истекают</label>
+              <div class="grid-2">
+                <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
+            </div>
             <div class="grid-2">
-              <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
@@ -1324,6 +1347,7 @@
       document.getElementById("cardTags").innerHTML = tagsHtml(c.tags);
       document.getElementById("clientName").value = c.name;
       document.getElementById("clientId").value = c.clientId;
+      document.getElementById("registered").value = "01.07.2026 11:08";
       snapshot = snap();
       setDirty(false);
     }
@@ -1566,6 +1590,30 @@
       cb.addEventListener("change", sync);
       sync();
     });
+
+    function wireTokens(root) {
+      const accessNever = root.querySelector("[data-tok=accessNever]");
+      const accessTtl = root.querySelector("[data-tok=accessTtl]");
+      const accessUnit = root.querySelector("[data-tok=accessUnit]");
+      const issueRefresh = root.querySelector("[data-tok=issueRefresh]");
+      const refreshBlock = root.querySelector("[data-tok=refreshBlock]");
+      const refreshNever = root.querySelector("[data-tok=refreshNever]");
+      const refreshTtl = root.querySelector("[data-tok=refreshTtl]");
+      const refreshUnit = root.querySelector("[data-tok=refreshUnit]");
+      const sync = () => {
+        accessTtl.disabled = accessNever.checked;
+        accessUnit.disabled = accessNever.checked;
+        refreshBlock.hidden = !issueRefresh.checked;
+        const lockRefresh = !issueRefresh.checked || refreshNever.checked;
+        refreshTtl.disabled = lockRefresh;
+        refreshUnit.disabled = lockRefresh;
+      };
+      accessNever.addEventListener("change", sync);
+      issueRefresh.addEventListener("change", sync);
+      refreshNever.addEventListener("change", sync);
+      sync();
+    }
+    document.querySelectorAll("[data-tokens]").forEach(wireTokens);
 
     function rowHtml(kind, placeholder) {
       if (kind === "contact") {
