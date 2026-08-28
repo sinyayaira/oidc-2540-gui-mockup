@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-store" />
   <title>OIDC Server — администрирование</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -353,6 +354,35 @@
       .span-rest { grid-column: 1 / -1; }
     }
   </style>
+  <script>
+    function oidcTok(el) {
+      const root = (el && el.closest) ? el.closest("[data-tokens]") : null;
+      if (!root) return;
+      const never = root.querySelector('[data-tok="accessNever"]');
+      const ttl = root.querySelector('[data-tok="accessTtl"]');
+      const unit = root.querySelector('[data-tok="accessUnit"]');
+      const issue = root.querySelector('[data-tok="issueRefresh"]');
+      const block = root.querySelector('[data-tok="refreshBlock"]');
+      const rnever = root.querySelector('[data-tok="refreshNever"]');
+      const rttl = root.querySelector('[data-tok="refreshTtl"]');
+      const runit = root.querySelector('[data-tok="refreshUnit"]');
+      const lockA = !!(never && never.checked);
+      if (ttl) { ttl.disabled = lockA; if (ttl.closest(".field")) ttl.closest(".field").classList.toggle("is-locked", lockA); }
+      if (unit) { unit.disabled = lockA; if (unit.closest(".field")) unit.closest(".field").classList.toggle("is-locked", lockA); }
+      const show = !!(issue && issue.checked);
+      if (block) {
+        block.hidden = !show;
+        block.classList.toggle("is-hidden", !show);
+        block.style.setProperty("display", show ? "block" : "none", "important");
+      }
+      const lockR = !show || !!(rnever && rnever.checked);
+      if (rttl) { rttl.disabled = lockR; if (rttl.closest(".field")) rttl.closest(".field").classList.toggle("is-locked", lockR); }
+      if (runit) { runit.disabled = lockR; if (runit.closest(".field")) runit.closest(".field").classList.toggle("is-locked", lockR); }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("[data-tokens]").forEach((root) => oidcTok(root.querySelector('[data-tok="issueRefresh"]')));
+    });
+  </script>
 </head>
 <body>
   <p class="share-note"><b>Макет к OIDC-2540</b> · не стенд, сохранение никуда не уходит · откройте этот файл в браузере</p>
@@ -745,19 +775,19 @@
 
         <section data-panel="tokens" hidden>
           <article class="card" data-tokens>
-            <label class="check"><input type="checkbox" data-tok="accessNever" /> Access-токены не истекают</label>
+            <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
             <div class="grid-2">
               <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
-            <label class="check"><input type="checkbox" checked data-tok="issueRefresh" /> Выдавать refresh-токены</label>
+            <label class="check"><input type="checkbox" checked data-tok="issueRefresh" onchange="oidcTok(this)" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
             <div class="token-extra is-hidden" data-tok="refreshBlock" hidden>
               <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
-              <label class="check"><input type="checkbox" checked data-tok="refreshNever" /> Refresh-токены не истекают</label>
+              <label class="check"><input type="checkbox" checked data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
               <div class="grid-2">
                 <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
                 <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
@@ -1132,19 +1162,19 @@
         </section>
         <section data-cpanel="tokens" hidden>
           <article class="card" data-tokens>
-            <label class="check"><input type="checkbox" data-tok="accessNever" /> Access-токены не истекают</label>
+            <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
             <div class="grid-2">
               <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
             </div>
-            <label class="check"><input type="checkbox" data-tok="issueRefresh" /> Выдавать refresh-токены</label>
+            <label class="check"><input type="checkbox" data-tok="issueRefresh" onchange="oidcTok(this)" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
             <div class="token-extra is-hidden" data-tok="refreshBlock" hidden>
               <label class="check"><input type="checkbox" /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" /> Отзывать активные access-токены при обновлении</label>
-              <label class="check"><input type="checkbox" data-tok="refreshNever" /> Refresh-токены не истекают</label>
+              <label class="check"><input type="checkbox" data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
               <div class="grid-2">
                 <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
                 <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
@@ -1455,30 +1485,7 @@
     const toast = document.getElementById("toast");
 
     function syncTokens(root) {
-      const q = (name) => root.querySelector(`[data-tok="${name}"]`);
-      const accessNever = q("accessNever");
-      const accessTtl = q("accessTtl");
-      const accessUnit = q("accessUnit");
-      const issueRefresh = q("issueRefresh");
-      const refreshBlock = q("refreshBlock");
-      const refreshNever = q("refreshNever");
-      const refreshTtl = q("refreshTtl");
-      const refreshUnit = q("refreshUnit");
-      if (!accessNever || !issueRefresh || !refreshBlock) return;
-      const lockAccess = accessNever.checked;
-      accessTtl.disabled = lockAccess;
-      accessUnit.disabled = lockAccess;
-      accessTtl.closest(".field").classList.toggle("is-locked", lockAccess);
-      accessUnit.closest(".field").classList.toggle("is-locked", lockAccess);
-      const showRefresh = issueRefresh.checked;
-      refreshBlock.hidden = !showRefresh;
-      refreshBlock.classList.toggle("is-hidden", !showRefresh);
-      refreshBlock.style.display = showRefresh ? "" : "none";
-      const lockRefresh = !showRefresh || refreshNever.checked;
-      refreshTtl.disabled = lockRefresh;
-      refreshUnit.disabled = lockRefresh;
-      refreshTtl.closest(".field").classList.toggle("is-locked", lockRefresh);
-      refreshUnit.closest(".field").classList.toggle("is-locked", lockRefresh);
+      oidcTok(root);
     }
     function syncAllTokens() {
       document.querySelectorAll("[data-tokens]").forEach(syncTokens);
