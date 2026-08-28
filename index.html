@@ -420,6 +420,7 @@
     .sp-table tr:last-child td { border-bottom: 0; }
     .sp-table tbody tr { cursor: pointer; }
     .sp-table tbody tr:hover { background: #f4efe8; }
+    .sp-table.plain tbody tr { cursor: default; }
     .sp-table .id { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
     .tag {
       display: inline-flex; align-items: center; gap: 6px;
@@ -433,9 +434,40 @@
     .st { display: inline-flex; align-items: center; gap: 8px; }
     .st i { width: 8px; height: 8px; border-radius: 50%; background: #9a938d; }
     .st.active i { background: #2c9a54; }
+    .st.blocked i { background: var(--error); }
+    .st.wait i { background: #cf7f36; }
+    .metrics {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;
+    }
+    .metric {
+      background: var(--paper); border: 1px solid #ece6de; border-radius: 16px; padding: 16px 18px;
+    }
+    .metric b { display: block; font-size: 22px; font-weight: 700; margin-top: 6px; }
+    .metric span { color: var(--muted); font-size: 13px; font-weight: 600; }
+    .trend {
+      display: inline-flex; margin-top: 8px; padding: 2px 8px; border-radius: 999px;
+      font-size: 12px; font-weight: 600;
+    }
+    .trend.ok { background: #e3f2e8; color: var(--ok); }
+    .trend.warn { background: #efe4d6; color: #6a3b08; }
+    .trend.neutral { background: #eee9e3; color: var(--ink-soft); }
+    .chart-card { margin-bottom: 16px; }
+    .bars {
+      display: flex; align-items: flex-end; gap: 6px; height: 120px; margin-top: 12px;
+    }
+    .bars i {
+      flex: 1; background: #fde8e4; border-radius: 4px; min-height: 4px;
+    }
+    .bars i.peak { background: var(--coral); }
+    .settings-form { max-width: 560px; }
+    .empty-msg { text-align: center; padding: 48px 16px; color: var(--ink-soft); font-weight: 600; }
+    @media (max-width: 1100px) {
+      .metrics { grid-template-columns: 1fr 1fr; }
+    }
     @media (max-width: 900px) {
       .grid-2, .grid-id { grid-template-columns: 1fr; }
       .span-rest { grid-column: 1 / -1; }
+      .metrics { grid-template-columns: 1fr; }
     }
   </style>
   <script>
@@ -485,43 +517,18 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M5 19c1.2-3 3.6-4.5 7-4.5S17.8 16 19 19"/></svg>
       Абоненты
     </button>
-
-    <div class="nav-group" data-group="journals">
-      <button class="nav-group-btn" type="button">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6h14M5 12h14M5 18h9"/></svg>
-        Журналы
-        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="nav-subs">
-        <button class="nav-sub" data-screen="j-audit" type="button">Аудит</button>
-        <button class="nav-sub" data-screen="j-auth" type="button">Авторизация</button>
-        <button class="nav-sub" data-screen="j-err" type="button">Ошибки</button>
-      </div>
-    </div>
-
-    <div class="nav-group" data-group="analytics">
-      <button class="nav-group-btn" type="button">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5m0 14h16M8 15l3-4 2 2 5-6"/></svg>
-        Аналитика
-        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="nav-subs">
-        <button class="nav-sub" data-screen="a-summary" type="button">Сводка</button>
-        <button class="nav-sub" data-screen="a-sp" type="button">По сервис-провайдерам</button>
-        <button class="nav-sub" data-screen="a-subs" type="button">По абонентам</button>
-      </div>
-    </div>
-
-    <div class="nav-group" data-group="settings">
-      <button class="nav-group-btn" type="button">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2"/></svg>
-        Настройки
-        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="nav-subs">
-        <button class="nav-sub" data-screen="s-platform" type="button">Платформа</button>
-      </div>
-    </div>
+    <button class="nav-item" data-screen="logs" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6h14M5 12h14M5 18h9"/></svg>
+      Журналы
+    </button>
+    <button class="nav-item" data-screen="analytics" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5m0 14h16M8 15l3-4 2 2 5-6"/></svg>
+      Аналитика
+    </button>
+    <button class="nav-item" data-screen="settings" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2"/></svg>
+      Настройки
+    </button>
   </aside>
 
   <main class="stage">
@@ -531,7 +538,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19c1.2-3 3.6-4.5 7-4.5S17.8 16 19 19"/></svg>
         </button>
         <div class="user-drop" id="userDrop" hidden>
-          <button type="button" disabled>admin</button>
+          <button type="button" disabled>i.smirnov</button>
           <hr />
           <button type="button" id="userProfile">Профиль</button>
           <button type="button" id="userLogout">Выйти</button>
@@ -1411,9 +1418,143 @@
       </div>
     </section>
 
-    <section class="app-screen" id="screen-other" hidden>
-      <header class="page-head"><h1 id="otherTitle"></h1></header>
-      <div class="page"><div class="card stub"><h2 id="otherLead"></h2><p>Раздел открывается отдельной страницей. Состав подразделов — заготовка для обсуждения.</p></div></div>
+    <section class="app-screen" id="screen-subs" hidden>
+      <header class="page-head"><h1>Абоненты</h1></header>
+      <div class="toolbar">
+        <div class="field" style="flex:1; max-width:420px; margin:0;">
+          <label class="label" for="subSearch">Поиск</label>
+          <input class="control" id="subSearch" placeholder="Номер абонента" />
+        </div>
+        <div class="pager">
+          <span id="subPageInfo"></span>
+          <button class="btn-icon" type="button" id="subPrev" disabled>‹</button>
+          <button class="btn-icon" type="button" id="subNext">›</button>
+        </div>
+      </div>
+      <div class="page" style="padding-top:0;">
+        <p class="empty-msg" id="subEmpty" hidden>Абонент не найден</p>
+        <table class="sp-table plain" id="subTable">
+          <thead>
+            <tr>
+              <th>Номер</th>
+              <th>Оператор</th>
+              <th>Статус</th>
+              <th>Последний вход</th>
+              <th>Клиентов</th>
+            </tr>
+          </thead>
+          <tbody id="subRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-logs" hidden>
+      <header class="page-head"><h1>Журналы</h1></header>
+      <div class="toolbar">
+        <div class="field" style="flex:1; max-width:420px; margin:0;">
+          <label class="label" for="logSearch">Поиск</label>
+          <input class="control" id="logSearch" placeholder="Номер абонента или событие" />
+        </div>
+      </div>
+      <div class="page" style="padding-top:0;">
+        <p class="empty-msg" id="logEmpty" hidden>Событий не найдено</p>
+        <table class="sp-table plain" id="logTable">
+          <thead>
+            <tr>
+              <th>Время</th>
+              <th>Событие</th>
+              <th>Абонент</th>
+              <th>Результат</th>
+              <th>Подробности</th>
+            </tr>
+          </thead>
+          <tbody id="logRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-analytics" hidden>
+      <header class="page-head"><h1>Аналитика</h1></header>
+      <nav class="tabs" id="anTabs">
+        <button type="button" class="active" data-atab="dashboard">Сводка</button>
+        <button type="button" data-atab="reports">Отчёты</button>
+      </nav>
+      <div class="page">
+        <div id="anDashboard">
+          <div class="metrics">
+            <div class="metric"><span>Авторизаций за сутки</span><b>128 402</b><span class="trend ok">+4,2%</span></div>
+            <div class="metric"><span>Отказов</span><b>1 934</b><span class="trend ok">−0,8%</span></div>
+            <div class="metric"><span>Активных клиентов</span><b>38</b><span class="trend neutral">+2</span></div>
+            <div class="metric"><span>Медиана ответа</span><b>212 мс</b><span class="trend warn">+18 мс</span></div>
+          </div>
+          <article class="card chart-card">
+            <h2>Авторизации по часам</h2>
+            <p class="hint">Пик приходится на 19:00, спад после полуночи.</p>
+            <div class="bars" id="anBars"></div>
+          </article>
+        </div>
+        <div id="anReports" hidden>
+          <div class="head-actions" style="justify-content:flex-end; margin-bottom:12px;">
+            <button class="btn btn-primary" type="button" id="anCollect">Собрать отчёт</button>
+          </div>
+          <table class="sp-table plain">
+            <thead>
+              <tr>
+                <th>Отчёт</th>
+                <th>Период</th>
+                <th>Собран</th>
+                <th>Статус</th>
+                <th>Размер</th>
+              </tr>
+            </thead>
+            <tbody id="anReportRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-screen" id="screen-settings" hidden>
+      <header class="page-head"><h1>Настройки</h1></header>
+      <div class="page">
+        <article class="card settings-form">
+          <h2>Параметры сервера</h2>
+          <p class="hint" style="margin:-8px 0 16px;">Действуют на всех клиентов. Клиент может сузить их у себя, но не расширить.</p>
+          <div class="field">
+            <label class="label" for="issuer">Издатель (issuer)</label>
+            <input class="control" id="issuer" value="https://oidc.a1s.ru" />
+            <div class="hint">Значение поля iss в выдаваемых токенах</div>
+          </div>
+          <div class="field" style="margin-top:16px;">
+            <label class="label" for="signAlg">Алгоритм подписи по умолчанию</label>
+            <select class="control" id="signAlg">
+              <option selected>RS256</option>
+              <option>ES256</option>
+              <option>PS256</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:16px;">
+            <label class="label" for="jwksTtl">Кэш JWKS, с</label>
+            <input class="control" id="jwksTtl" type="number" value="3600" />
+          </div>
+          <div class="field" style="margin-top:16px;">
+            <label class="label" for="sessTtl">Время жизни сессии, с</label>
+            <input class="control" id="sessTtl" type="number" value="86400" />
+          </div>
+          <h2 style="margin-top:22px;">Требования безопасности</h2>
+          <label class="check"><input type="checkbox" id="reqPkce" checked /> Требовать PKCE от всех клиентов</label>
+          <label class="check"><input type="checkbox" id="allowDevice" /> Разрешить device flow</label>
+          <div class="field" style="margin-top:16px;">
+            <label class="label" for="supportMail">Почта поддержки</label>
+            <input class="control" id="supportMail" type="email" value="support@a1s.ru" />
+            <div class="hint">Показывается абоненту на экране ошибки</div>
+          </div>
+          <div class="note">Смена издателя разорвёт действующие сессии: клиентам придётся заново пройти авторизацию.</div>
+          <div class="head-actions" style="margin-top:16px;">
+            <button class="btn btn-primary" type="button" id="setSave" disabled>Сохранить</button>
+            <button class="btn btn-ghost" type="button" id="setCancel" disabled>Отменить</button>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
   </div>
@@ -1474,20 +1615,59 @@
     }
     renderList();
 
-    const screens = {
-      subs: ["Абоненты", "Список абонентов"],
-      "j-audit": ["Аудит", "Журнал аудита"],
-      "j-auth": ["Авторизация", "Журнал авторизации"],
-      "j-err": ["Ошибки", "Журнал ошибок"],
-      "a-summary": ["Сводка", "Сводная аналитика"],
-      "a-sp": ["По сервис-провайдерам", "Аналитика по СП"],
-      "a-subs": ["По абонентам", "Аналитика по абонентам"],
-      "s-platform": ["Платформа", "Настройки платформы"]
+    const OPERATORS = ["Tele2", "МегаФон", "МТС", "Билайн"];
+    const SUB_LABEL = { active: "Активен", blocked: "Заблокирован", pending: "Ожидает подтверждения" };
+    const SUBS = Array.from({ length: 36 }, (_, t) => ({
+      id: `s${pad(t + 1)}`,
+      msisdn: `+7 9${pad(t % 100)} ${pad((t * 3) % 100)}0-${pad((t * 7) % 100)}-${pad(t % 100)}`,
+      status: t % 11 === 5 ? "blocked" : t % 7 === 2 ? "pending" : "active",
+      operator: OPERATORS[t % OPERATORS.length],
+      lastLogin: `2026-08-${pad((t % 24) + 1)} 1${t % 10}:${pad((t * 11) % 60)}`,
+      clients: (t % 5) + 1
+    }));
+    const EVENTS = ["authorization_request", "token_issued", "token_refresh", "userinfo", "logout"];
+    const OUT_LABEL = { ok: "Успешно", warn: "Внимание", error: "Ошибка" };
+    const LOGS = Array.from({ length: 60 }, (_, t) => {
+      const err = t % 9 === 4;
+      const warn = t % 11 === 7;
+      return {
+        id: `l${pad(t + 1)}`,
+        at: `2026-08-24 1${t % 10}:${pad((t * 7) % 60)}:${pad((t * 13) % 60)}`,
+        clientId: CLIENTS[t % CLIENTS.length].clientId,
+        event: EVENTS[t % EVENTS.length],
+        subject: `+7 9${pad(t % 100)} ${pad((t * 3) % 100)}0-${pad((t * 7) % 100)}-${pad(t % 100)}`,
+        outcome: err ? "error" : warn ? "warn" : "ok",
+        detail: err ? "invalid_grant: код авторизации истёк" : warn ? "Повторное использование refresh-токена" : "Успешно"
+      };
+    });
+    const REPORT_NAMES = ["Авторизации по клиентам", "Отказы аутентификации", "Активные абоненты", "Выданные токены", "Отзыв refresh-токенов"];
+    const REP_LABEL = { ready: "Готов", running: "Считается", failed: "Ошибка" };
+    const REPORTS = Array.from({ length: 12 }, (_, t) => ({
+      id: `r${pad(t + 1)}`,
+      name: REPORT_NAMES[t % REPORT_NAMES.length],
+      period: `2026-0${(t % 8) + 1}`,
+      createdAt: `2026-08-${pad((t % 24) + 1)}`,
+      status: t % 9 === 4 ? "failed" : t % 5 === 1 ? "running" : "ready",
+      size: t % 9 === 4 ? "—" : `${(t % 7) + 1},${t % 10} МБ`
+    }));
+    const BAR_H = [12, 18, 26, 34, 48, 66, 82, 94, 88, 76, 64, 52, 44, 38, 30, 22];
+    const SET_DEFAULTS = {
+      issuer: "https://oidc.a1s.ru",
+      signAlg: "RS256",
+      jwksTtl: "3600",
+      sessTtl: "86400",
+      reqPkce: true,
+      allowDevice: false,
+      supportMail: "support@a1s.ru"
     };
 
     const listEl = document.getElementById("screen-sp-list");
     const cardEl = document.getElementById("screen-sp");
     const createEl = document.getElementById("screen-sp-create");
+    const subsEl = document.getElementById("screen-subs");
+    const logsEl = document.getElementById("screen-logs");
+    const anEl = document.getElementById("screen-analytics");
+    const setEl = document.getElementById("screen-settings");
 
     function hideAll() {
       document.querySelectorAll(".app-screen").forEach((s) => { s.hidden = true; });
@@ -1531,36 +1711,129 @@
       document.querySelectorAll("#createTabs button").forEach((b) => b.classList.toggle("active", b.dataset.ctab === "general"));
       document.querySelectorAll("[data-cpanel]").forEach((p) => { p.hidden = p.dataset.cpanel !== "general"; });
     }
-    function showOther(title, lead) {
+    let subPage = 0;
+    let subQuery = "";
+    function filteredSubs() {
+      const digits = subQuery.replace(/\D/g, "");
+      return digits === "" ? SUBS : SUBS.filter((s) => s.msisdn.replace(/\D/g, "").includes(digits));
+    }
+    function stClass(key) {
+      if (key === "active" || key === "ok" || key === "ready") return "active";
+      if (key === "blocked" || key === "error" || key === "failed") return "blocked";
+      return "wait";
+    }
+    function renderSubs() {
+      const rows = filteredSubs();
+      const total = rows.length;
+      const start = subPage * PAGE;
+      const slice = rows.slice(start, start + PAGE);
+      const empty = total === 0;
+      document.getElementById("subEmpty").hidden = !empty;
+      document.getElementById("subTable").hidden = empty;
+      document.querySelector("#screen-subs .pager").hidden = empty;
+      document.getElementById("subRows").innerHTML = slice.map((s) => `
+        <tr>
+          <td class="id">${s.msisdn}</td>
+          <td>${s.operator}</td>
+          <td><span class="st ${stClass(s.status)}"><i></i>${SUB_LABEL[s.status]}</span></td>
+          <td class="id">${s.lastLogin}</td>
+          <td>${s.clients}</td>
+        </tr>`).join("");
+      const from = total ? start + 1 : 0;
+      const to = Math.min(start + PAGE, total);
+      document.getElementById("subPageInfo").textContent = `${from}–${to} из ${total}`;
+      document.getElementById("subPrev").disabled = subPage === 0;
+      document.getElementById("subNext").disabled = start + PAGE >= total;
+    }
+    let logQuery = "";
+    function renderLogs() {
+      const q = logQuery.trim().toLowerCase();
+      const rows = LOGS.filter((l) => q === "" || l.subject.toLowerCase().includes(q) || l.event.includes(q)).slice(0, 25);
+      const empty = rows.length === 0;
+      document.getElementById("logEmpty").hidden = !empty;
+      document.getElementById("logTable").hidden = empty;
+      document.getElementById("logRows").innerHTML = rows.map((l) => `
+        <tr>
+          <td class="id">${l.at}</td>
+          <td class="id">${l.event}</td>
+          <td class="id">${l.subject}</td>
+          <td><span class="st ${stClass(l.outcome)}"><i></i>${OUT_LABEL[l.outcome]}</span></td>
+          <td>${l.detail}</td>
+        </tr>`).join("");
+    }
+    function renderAnalytics() {
+      const peak = Math.max(...BAR_H);
+      document.getElementById("anBars").innerHTML = BAR_H.map((h) =>
+        `<i class="${h === peak ? "peak" : ""}" style="height:${(h / peak) * 100}%"></i>`
+      ).join("");
+      document.getElementById("anReportRows").innerHTML = REPORTS.map((r) => `
+        <tr>
+          <td>${r.name}</td>
+          <td class="id">${r.period}</td>
+          <td class="id">${r.createdAt}</td>
+          <td><span class="st ${stClass(r.status)}"><i></i>${REP_LABEL[r.status]}</span></td>
+          <td>${r.size}</td>
+        </tr>`).join("");
+    }
+    const setFields = ["issuer", "signAlg", "jwksTtl", "sessTtl", "reqPkce", "allowDevice", "supportMail"];
+    function setSnap() {
+      return setFields.map((id) => {
+        const el = document.getElementById(id);
+        return el.type === "checkbox" ? el.checked : el.value;
+      }).join("\n");
+    }
+    let settingsSnap = "";
+    function setSettingsDirty(v) {
+      document.getElementById("setSave").disabled = !v;
+      document.getElementById("setCancel").disabled = !v;
+    }
+    function applySettings(src) {
+      document.getElementById("issuer").value = src.issuer;
+      document.getElementById("signAlg").value = src.signAlg;
+      document.getElementById("jwksTtl").value = src.jwksTtl;
+      document.getElementById("sessTtl").value = src.sessTtl;
+      document.getElementById("reqPkce").checked = src.reqPkce;
+      document.getElementById("allowDevice").checked = src.allowDevice;
+      document.getElementById("supportMail").value = src.supportMail;
+    }
+    function showSubs() {
       hideAll();
-      document.getElementById("screen-other").hidden = false;
-      document.getElementById("otherTitle").textContent = title;
-      document.getElementById("otherLead").textContent = lead;
+      subsEl.hidden = false;
+      renderSubs();
+    }
+    function showLogs() {
+      hideAll();
+      logsEl.hidden = false;
+      renderLogs();
+    }
+    function showAnalytics() {
+      hideAll();
+      anEl.hidden = false;
+      renderAnalytics();
+    }
+    function showSettings() {
+      hideAll();
+      setEl.hidden = false;
     }
 
     const appNav = document.getElementById("appNav");
     appNav.addEventListener("click", (e) => {
       if (e.target.closest(".brand")) {
-        appNav.querySelectorAll(".nav-item, .nav-sub").forEach((el) => el.classList.remove("active"));
+        appNav.querySelectorAll(".nav-item").forEach((el) => el.classList.remove("active"));
         appNav.querySelector('[data-screen="sp"]').classList.add("active");
         showList();
         return;
       }
-      const groupBtn = e.target.closest(".nav-group-btn");
-      if (groupBtn) {
-        groupBtn.parentElement.classList.toggle("open");
-        return;
-      }
       const item = e.target.closest("[data-screen]");
       if (!item) return;
-      appNav.querySelectorAll(".nav-item, .nav-sub").forEach((el) => el.classList.remove("active"));
+      appNav.querySelectorAll(".nav-item").forEach((el) => el.classList.remove("active"));
       item.classList.add("active");
       const screen = item.dataset.screen;
-      if (screen === "sp") {
-        showList();
-        return;
-      }
-      showOther(...screens[screen]);
+      if (screen === "sp") showList();
+      else if (screen === "subs") showSubs();
+      else if (screen === "logs") showLogs();
+      else if (screen === "analytics") showAnalytics();
+      else if (screen === "settings") showSettings();
     });
 
     document.getElementById("spRows").addEventListener("click", (e) => {
@@ -1640,6 +1913,46 @@
     document.addEventListener("click", (e) => {
       if (!document.getElementById("userMenu").contains(e.target)) closeUserMenu();
     });
+    document.getElementById("subSearch").addEventListener("input", (e) => {
+      subQuery = e.target.value;
+      subPage = 0;
+      renderSubs();
+    });
+    document.getElementById("subPrev").onclick = () => { if (subPage > 0) { subPage--; renderSubs(); } };
+    document.getElementById("subNext").onclick = () => { subPage++; renderSubs(); };
+    document.getElementById("logSearch").addEventListener("input", (e) => {
+      logQuery = e.target.value;
+      renderLogs();
+    });
+    document.getElementById("anTabs").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-atab]");
+      if (!btn) return;
+      document.querySelectorAll("#anTabs button").forEach((b) => b.classList.toggle("active", b === btn));
+      document.getElementById("anDashboard").hidden = btn.dataset.atab !== "dashboard";
+      document.getElementById("anReports").hidden = btn.dataset.atab !== "reports";
+    });
+    settingsSnap = setSnap();
+    document.getElementById("screen-settings").addEventListener("input", () => setSettingsDirty(setSnap() !== settingsSnap));
+    document.getElementById("screen-settings").addEventListener("change", () => setSettingsDirty(setSnap() !== settingsSnap));
+    document.getElementById("setSave").onclick = () => {
+      settingsSnap = setSnap();
+      setSettingsDirty(false);
+      showToast("Параметры сохранены");
+    };
+    document.getElementById("setCancel").onclick = () => {
+      const vals = settingsSnap.split("\n");
+      applySettings({
+        issuer: vals[0],
+        signAlg: vals[1],
+        jwksTtl: vals[2],
+        sessTtl: vals[3],
+        reqPkce: vals[4] === "true",
+        allowDevice: vals[5] === "true",
+        supportMail: vals[6]
+      });
+      setSettingsDirty(false);
+    };
+
     document.getElementById("userProfile").onclick = () => closeUserMenu();
     document.getElementById("userLogout").onclick = () => {
       closeUserMenu();
