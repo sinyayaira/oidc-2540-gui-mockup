@@ -183,10 +183,44 @@
     }
     .span-2 { grid-column: 1 / -1; }
     .span-rest { grid-column: 2 / -1; }
-    .logo {
-      width: 88px; height: 88px; border-radius: 12px;
-      background: #efe4dc; border: 1px solid #eadfd8;
+    .logo-wrap { width: 88px; display: flex; flex-direction: column; gap: 6px; }
+    .logo-box { position: relative; width: 88px; height: 88px; }
+    .logo-btn {
+      width: 88px; height: 88px; border-radius: 12px; padding: 0;
+      position: relative; overflow: hidden;
+      border: 1.5px dashed #c4b8b0;
+      background: #f6f3ee;
+      display: grid; place-items: center;
     }
+    .logo-btn:not(.is-empty) {
+      border-style: solid;
+      border-width: 1px;
+      border-color: #eadfd8;
+      background: #fff;
+    }
+    .logo-btn img {
+      width: 100%; height: 100%; object-fit: contain;
+      display: none;
+    }
+    .logo-btn:not(.is-empty) img { display: block; }
+    .logo-ph { font-size: 11px; font-weight: 700; color: var(--ink-soft); line-height: 1.2; }
+    .logo-btn:not(.is-empty) .logo-ph { display: none; }
+    .logo-hover {
+      display: none;
+      position: absolute; inset: 0;
+      background: rgba(54, 50, 47, 0.55);
+      color: #fff; font-size: 11px; font-weight: 700;
+      place-items: center;
+    }
+    .logo-btn:not(.is-empty):hover .logo-hover,
+    .logo-btn:not(.is-empty):focus-visible .logo-hover { display: grid; }
+    .logo-x {
+      position: absolute; top: -7px; right: -7px; z-index: 1;
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 0; background: #36322f; color: #fff;
+      font-size: 11px; line-height: 1; padding: 0;
+    }
+    .logo-btn.is-empty + .logo-x { display: none; }
     .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
     .label { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
     .req { color: var(--coral); }
@@ -516,7 +550,18 @@
         <section data-panel="general">
           <article class="card">
             <div class="grid-id">
-              <div class="logo"></div>
+              <div class="logo-wrap">
+                <span class="label">Логотип</span>
+                <div class="logo-box">
+                  <button type="button" class="logo-btn" id="logoBtnCard" aria-label="Изменить логотип">
+                    <img id="logoImgCard" alt="" src="https://m-c.tele2.ru/oidc/resources/images/byclient/tele2/logo.png" />
+                    <span class="logo-ph">Загрузить</span>
+                    <span class="logo-hover">Изменить</span>
+                  </button>
+                  <button type="button" class="logo-x" id="logoClearCard" aria-label="Убрать логотип" title="Убрать">✕</button>
+                  <input type="file" id="logoFileCard" accept="image/png,image/jpeg,image/svg+xml,image/webp,image/gif" hidden />
+                </div>
+              </div>
               <div class="field">
                 <label class="label" for="clientName">Название клиента <span class="req">*</span></label>
                 <input class="control" id="clientName" value="nested-jwt-test-idgw" />
@@ -645,10 +690,6 @@
               <div class="field">
                 <label class="label">Маска номера</label>
                 <input class="control" value="+# (###) *****##" />
-              </div>
-              <div class="field">
-                <label class="label">Адрес логотипа</label>
-                <input class="control" value="https://m-c.tele2.ru/oidc/resources/images/byclient/tele2/logo.png" />
               </div>
               <div class="field">
                 <label class="label">Адрес политики</label>
@@ -949,7 +990,18 @@
         <section data-cpanel="general">
           <article class="card">
             <div class="grid-id">
-              <div class="logo"></div>
+              <div class="logo-wrap">
+                <span class="label">Логотип</span>
+                <div class="logo-box">
+                  <button type="button" class="logo-btn is-empty" id="logoBtnNew" aria-label="Загрузить логотип">
+                    <img id="logoImgNew" alt="" />
+                    <span class="logo-ph">Загрузить</span>
+                    <span class="logo-hover">Изменить</span>
+                  </button>
+                  <button type="button" class="logo-x" id="logoClearNew" aria-label="Убрать логотип" title="Убрать" hidden>✕</button>
+                  <input type="file" id="logoFileNew" accept="image/png,image/jpeg,image/svg+xml,image/webp,image/gif" hidden />
+                </div>
+              </div>
               <div class="field span-rest">
                 <label class="label" for="newName">Название клиента <span class="req">*</span></label>
                 <input class="control" id="newName" />
@@ -1067,10 +1119,6 @@
               <div class="field">
                 <label class="label">Маска номера</label>
                 <input class="control" value="+# (###) *****##" />
-              </div>
-              <div class="field">
-                <label class="label">Адрес логотипа</label>
-                <input class="control" />
               </div>
               <div class="field">
                 <label class="label">Адрес политики</label>
@@ -1400,6 +1448,11 @@
       document.getElementById("clientName").value = c.name;
       document.getElementById("clientId").value = c.clientId;
       document.getElementById("registered").value = "01.07.2026 11:08";
+      const logoImg = document.getElementById("logoImgCard");
+      delete logoImg.dataset.fallback;
+      logoImg.src = "https://m-c.tele2.ru/oidc/resources/images/byclient/tele2/logo.png";
+      document.getElementById("logoBtnCard").classList.remove("is-empty");
+      document.getElementById("logoClearCard").hidden = false;
       snapshot = snap();
       setDirty(false);
     }
@@ -1415,6 +1468,10 @@
       createEl.hidden = false;
       document.getElementById("newName").value = "";
       document.getElementById("newId").value = "";
+      document.getElementById("logoBtnNew").classList.add("is-empty");
+      document.getElementById("logoBtnNew").setAttribute("aria-label", "Загрузить логотип");
+      document.getElementById("logoImgNew").removeAttribute("src");
+      document.getElementById("logoClearNew").hidden = true;
       document.getElementById("createSave").disabled = true;
       document.querySelectorAll("#createTabs button").forEach((b) => b.classList.toggle("active", b.dataset.ctab === "general"));
       document.querySelectorAll("[data-cpanel]").forEach((p) => { p.hidden = p.dataset.cpanel !== "general"; });
@@ -1692,6 +1749,64 @@
         if (dirty) setDirty(true);
       });
       sync();
+    });
+
+    function bindLogo({ btn, file, img, clear, dirty }) {
+      const fallback = "data:image/svg+xml," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88"><rect width="88" height="88" rx="12" fill="#f2513d"/><text x="44" y="54" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="22" font-weight="700">SP</text></svg>'
+      );
+      const setFilled = (src) => {
+        img.src = src;
+        btn.classList.remove("is-empty");
+        btn.setAttribute("aria-label", "Изменить логотип");
+        if (clear) clear.hidden = false;
+      };
+      const setEmpty = () => {
+        img.removeAttribute("src");
+        btn.classList.add("is-empty");
+        btn.setAttribute("aria-label", "Загрузить логотип");
+        if (clear) clear.hidden = true;
+      };
+      img.addEventListener("error", () => {
+        if (img.dataset.fallback) return;
+        img.dataset.fallback = "1";
+        img.src = fallback;
+      });
+      btn.addEventListener("click", () => file.click());
+      file.addEventListener("change", () => {
+        const f = file.files && file.files[0];
+        if (!f || !/^image\//.test(f.type)) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          delete img.dataset.fallback;
+          setFilled(reader.result);
+          if (dirty) setDirty(true);
+        };
+        reader.readAsDataURL(f);
+        file.value = "";
+      });
+      if (clear) {
+        clear.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setEmpty();
+          if (dirty) setDirty(true);
+        });
+      }
+    }
+    bindLogo({
+      btn: document.getElementById("logoBtnCard"),
+      file: document.getElementById("logoFileCard"),
+      img: document.getElementById("logoImgCard"),
+      clear: document.getElementById("logoClearCard"),
+      dirty: true
+    });
+    bindLogo({
+      btn: document.getElementById("logoBtnNew"),
+      file: document.getElementById("logoFileNew"),
+      img: document.getElementById("logoImgNew"),
+      clear: document.getElementById("logoClearNew"),
+      dirty: false
     });
 
     document.getElementById("demoError").onclick = () => {
