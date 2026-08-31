@@ -204,7 +204,7 @@
       width: 100%;
     }
     .form-page {
-      --field-w: 440px;
+      --field-w: 330px;
       max-width: 920px;
     }
     .form-page .field:not(.span-2):not(.wide) {
@@ -214,10 +214,31 @@
     .form-page .grid-id > .field:not(.span-2) {
       max-width: none;
     }
-    .grid-2.narrow {
-      grid-template-columns: repeat(2, minmax(0, calc(var(--field-w) * 3 / 4)));
+    .form-page .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, var(--field-w)));
       justify-content: start;
     }
+    .form-page .grid-2.chips {
+      grid-template-columns: repeat(2, minmax(0, 480px));
+    }
+    .form-page .grid-id {
+      grid-template-columns: 88px minmax(0, var(--field-w)) minmax(0, var(--field-w));
+      justify-content: start;
+    }
+    .ttl-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      justify-content: flex-start;
+    }
+    .ttl-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 10px;
+      width: var(--field-w);
+      align-items: end;
+    }
+    .ttl-pair .field { max-width: none; min-width: 0; }
     .card {
       background: var(--paper);
       border: 1px solid #ece6de;
@@ -303,7 +324,7 @@
       border-bottom-color: #cfc6bc;
     }
     .token-extra { margin: 4px 0 8px; }
-    .token-extra .grid-2 { margin-top: 10px; }
+    .token-extra .ttl-row { margin-top: 10px; }
     .control.error { border-bottom-color: var(--error); background: #fff6f4; }
     textarea.control {
       min-height: 160px; font-family: var(--mono); font-size: 12px;
@@ -480,9 +501,10 @@
       .metrics { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 900px) {
-      .grid-2, .grid-id { grid-template-columns: 1fr; }
+      .grid-2, .grid-id, .form-page .grid-2, .form-page .grid-2.chips, .form-page .grid-id { grid-template-columns: 1fr; }
       .span-rest { grid-column: 1 / -1; }
       .metrics { grid-template-columns: 1fr; }
+      .ttl-pair { width: 100%; max-width: var(--field-w); }
     }
   </style>
   <script>
@@ -910,11 +932,15 @@
         <section data-panel="tokens" hidden>
           <article class="card" data-tokens>
             <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
-            <div class="grid-2 narrow">
-              <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
-              <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+            <div class="ttl-row">
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
             </div>
             <label class="check"><input type="checkbox" checked data-tok="issueRefresh" onchange="oidcTok(this)" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
@@ -922,16 +948,22 @@
               <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
               <label class="check"><input type="checkbox" checked data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
-              <div class="grid-2 narrow">
-                <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
-                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              <div class="ttl-row">
+                <div class="ttl-pair">
+                  <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
+                  <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+                </div>
               </div>
             </div>
-            <div class="grid-2 narrow">
-              <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
-              <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+            <div class="ttl-row">
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
             </div>
             <label class="check"><input type="checkbox" checked /> Передавать JWKS URI сервис-провайдеру</label>
           </article>
@@ -958,7 +990,7 @@
             <div id="adminEmpty" class="note info" hidden>Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
             <div id="adminBlock">
               <label class="check"><input type="checkbox" id="adminAll" /> Все сервис-провайдеры</label>
-              <div class="grid-2 narrow" style="margin-top:14px;">
+              <div class="grid-2 chips" style="margin-top:14px;">
               <div class="field">
                 <label class="label" for="clientSearch">Доступные клиенты</label>
                 <div class="chips" id="clientChips"></div>
@@ -1328,11 +1360,15 @@
         <section data-cpanel="tokens" hidden>
           <article class="card" data-tokens>
             <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
-            <div class="grid-2 narrow">
-              <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
-              <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+            <div class="ttl-row">
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
             </div>
             <label class="check"><input type="checkbox" data-tok="issueRefresh" onchange="oidcTok(this)" /> Выдавать refresh-токены</label>
             <p class="hint">Добавляет клиенту область offline_access.</p>
@@ -1340,16 +1376,22 @@
               <label class="check"><input type="checkbox" /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" /> Отзывать активные access-токены при обновлении</label>
               <label class="check"><input type="checkbox" data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
-              <div class="grid-2 narrow">
-                <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
-                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              <div class="ttl-row">
+                <div class="ttl-pair">
+                  <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
+                  <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+                </div>
               </div>
             </div>
-            <div class="grid-2 narrow">
-              <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
-              <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
-              <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+            <div class="ttl-row">
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              </div>
             </div>
             <label class="check"><input type="checkbox" /> Передавать JWKS URI сервис-провайдеру</label>
           </article>
@@ -1374,7 +1416,7 @@
             <div id="newAdminEmpty" class="note info">Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
             <div id="newAdminBlock" hidden>
               <label class="check"><input type="checkbox" id="newAdminAll" /> Все сервис-провайдеры</label>
-              <div class="grid-2 narrow" style="margin-top:14px;">
+              <div class="grid-2 chips" style="margin-top:14px;">
               <div class="field">
                 <label class="label" for="newClientSearch">Доступные клиенты</label>
                 <div class="chips" id="newClientChips"></div>
