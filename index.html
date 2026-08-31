@@ -220,6 +220,7 @@
     }
     .form-page .grid-2.chips {
       grid-template-columns: repeat(2, minmax(0, 480px));
+      column-gap: 1cm;
     }
     .form-page .grid-id {
       grid-template-columns: 88px minmax(0, var(--field-w)) minmax(0, var(--field-w));
@@ -227,9 +228,9 @@
     }
     .ttl-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px 24px;
-      justify-content: flex-start;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
     }
     .ttl-pair {
       display: grid;
