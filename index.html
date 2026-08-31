@@ -204,14 +204,19 @@
       width: 100%;
     }
     .form-page {
+      --field-w: 440px;
       max-width: 920px;
     }
     .form-page .field:not(.span-2):not(.wide) {
-      max-width: 440px;
+      max-width: var(--field-w);
     }
     .form-page .grid-2 > .field:not(.span-2),
     .form-page .grid-id > .field:not(.span-2) {
       max-width: none;
+    }
+    .grid-2.narrow {
+      grid-template-columns: repeat(2, minmax(0, calc(var(--field-w) * 2 / 3)));
+      justify-content: start;
     }
     .card {
       background: var(--paper);
@@ -653,7 +658,7 @@
           <article class="card">
             <h2>Тестовый период <span>Ограничение числа запросов до перевода клиента в рабочий режим</span></h2>
             <label class="check" style="margin:0 0 14px;"><input type="checkbox" /> Период обработан</label>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field">
                 <label class="label" for="periodStart">Начало действия</label>
                 <input class="control" id="periodStart" type="datetime-local" value="2024-07-10T16:50" />
@@ -682,7 +687,7 @@
           </article>
           <article class="card">
             <h2>Нагрузка, приоритет и биллинг</h2>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field">
                 <label class="label">Входной троттлинг ServerInitiated</label>
                 <input class="control" type="number" />
@@ -738,7 +743,7 @@
           </article>
           <article class="card">
             <h2>Оформление страниц <span>Оператор, дизайн, маска номера и ссылки</span></h2>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field">
                 <label class="label">Оператор</label>
                 <select class="control"><option>Default</option><option>TELE2</option><option>MEGAFON</option><option>MTS</option><option>BEELINE</option></select>
@@ -756,6 +761,8 @@
                 <label class="label">Заголовок в дизайне</label>
                 <input class="control" value="MC Tele2" />
               </div>
+            </div>
+            <div class="grid-2" style="margin-top:16px;">
               <div class="field span-2">
                 <label class="check" style="margin:0;"><input type="checkbox" checked /> Маскировать номер на страницах входа</label>
               </div>
@@ -903,7 +910,7 @@
         <section data-panel="tokens" hidden>
           <article class="card" data-tokens>
             <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
@@ -915,12 +922,12 @@
               <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
               <label class="check"><input type="checkbox" checked data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
-              <div class="grid-2">
+              <div class="grid-2 narrow">
                 <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
                 <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               </div>
             </div>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
@@ -933,7 +940,7 @@
         <section data-panel="crypto" hidden>
           <article class="card">
             <p class="hint">«По умолчанию сервера» означает, что клиент не задаёт алгоритм и берёт общий параметр из настроек.</p>
-            <div class="grid-2" style="margin-top:12px;">
+            <div class="grid-2 narrow" style="margin-top:12px;">
               <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
               <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
               <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RSA-OAEP</option><option>RSA-OAEP-256</option><option>ECDH-ES</option><option>Не использовать</option></select></div>
@@ -951,7 +958,7 @@
             <div id="adminEmpty" class="note info" hidden>Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
             <div id="adminBlock">
               <label class="check"><input type="checkbox" id="adminAll" /> Все сервис-провайдеры</label>
-              <div class="grid-2" style="margin-top:14px;">
+              <div class="grid-2 narrow" style="margin-top:14px;">
               <div class="field">
                 <label class="label" for="clientSearch">Доступные клиенты</label>
                 <div class="chips" id="clientChips"></div>
@@ -1104,7 +1111,7 @@
           <article class="card">
             <h2>Тестовый период <span>Ограничение числа запросов до перевода клиента в рабочий режим</span></h2>
             <label class="check" style="margin:0 0 14px;"><input type="checkbox" /> Период обработан</label>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field">
                 <label class="label">Начало действия</label>
                 <input class="control" type="datetime-local" />
@@ -1133,7 +1140,7 @@
           </article>
           <article class="card">
             <h2>Нагрузка, приоритет и биллинг</h2>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field">
                 <label class="label">Входной троттлинг ServerInitiated</label>
                 <input class="control" type="number" />
@@ -1188,7 +1195,7 @@
           </article>
           <article class="card">
             <h2>Оформление страниц <span>Оператор, дизайн, маска номера и ссылки</span></h2>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field">
                 <label class="label">Оператор</label>
                 <select class="control"><option>Default</option><option>TELE2</option><option>MEGAFON</option><option>MTS</option><option>BEELINE</option></select>
@@ -1205,6 +1212,8 @@
                 <label class="label">Заголовок в дизайне</label>
                 <input class="control" />
               </div>
+            </div>
+            <div class="grid-2" style="margin-top:16px;">
               <div class="field span-2">
                 <label class="check" style="margin:0;"><input type="checkbox" checked /> Маскировать номер на страницах входа</label>
               </div>
@@ -1319,7 +1328,7 @@
         <section data-cpanel="tokens" hidden>
           <article class="card" data-tokens>
             <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
@@ -1331,12 +1340,12 @@
               <label class="check"><input type="checkbox" /> Refresh-токены переиспользуются</label>
               <label class="check"><input type="checkbox" /> Отзывать активные access-токены при обновлении</label>
               <label class="check"><input type="checkbox" data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
-              <div class="grid-2">
+              <div class="grid-2 narrow">
                 <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
                 <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               </div>
             </div>
-            <div class="grid-2">
+            <div class="grid-2 narrow">
               <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
               <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
               <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
@@ -1348,7 +1357,7 @@
         <section data-cpanel="crypto" hidden>
           <article class="card">
             <p class="hint">«По умолчанию сервера» означает, что клиент не задаёт алгоритм и берёт общий параметр из настроек.</p>
-            <div class="grid-2" style="margin-top:12px;">
+            <div class="grid-2 narrow" style="margin-top:12px;">
               <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
               <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
               <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RSA-OAEP</option><option>RSA-OAEP-256</option><option>ECDH-ES</option><option>Не использовать</option></select></div>
@@ -1365,7 +1374,7 @@
             <div id="newAdminEmpty" class="note info">Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
             <div id="newAdminBlock" hidden>
               <label class="check"><input type="checkbox" id="newAdminAll" /> Все сервис-провайдеры</label>
-              <div class="grid-2" style="margin-top:14px;">
+              <div class="grid-2 narrow" style="margin-top:14px;">
               <div class="field">
                 <label class="label" for="newClientSearch">Доступные клиенты</label>
                 <div class="chips" id="newClientChips"></div>
