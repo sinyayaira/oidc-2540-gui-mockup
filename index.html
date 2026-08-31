@@ -203,6 +203,16 @@
       padding: 20px 28px 40px;
       width: 100%;
     }
+    .form-page {
+      max-width: 920px;
+    }
+    .form-page .field:not(.span-2):not(.wide) {
+      max-width: 440px;
+    }
+    .form-page .grid-2 > .field:not(.span-2),
+    .form-page .grid-id > .field:not(.span-2) {
+      max-width: none;
+    }
     .card {
       background: var(--paper);
       border: 1px solid #ece6de;
@@ -602,7 +612,7 @@
       </nav>
       </div>
 
-      <div class="page" id="panels">
+      <div class="page form-page" id="panels">
         <section data-panel="general">
           <article class="card">
             <div class="grid-id">
@@ -661,7 +671,7 @@
                 <label class="label">Лимит запросов USER_INFO</label>
                 <input class="control" type="number" />
               </div>
-              <div class="field span-2">
+              <div class="field">
                 <label class="label">Действие по достижению лимита</label>
                 <select class="control">
                   <option>Заблокировать</option>
@@ -692,7 +702,7 @@
                 <input class="control" />
                 <div class="hint">Используется для тарификации</div>
               </div>
-              <div class="field span-2">
+              <div class="field">
                 <label class="label">Тип биллинга</label>
                 <select class="control"><option>NONE</option><option>PER_REQUEST</option><option>SUBSCRIPTION</option></select>
               </div>
@@ -700,23 +710,29 @@
           </article>
           <article class="card">
             <h2>Тексты сообщений <span>Белые списки bindingMessage и context</span></h2>
-            <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
-            <div class="field" style="margin:12px 0;">
-              <label class="label">Допустимые bindingMessage</label>
-              <div class="hint">Значения, которые клиент вправе передавать в параметре</div>
-              <div class="repeat" data-kind="text" style="margin-top:8px;">
-                <div class="repeat-rows"></div>
-                <p class="hint repeat-empty">Список пуст</p>
-                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            <div class="grid-2">
+              <div>
+                <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
+                <div class="field wide" style="margin-top:12px;">
+                  <label class="label">Допустимые bindingMessage</label>
+                  <div class="hint">Значения, которые клиент вправе передавать в параметре</div>
+                  <div class="repeat" data-kind="text" style="margin-top:8px;">
+                    <div class="repeat-rows"></div>
+                    <p class="hint repeat-empty">Список пуст</p>
+                    <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
-            <div class="field" style="margin-top:12px;">
-              <label class="label">Допустимые context</label>
-              <div class="repeat" data-kind="text" style="margin-top:8px;">
-                <div class="repeat-rows"></div>
-                <p class="hint repeat-empty">Список пуст</p>
-                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              <div>
+                <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
+                <div class="field wide" style="margin-top:12px;">
+                  <label class="label">Допустимые context</label>
+                  <div class="repeat" data-kind="text" style="margin-top:8px;">
+                    <div class="repeat-rows"></div>
+                    <p class="hint repeat-empty">Список пуст</p>
+                    <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+                  </div>
+                </div>
               </div>
             </div>
           </article>
@@ -816,7 +832,7 @@
           <article class="card">
             <label class="check"><input type="checkbox" /> Доверенный сервис-провайдер (TSP)</label>
             <label class="check"><input type="checkbox" /> Требовать регистрацию абонента в интерфейсе</label>
-            <div class="field" style="margin-top:14px;">
+            <div class="field wide" style="margin-top:14px;">
               <label class="label">URI обогащения заголовком</label>
               <input class="control" placeholder="http://" />
               <div class="hint">Определение номера по заголовку. Только http://</div>
@@ -846,11 +862,11 @@
               <button type="button" class="on" data-mode="uri">По адресу</button>
               <button type="button" data-mode="value">Значением</button>
             </div>
-            <div class="field" style="margin-top:14px;" id="jwksUriWrap">
+            <div class="field wide" style="margin-top:14px;" id="jwksUriWrap">
               <input class="control" id="jwksUri" value="http://mcap-cluster.dev.m1.a1s/jwks" />
               <div class="hint">JSON Web Key Set клиента — сервер должен иметь к нему доступ</div>
             </div>
-            <div class="field" style="margin-top:14px; display:none;" id="jwksValWrap">
+            <div class="field wide" style="margin-top:14px; display:none;" id="jwksValWrap">
               <textarea class="control" id="jwksVal">{
   "keys": [
     {
@@ -873,11 +889,11 @@
               <button type="button" class="on" data-mode="uri">По адресу</button>
               <button type="button" data-mode="value">Значением</button>
             </div>
-            <div class="field" style="margin-top:14px;" id="encUriWrap">
+            <div class="field wide" style="margin-top:14px;" id="encUriWrap">
               <input class="control" value="http://idgw-load-dummy.dev.m1.a1s/jwks" />
               <div class="hint">Ключи, которыми шифруются токены для клиента</div>
             </div>
-            <div class="field" style="margin-top:14px; display:none;" id="encValWrap">
+            <div class="field wide" style="margin-top:14px; display:none;" id="encValWrap">
               <textarea class="control" placeholder='{"keys":[]}'></textarea>
               <div class="hint">JSON в многострочном поле. На сервер уходит строка.</div>
             </div>
@@ -924,7 +940,7 @@
               <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>A128CBC-HS256</option><option>A192CBC-HS384</option><option>A256GCM</option></select></div>
               <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>Не использовать</option><option>plain</option><option>S256</option></select></div>
               <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>Не использовать</option><option>SHA-256</option><option>SHA-512</option><option>HMAC-SHA-256</option></select></div>
-              <div class="field span-2"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
+              <div class="field"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
             </div>
           </article>
         </section>
@@ -935,7 +951,8 @@
             <div id="adminEmpty" class="note info" hidden>Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
             <div id="adminBlock">
               <label class="check"><input type="checkbox" id="adminAll" /> Все сервис-провайдеры</label>
-              <div class="field" style="margin-top:14px;">
+              <div class="grid-2" style="margin-top:14px;">
+              <div class="field">
                 <label class="label" for="clientSearch">Доступные клиенты</label>
                 <div class="chips" id="clientChips"></div>
                 <div class="search-wrap">
@@ -944,7 +961,7 @@
                 </div>
                 <div class="hint">Начните вводить название</div>
               </div>
-              <div class="field" style="margin-top:14px;">
+              <div class="field">
                 <label class="label" for="cmdSearch">Разрешённые команды</label>
                 <div class="chips" id="cmdChips"></div>
                 <div class="search-wrap">
@@ -952,6 +969,7 @@
                   <div class="suggest" id="cmdSuggest" hidden></div>
                 </div>
                 <div class="hint">Начните вводить название</div>
+              </div>
               </div>
               <div class="note">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
             </div>
@@ -982,7 +1000,7 @@
 
         <section data-panel="other" hidden>
           <article class="card">
-            <div class="field">
+            <div class="field wide">
               <label class="label">Initiate Login URI</label>
               <input class="control" placeholder="https://" />
               <div class="hint">Адрес, с которого сервер инициирует вход на стороне клиента</div>
@@ -1054,7 +1072,7 @@
         <button type="button" data-ctab="other">Остальное</button>
       </nav>
       </div>
-      <div class="page">
+      <div class="page form-page">
         <section data-cpanel="general">
           <article class="card">
             <div class="grid-id">
@@ -1104,7 +1122,7 @@
                 <label class="label">Лимит запросов USER_INFO</label>
                 <input class="control" type="number" />
               </div>
-              <div class="field span-2">
+              <div class="field">
                 <label class="label">Действие по достижению лимита</label>
                 <select class="control">
                   <option>Заблокировать</option>
@@ -1135,7 +1153,7 @@
                 <input class="control" />
                 <div class="hint">Используется для тарификации</div>
               </div>
-              <div class="field span-2">
+              <div class="field">
                 <label class="label">Тип биллинга</label>
                 <select class="control"><option>NONE</option><option>PER_REQUEST</option><option>SUBSCRIPTION</option></select>
               </div>
@@ -1143,22 +1161,28 @@
           </article>
           <article class="card">
             <h2>Тексты сообщений <span>Белые списки bindingMessage и context</span></h2>
-            <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
-            <div class="field" style="margin:12px 0;">
-              <label class="label">Допустимые bindingMessage</label>
-              <div class="repeat" data-kind="text" style="margin-top:8px;">
-                <div class="repeat-rows"></div>
-                <p class="hint repeat-empty">Список пуст</p>
-                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            <div class="grid-2">
+              <div>
+                <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
+                <div class="field wide" style="margin-top:12px;">
+                  <label class="label">Допустимые bindingMessage</label>
+                  <div class="repeat" data-kind="text" style="margin-top:8px;">
+                    <div class="repeat-rows"></div>
+                    <p class="hint repeat-empty">Список пуст</p>
+                    <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
-            <div class="field" style="margin-top:12px;">
-              <label class="label">Допустимые context</label>
-              <div class="repeat" data-kind="text" style="margin-top:8px;">
-                <div class="repeat-rows"></div>
-                <p class="hint repeat-empty">Список пуст</p>
-                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              <div>
+                <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
+                <div class="field wide" style="margin-top:12px;">
+                  <label class="label">Допустимые context</label>
+                  <div class="repeat" data-kind="text" style="margin-top:8px;">
+                    <div class="repeat-rows"></div>
+                    <p class="hint repeat-empty">Список пуст</p>
+                    <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+                  </div>
+                </div>
               </div>
             </div>
           </article>
@@ -1238,7 +1262,7 @@
           <article class="card">
             <label class="check"><input type="checkbox" /> Доверенный сервис-провайдер (TSP)</label>
             <label class="check"><input type="checkbox" /> Требовать регистрацию абонента в интерфейсе</label>
-            <div class="field" style="margin-top:14px;">
+            <div class="field wide" style="margin-top:14px;">
               <label class="label">URI обогащения заголовком</label>
               <input class="control" placeholder="http://" />
               <div class="hint">Определение номера по заголовку. Только http://</div>
@@ -1267,11 +1291,11 @@
               <button type="button" class="on" data-mode="uri">По адресу</button>
               <button type="button" data-mode="value">Значением</button>
             </div>
-            <div class="field" style="margin-top:14px;" id="newJwksUriWrap">
+            <div class="field wide" style="margin-top:14px;" id="newJwksUriWrap">
               <input class="control" placeholder="https://" />
               <div class="hint">JSON Web Key Set клиента — сервер должен иметь к нему доступ</div>
             </div>
-            <div class="field" style="margin-top:14px; display:none;" id="newJwksValWrap">
+            <div class="field wide" style="margin-top:14px; display:none;" id="newJwksValWrap">
               <textarea class="control" placeholder='{"keys":[]}'></textarea>
               <div class="hint">JSON в многострочном поле. На сервер уходит строка.</div>
             </div>
@@ -1282,11 +1306,11 @@
               <button type="button" class="on" data-mode="uri">По адресу</button>
               <button type="button" data-mode="value">Значением</button>
             </div>
-            <div class="field" style="margin-top:14px;" id="newEncUriWrap">
+            <div class="field wide" style="margin-top:14px;" id="newEncUriWrap">
               <input class="control" placeholder="https://" />
               <div class="hint">Ключи, которыми шифруются токены для клиента</div>
             </div>
-            <div class="field" style="margin-top:14px; display:none;" id="newEncValWrap">
+            <div class="field wide" style="margin-top:14px; display:none;" id="newEncValWrap">
               <textarea class="control" placeholder='{"keys":[]}'></textarea>
               <div class="hint">JSON в многострочном поле. На сервер уходит строка.</div>
             </div>
@@ -1331,7 +1355,7 @@
               <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>A128CBC-HS256</option><option>A192CBC-HS384</option><option>A256GCM</option></select></div>
               <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>Не использовать</option><option>plain</option><option>S256</option></select></div>
               <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>Не использовать</option><option>SHA-256</option><option>SHA-512</option><option>HMAC-SHA-256</option></select></div>
-              <div class="field span-2"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
+              <div class="field"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
             </div>
           </article>
         </section>
@@ -1341,7 +1365,8 @@
             <div id="newAdminEmpty" class="note info">Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
             <div id="newAdminBlock" hidden>
               <label class="check"><input type="checkbox" id="newAdminAll" /> Все сервис-провайдеры</label>
-              <div class="field" style="margin-top:14px;">
+              <div class="grid-2" style="margin-top:14px;">
+              <div class="field">
                 <label class="label" for="newClientSearch">Доступные клиенты</label>
                 <div class="chips" id="newClientChips"></div>
                 <div class="search-wrap">
@@ -1350,7 +1375,7 @@
                 </div>
                 <div class="hint">Начните вводить название</div>
               </div>
-              <div class="field" style="margin-top:14px;">
+              <div class="field">
                 <label class="label" for="newCmdSearch">Разрешённые команды</label>
                 <div class="chips" id="newCmdChips"></div>
                 <div class="search-wrap">
@@ -1358,6 +1383,7 @@
                   <div class="suggest" id="newCmdSuggest" hidden></div>
                 </div>
                 <div class="hint">Начните вводить название</div>
+              </div>
               </div>
               <div class="note">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
             </div>
@@ -1368,7 +1394,7 @@
         <section data-cpanel="authn" hidden><article class="card"><h2>Authenticators</h2></article></section>
         <section data-cpanel="other" hidden>
           <article class="card">
-            <div class="field">
+            <div class="field wide">
               <label class="label">Initiate Login URI</label>
               <input class="control" placeholder="https://" />
               <div class="hint">Адрес, с которого сервер инициирует вход на стороне клиента</div>
