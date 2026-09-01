@@ -328,12 +328,31 @@
     .check-row { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; }
     .grant-grid, .doc-grid {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 8px 16px;
       margin-top: 8px;
     }
+    .grant-grid {
+      grid-template-columns: 1fr;
+    }
+    .doc-grid {
+      grid-template-columns: 1fr;
+    }
     @media (min-width: 600px) {
-      .grant-grid, .doc-grid { grid-template-columns: 1fr 1fr; }
+      .grant-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .doc-grid .check {
+      margin-top: 0;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      min-width: 0;
+      font-size: 12px;
+      line-height: 1.35;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .doc-grid .check input[type="checkbox"] {
+      flex: none;
+      margin-top: 2px;
     }
     .scope-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .scope-table th, .scope-table td { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; }
@@ -489,6 +508,7 @@
       border-radius: var(--radius-md);
       padding: 24px;
       width: 100%;
+      container-type: inline-size;
     }
     .card + .card { margin-top: 16px; }
     body.is-ia [data-panel] > .card + .card { margin-top: 0; }
@@ -497,6 +517,10 @@
     .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
     @media (min-width: 600px) {
       .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .card .grid-2 { grid-template-columns: 1fr; }
+    @container (min-width: 520px) {
+      .card .grid-2 { grid-template-columns: 1fr 1fr; }
     }
     .grid-id {
       display: grid;
