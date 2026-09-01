@@ -11,91 +11,137 @@
   <style>
     :root {
       --ink: #36322f;
+      --primary: #403e3c;
       --ink-soft: #6c655f;
-      --muted: #8b837c;
-      --line: #e4ddd6;
-      --linen-0: #f7f5ed;
-      --paper: #fcfbf8;
+      --text-disabled: #99918a;
+      --muted: #99918a;
+      --line: #ececec;
+      --linen-0: #fafafa;
+      --linen-1: #f5f5f5;
+      --linen-2: #f5f5f5;
+      --paper: #ffffff;
       --coral: #f2513d;
-      --coral-hover: #dc220b;
+      --coral-soft: rgb(252, 233, 231);
+      --flame: #dc220b;
       --ok: #1f7a40;
+      --ok-dot: #2c9a54;
       --error: #c2200a;
-      --nav: #2b2426;
-      --nav-active: #3d3436;
-      --focus: #266798;
-      --font: Manrope, "Segoe UI", sans-serif;
-      --mono: "JetBrains Mono", Consolas, monospace;
+      --error-soft: rgba(220, 34, 11, 0.10);
+      --warn-bg: rgba(202, 114, 8, 0.13);
+      --warn-fg: #a35e07;
+      --nav: #ffffff;
+      --nav-active: rgba(64, 62, 60, 0.08);
+      --tab-active: rgba(54, 50, 47, 0.05);
+      --hover-film: rgba(54, 50, 47, 0.08);
+      --radius-xs: 4px;
+      --radius-sm: 8px;
+      --radius-md: 11px;
+      --radius-lg: 14px;
+      --space: 8px;
+      --container-xs: 444px;
+      --container-sm: 600px;
+      --container-md: 900px;
+      --container-lg: 1200px;
+      --container-xl: 1536px;
+      --font: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
     }
     * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
+    html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
     body {
+      height: 100%;
+      margin: 0;
       font-family: var(--font);
-      color: var(--ink);
+      font-size: 14px;
+      color: var(--primary);
       background: var(--linen-0);
       display: flex;
       flex-direction: column;
-      min-height: 100%;
+      min-height: 0;
       overflow: hidden;
     }
-    .shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    .shell {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
     button, input, select, textarea { font: inherit; color: inherit; }
     button { cursor: pointer; }
 
     .app-nav {
-      width: 232px;
+      width: 240px;
       flex: none;
+      align-self: stretch;
       background: var(--nav);
-      color: #f4eee8;
+      color: var(--primary);
+      border-right: 1px solid var(--line);
       display: flex;
       flex-direction: column;
-      padding: 18px 10px;
-      overflow: auto;
+      padding: 16px 8px;
+      min-width: 0;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      overscroll-behavior: none;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .app-nav::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
     }
     .brand {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 8px;
       width: 100%; border: 0; background: transparent;
       color: inherit; text-align: left; font: inherit;
-      padding: 6px 10px 16px; font-weight: 700;
+      padding: 8px 8px 16px; font-weight: 700;
       border-radius: 8px; cursor: pointer;
     }
-    .brand:hover { background: #3a3335; }
+    .brand:hover { background: var(--nav-active); }
     .brand-mark {
-      width: 28px; height: 28px; border-radius: 8px;
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
       background: var(--coral); color: #fff;
       display: grid; place-items: center; font-weight: 800;
     }
-    .brand small { display: block; font-weight: 500; color: #b8aea8; font-size: 11px; }
+    .brand small { display: block; font-weight: 500; color: var(--ink-soft); font-size: 11px; }
 
     .nav-item, .nav-group-btn {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 8px;
       width: 100%; border: 0; background: transparent;
-      color: #d9d0ca; text-align: left;
-      padding: 10px 12px; border-radius: 8px;
+      color: var(--primary); text-align: left;
+      padding: 8px 16px; border-radius: var(--radius-sm);
     }
     .nav-item.active, .nav-sub.active, .nav-group.open > .nav-group-btn {
-      background: var(--nav-active); color: #fff;
+      background: var(--nav-active); color: var(--primary);
     }
     .nav-item svg, .nav-group-btn svg { flex: none; }
     .chevron { margin-left: auto; transition: transform .15s; opacity: .7; }
     .nav-group.open .chevron { transform: rotate(180deg); }
-    .nav-subs { display: none; padding: 2px 0 8px 12px; }
+    .nav-subs { display: none; padding: 0 0 8px 16px; }
     .nav-group.open .nav-subs { display: block; }
     .nav-sub {
       display: block; width: 100%; border: 0; background: transparent;
-      color: #c4bbb5; text-align: left;
-      padding: 8px 12px; border-radius: 8px; font-size: 13px;
+      color: var(--ink-soft); text-align: left;
+      padding: 8px 16px; border-radius: 8px; font-size: 13px;
     }
-    .nav-sub:hover, .nav-item:hover, .nav-group-btn:hover { background: #3a3335; color: #fff; }
+    .nav-sub:hover, .nav-item:hover, .nav-group-btn:hover { background: var(--nav-active); color: var(--primary); }
 
     .share-note {
       flex: none;
-      background: #3d3436;
-      color: #d9d0ca;
+      flex-shrink: 0;
+      background: var(--paper);
+      color: var(--ink-soft);
       font-size: 12px;
-      padding: 6px 12px;
+      padding: 8px 16px;
       text-align: center;
+      border-bottom: 1px solid var(--line);
     }
-    .share-note b { color: #fff; font-weight: 600; }
+    .share-note b { color: var(--primary); font-weight: 600; }
     .stage {
       flex: 1;
       min-width: 0;
@@ -108,86 +154,117 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 8px 20px 0;
+      padding: 8px 16px 0;
       background: var(--linen-0);
       z-index: 30;
     }
     .user-menu { position: relative; }
     .user-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 1px solid var(--line); background: #fff;
-      display: grid; place-items: center; color: var(--ink);
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid var(--line); background: var(--paper);
+      display: grid; place-items: center; color: var(--primary);
     }
-    .user-btn:hover, .user-btn[aria-expanded="true"] { background: #efece7; }
+    .user-btn:hover, .user-btn[aria-expanded="true"] { background: var(--hover-film); }
     .user-drop {
-      position: absolute; right: 0; top: calc(100% + 6px);
-      min-width: 220px;
-      background: #fff;
-      border: 1px solid #ece6de;
-      border-radius: 12px;
-      box-shadow: 0 10px 28px rgba(54,50,47,.12);
-      padding: 6px;
+      position: absolute; right: 0; top: calc(100% + 8px);
+      min-width: 224px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 24px rgba(54,50,47,.12);
+      padding: 8px;
       z-index: 40;
     }
     .user-drop button {
       display: block; width: 100%; text-align: left;
       border: 0; background: transparent;
-      padding: 9px 12px; border-radius: 8px; font-weight: 600;
+      padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700;
     }
-    .user-drop button:hover:not(:disabled) { background: #f4efe8; }
+    .user-drop button:hover:not(:disabled) { background: var(--hover-film); }
     .user-drop button:disabled { color: var(--muted); cursor: default; }
     .user-drop hr { border: 0; border-top: 1px solid var(--line); margin: 4px 8px; }
     .page-head {
       display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 16px; padding: 22px 28px 8px;
+      gap: 16px; padding: 16px 16px 8px;
+      width: 100%;
+      max-width: var(--container-lg);
+      margin-inline: auto;
     }
     .card-toolbar {
       flex: none;
       background: var(--linen-0);
-      box-shadow: 0 1px 0 var(--line);
+      width: 100%;
+      min-width: 0;
+      overflow-x: hidden;
     }
-    h1 { margin: 0; font-size: 26px; font-weight: 700; }
-    .title-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    h1 { margin: 0; font-size: 26px; font-weight: 800; color: var(--primary); }
+    .title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .badge {
       display: inline-flex; align-items: center;
-      padding: 4px 10px; border-radius: 999px;
-      font-size: 12px; font-weight: 600;
-      background: #efe4d6; color: #6a3b08;
+      padding: 4px 8px; border-radius: 999px;
+      font-size: 12px; font-weight: 700;
+      background: var(--warn-bg); color: var(--warn-fg);
     }
     .head-actions { display: flex; gap: 8px; align-items: center; }
-    .dirty-hint { font-size: 13px; color: #8a3418; font-weight: 600; display: none; }
+    .dirty-hint { font-size: 13px; color: var(--flame); font-weight: 700; display: none; }
     .dirty-hint.show { display: block; }
     .btn {
-      border: 0; border-radius: 8px; padding: 9px 16px;
-      font-weight: 600; font-size: 14px;
+      border: 0; border-radius: var(--radius-md); padding: 8px 16px;
+      font-weight: 700; font-size: 14px;
     }
-    .btn:disabled { opacity: .45; cursor: default; }
-    .btn-ghost { background: #ece7e0; }
-    .btn-primary { background: var(--coral); color: #fff; }
-    .btn-primary:hover:not(:disabled) { background: var(--coral-hover); }
+    .btn:disabled { opacity: .38; cursor: default; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid color-mix(in srgb, var(--primary) 50%, transparent);
+    }
+    .btn-ghost:hover:not(:disabled) { background: var(--hover-film); }
+    .btn-text { background: transparent; color: var(--primary); }
+    .btn-text:hover:not(:disabled) { background: var(--hover-film); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+    .btn-accent { background: var(--coral); color: #fff; }
+    .btn-accent:hover:not(:disabled) { background: var(--flame); }
     .btn-icon {
-      width: 34px; height: 34px; border-radius: 8px;
-      border: 1px solid var(--line); background: #fff;
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      border: 1px solid var(--line); background: var(--paper);
     }
 
     .tabs {
-      display: flex; flex-wrap: wrap; gap: 0;
-      padding: 8px 28px 0;
-      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 16px 16px;
+      border-bottom: 0;
       overflow: hidden;
+      width: 100%;
+      max-width: var(--container-lg);
+      margin-inline: auto;
     }
     .tabs button {
-      border: 0; background: none; padding: 10px 12px;
-      color: var(--ink-soft); font-weight: 600; white-space: nowrap;
-      border-bottom: 2px solid transparent; margin-bottom: -1px;
-      display: inline-flex; align-items: center; gap: 8px;
+      border: 0;
+      background: none;
+      padding: 8px 12px;
+      color: var(--text-disabled);
+      font-weight: 700;
+      white-space: nowrap;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      flex: 0 1 auto;
+      max-width: 100%;
     }
-    .tabs button.active { color: var(--ink); border-bottom-color: var(--coral); }
+    .tabs button:hover { color: var(--primary); }
+    .tabs button.active { color: var(--primary); background: var(--tab-active); }
     .err-dot {
       width: 8px; height: 8px; border-radius: 50%; background: var(--error);
       display: none;
+      flex: none;
     }
-    .tabs button.has-error .err-dot { display: block; }
+    .tabs button.has-error .err-dot,
+    .tabs button.has-dirty .err-dot { display: block; }
 
     .stage > section {
       flex: 1;
@@ -199,79 +276,255 @@
     .page {
       flex: 1;
       min-height: 0;
+      min-width: 0;
       overflow: auto;
-      padding: 20px 28px 40px;
+      overflow-x: hidden;
+      padding: 16px 16px 32px;
+      width: 100%;
+      max-width: var(--container-lg);
+      margin-inline: auto;
+    }
+    .app-screen { width: 100%; }
+    .form-page {
       width: 100%;
     }
-    .form-page {
-      --field-w: 330px;
-      max-width: 920px;
-    }
-    .form-page .field:not(.span-2):not(.wide) {
-      max-width: var(--field-w);
-    }
     .form-page .grid-2 > .field:not(.span-2),
-    .form-page .grid-id > .field:not(.span-2) {
+    .form-page .grid-id > .field:not(.span-2),
+    .form-page .grid-3 > .field {
       max-width: none;
     }
     .form-page .grid-2 {
-      grid-template-columns: repeat(2, minmax(0, var(--field-w)));
-      justify-content: start;
+      width: 100%;
     }
-    .form-page .grid-2.chips {
-      grid-template-columns: repeat(2, minmax(0, 480px));
-      column-gap: 1cm;
+    .form-page .grid-3 {
+      width: 100%;
+    }
+    .form-page .picker-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      width: 100%;
+      margin-top: 16px;
+    }
+    @media (min-width: 600px) {
+      .form-page .picker-grid { grid-template-columns: 1fr 1fr; }
     }
     .form-page .grid-id {
-      grid-template-columns: 88px minmax(0, var(--field-w)) minmax(0, var(--field-w));
-      justify-content: start;
+      grid-template-columns: 80px 1fr;
+      width: 100%;
     }
-    .ttl-row {
+    @media (min-width: 600px) {
+      .form-page .grid-id {
+        grid-template-columns: 80px 1fr 1fr;
+      }
+    }
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 600px) {
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 900px) {
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .check-row { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; }
+    .grant-grid, .doc-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px 16px;
+      margin-top: 8px;
+    }
+    @media (min-width: 600px) {
+      .grant-grid, .doc-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .scope-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .scope-table th, .scope-table td { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+    .scope-table th { color: var(--ink-soft); font-weight: 600; }
+    .scope-table td:not(:first-child), .scope-table th:not(:first-child) { text-align: center; width: 64px; }
+    .scope-table code { font-family: var(--mono); font-size: 12px; }
+    .claim-table {
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+      table-layout: auto;
+    }
+    .claim-table th, .claim-table td {
+      padding: 8px 4px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+    }
+    .claim-table th { color: var(--ink-soft); font-weight: 600; }
+    .claim-table td:first-child, .claim-table th:first-child {
+      text-align: left;
+      padding-left: 0;
+      padding-right: 8px;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .claim-table th:nth-child(2),
+    .claim-table td:nth-child(2),
+    .claim-table th:nth-child(3),
+    .claim-table td:nth-child(3) {
+      width: 1%;
+      min-width: 48px;
+      text-align: center;
+      white-space: nowrap;
+      padding-left: 4px;
+      padding-right: 4px;
+      overflow: visible;
+    }
+    .claim-table .claim-all td { color: var(--ink-soft); font-size: 12px; font-weight: 600; }
+    .claim-table code {
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.35;
+      word-break: break-all;
+    }
+    .claim-table input[type="checkbox"] {
+      display: inline-grid !important;
+      width: 16px !important;
+      height: 16px !important;
+      min-width: 16px;
+      min-height: 16px;
+      margin: 0;
+      vertical-align: middle;
+      flex: none;
+    }
+    .stack-fields { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+    .stack-fields .bool-seg,
+    .field > .bool-seg {
+      align-self: flex-start;
+    }
+    details.scope-block {
+      border: 0;
+      padding: 0;
+      background: transparent;
+    }
+    details.scope-block summary { font-weight: 700; cursor: pointer; }
+    .card-scope {
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
+    }
+    .card-scope h2 {
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .card-scope h2:focus { outline: none; }
+    .card-scope h2:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--error) 55%, transparent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+    .card-scope .claim-table { width: 100%; max-width: 100%; }
+    .card-scope--foldable.is-folded .claim-row-more { display: none; }
+    .scope-fold-btn {
+      align-self: flex-start;
+      margin-top: 8px;
+      padding: 4px 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .scope-fold-btn:hover { background: var(--hover-film); }
+    .scope-fold-chevron {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23403e3c' d='M1.2.8 6 5.6 10.8.8 12 2 6 8 0 2z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: transform .15s;
+    }
+    .scope-fold-chevron.is-up { transform: rotate(180deg); }
+    .nyi { font-size: 11px; color: var(--muted); font-weight: 600; margin-left: 8px; }
+    .ttl-row {
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 16px;
+      width: 100%;
+    }
+    @media (min-width: 600px) {
+      .ttl-row { grid-template-columns: 1fr 1fr; }
     }
     .ttl-pair {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 120px;
-      gap: 10px;
-      width: var(--field-w);
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
       align-items: end;
+    }
+    .ttl-pair .field:first-child { grid-column: 1 / -1; }
+    .ttl-pair .field:last-child { grid-column: 1 / -1; }
+    @media (min-width: 600px) {
+      .ttl-pair .field:first-child { grid-column: span 8; }
+      .ttl-pair .field:last-child { grid-column: span 4; }
+    }
+    .ttl-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-stack .radios {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0;
     }
     .ttl-pair .field { max-width: none; min-width: 0; }
     .card {
       background: var(--paper);
-      border: 1px solid #ece6de;
-      border-radius: 16px;
-      padding: 22px 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 24px;
       width: 100%;
     }
-    .card + .card { margin-top: 12px; }
-    .card h2 { margin: 0 0 16px; font-size: 16px; }
+    .card + .card { margin-top: 16px; }
+    body.is-ia [data-panel] > .card + .card { margin-top: 0; }
+    .card h2 { margin: 0 0 16px; font-size: 16px; font-weight: 800; }
     .card h2 span { color: var(--muted); font-weight: 500; font-size: 13px; margin-left: 8px; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
     .grid-id {
       display: grid;
-      grid-template-columns: 88px 1fr 1fr;
-      gap: 16px 20px; align-items: start;
+      grid-template-columns: 80px 1fr;
+      gap: 16px; align-items: start;
+    }
+    @media (min-width: 600px) {
+      .grid-id { grid-template-columns: 80px 1fr 1fr; }
     }
     .span-2 { grid-column: 1 / -1; }
-    .span-rest { grid-column: 2 / -1; }
-    .logo-wrap { width: 88px; display: flex; flex-direction: column; gap: 6px; }
-    .logo-box { position: relative; width: 88px; height: 88px; }
+    .span-rest { grid-column: 1 / -1; }
+    @media (min-width: 600px) {
+      .span-rest { grid-column: 2 / -1; }
+    }
+    .logo-wrap { width: 80px; display: flex; flex-direction: column; gap: 8px; }
+    .logo-box { position: relative; width: 80px; height: 80px; }
     .logo-btn {
-      width: 88px; height: 88px; border-radius: 12px; padding: 0;
+      width: 80px; height: 80px; border-radius: var(--radius-md); padding: 0;
       position: relative; overflow: hidden;
-      border: 1.5px dashed #c4b8b0;
-      background: #f6f3ee;
+      border: 1.5px dashed color-mix(in srgb, var(--ink) 28%, transparent);
+      background: var(--linen-2);
       display: grid; place-items: center;
     }
     .logo-btn:not(.is-empty) {
       border-style: solid;
       border-width: 1px;
-      border-color: #eadfd8;
-      background: #fff;
+      border-color: var(--line);
+      background: var(--paper);
     }
     .logo-btn img {
       width: 100%; height: 100%; object-fit: contain;
@@ -290,53 +543,159 @@
     .logo-btn:not(.is-empty):hover .logo-hover,
     .logo-btn:not(.is-empty):focus-visible .logo-hover { display: grid; }
     .logo-x {
-      position: absolute; top: -7px; right: -7px; z-index: 1;
-      width: 20px; height: 20px; border-radius: 50%;
+      position: absolute; top: -8px; right: -8px; z-index: 1;
+      width: 24px; height: 24px; border-radius: 50%;
       border: 0; background: #36322f; color: #fff;
       font-size: 11px; line-height: 1; padding: 0;
     }
     .logo-btn.is-empty + .logo-x { display: none; }
-    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-    .label { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+    .field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    .label { font-size: 12px; color: var(--text-disabled); font-weight: 700; }
     .req { color: var(--coral); }
     .control {
-      width: 100%; background: #f6f3ee;
-      border: 0; border-bottom: 1px solid #cfc6bc;
-      border-radius: 4px 4px 0 0;
-      padding: 10px 8px; outline: none;
+      width: 100%; background: transparent;
+      border: 0; border-bottom: 1.5px solid color-mix(in srgb, var(--ink) 28%, transparent);
+      border-radius: 0;
+      padding: 8px 0; outline: none;
+      color: var(--primary);
     }
-    .control:focus { border-bottom-color: var(--focus); background: #fff; }
+    select.control {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 32px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%236c655f' d='M1.2.8 6 5.6 10.8.8 12 2 6 8 0 2z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 4px center;
+      cursor: pointer;
+    }
+    .ac-box {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 8px 32px 8px 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--paper);
+      z-index: 1;
+    }
+    .ac-box:focus-within { border-color: var(--primary); z-index: 8; }
+    .ac-box .chips { margin: 0; min-height: 0; }
+    .ac-box .chip {
+      background: var(--hover-film);
+      border: 0;
+      color: var(--primary);
+    }
+    .ac-box .chip button:hover { background: color-mix(in srgb, var(--ink) 12%, transparent); }
+    .ac-input {
+      flex: 1;
+      min-width: 120px;
+      border: 0;
+      background: transparent;
+      padding: 8px 0;
+      outline: none;
+      color: var(--primary);
+    }
+    .ac-input::placeholder { color: var(--text-disabled); }
+    .ac-chevron {
+      position: absolute; right: 8px; top: 50%;
+      width: 16px; height: 16px;
+      transform: translateY(-50%);
+      border: 0; background: transparent;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%236c655f' d='M1.2.8 6 5.6 10.8.8 12 2 6 8 0 2z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .ac-box .suggest { top: calc(100% + 2px); }
+    .bool-seg {
+      display: inline-flex;
+      width: max-content;
+      max-width: 100%;
+      flex: none;
+      align-self: flex-start;
+      background: var(--hover-film);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 0;
+    }
+    .bool-seg button {
+      border: 0;
+      background: transparent;
+      border-radius: 999px;
+      padding: 4px 16px;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--primary);
+      flex: none;
+    }
+    .bool-seg button.on {
+      background: var(--primary);
+      color: #fff;
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .picker-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      width: 100%;
+      margin-top: 16px;
+    }
+    @media (min-width: 600px) {
+      .picker-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .control:focus {
+      border-bottom-color: var(--primary);
+    }
     .control[readonly] {
       color: var(--ink-soft);
       cursor: default;
+      border-bottom-color: transparent;
     }
     .control[readonly]:focus {
-      background: #f6f3ee;
-      border-bottom-color: #cfc6bc;
+      background: transparent;
+      border-bottom-color: transparent;
     }
     .control:disabled {
-      color: var(--ink-soft);
-      background: #efece7;
+      color: var(--text-disabled);
+      background: transparent;
       cursor: default;
       opacity: 0.7;
     }
     .control:disabled:focus {
-      background: #efece7;
-      border-bottom-color: #cfc6bc;
+      background: transparent;
+      border-bottom-color: color-mix(in srgb, var(--ink) 28%, transparent);
     }
-    .token-extra { margin: 4px 0 8px; }
-    .token-extra .ttl-row { margin-top: 10px; }
-    .control.error { border-bottom-color: var(--error); background: #fff6f4; }
+    .token-extra { margin: 16px 0 0; }
+    .token-extra .ttl-row { margin-top: 16px; }
+    .token-extra .check-row { margin-top: 0; }
+    .control.error { border-bottom-color: var(--error); background: var(--error-soft); }
     textarea.control {
       min-height: 160px; font-family: var(--mono); font-size: 12px;
-      line-height: 1.45; resize: vertical; border: 1px solid #e5ded6;
-      border-radius: 8px;
+      line-height: 1.45; resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
     }
-    .hint { font-size: 12px; color: var(--muted); }
+    .hint { font-size: 12px; color: var(--text-disabled); font-weight: 400; }
     .hint.error { color: var(--error); }
     .with-copy { display: flex; gap: 8px; }
     .with-copy .control { flex: 1; font-family: var(--mono); font-size: 13px; }
-    .check { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: 600; }
+    .check { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: 600; flex-wrap: nowrap; line-height: 1.25; }
+    .check-row .check, .form-stack .check { margin-top: 0; }
+    .check-oneline { white-space: nowrap; width: max-content; max-width: 100%; }
     [hidden] { display: none !important; }
     .is-hidden { display: none !important; }
     .field.is-locked {
@@ -351,19 +710,19 @@
       width: 16px; height: 16px;
       margin: 0;
       flex: none;
-      border: 1.5px solid #c4b8b0;
-      background: #f6f3ee;
+      border: 1.5px solid color-mix(in srgb, var(--coral) 35%, #c4b8b0);
+      background: var(--paper);
       cursor: pointer;
       display: inline-grid;
       place-content: center;
       vertical-align: middle;
-      accent-color: var(--ink);
+      accent-color: var(--coral);
     }
-    input[type="checkbox"] { border-radius: 4px; }
+    input[type="checkbox"] { border-radius: var(--radius-xs); }
     input[type="radio"] { border-radius: 50%; }
     input[type="checkbox"]:hover:not(:disabled),
     input[type="radio"]:hover:not(:disabled) {
-      border-color: #9a8f86;
+      border-color: var(--coral);
     }
     input[type="checkbox"]::after {
       content: "";
@@ -375,10 +734,10 @@
       transform: rotate(45deg);
     }
     input[type="checkbox"]:checked {
-      background: var(--ink);
-      border-color: var(--ink);
+      background: var(--paper);
+      border-color: var(--coral);
     }
-    input[type="checkbox"]:checked::after { border-color: #fcfbf8; }
+    input[type="checkbox"]:checked::after { border-color: var(--coral); }
     input[type="radio"]::after {
       content: "";
       width: 8px;
@@ -386,11 +745,11 @@
       border-radius: 50%;
       background: transparent;
     }
-    input[type="radio"]:checked { border-color: var(--ink); }
-    input[type="radio"]:checked::after { background: var(--ink); }
+    input[type="radio"]:checked { border-color: var(--coral); }
+    input[type="radio"]:checked::after { background: var(--coral); }
     input[type="checkbox"]:focus-visible,
     input[type="radio"]:focus-visible {
-      outline: 2px solid var(--focus);
+      outline: 2px solid var(--coral);
       outline-offset: 2px;
     }
     input[type="checkbox"]:disabled,
@@ -398,73 +757,81 @@
       opacity: 0.4;
       cursor: default;
     }
-    .seg { display: inline-flex; background: #efece7; border-radius: 8px; padding: 3px; }
+    .seg { display: inline-flex; width: max-content; max-width: 100%; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 4px; }
     .seg button {
-      border: 0; background: transparent; border-radius: 6px;
-      padding: 7px 12px; font-weight: 600; color: var(--ink-soft);
+      border: 0; background: transparent; border-radius: var(--radius-sm);
+      padding: 8px 16px; font-weight: 700; color: var(--ink-soft);
     }
-    .seg button.on { background: #fff; color: var(--ink); }
-    .radios { display: flex; flex-direction: column; gap: 8px; margin: 6px 0 12px; }
+    .seg button.on { background: var(--tab-active); color: var(--primary); }
+    .radios { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 16px; }
+    .radios.inline { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px 16px; }
     .radios label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
     .list-row { display: flex; gap: 8px; margin-bottom: 8px; }
     .list-row .control { flex: 1; }
-    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; min-height: 0; }
     .chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: #eee9e3; border-radius: 999px;
-      padding: 4px 8px 4px 10px; font-size: 13px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      border-radius: var(--radius-sm);
+      padding: 4px 8px; font-size: 12px; font-weight: 700;
     }
     .chip button {
-      width: 18px; height: 18px; border: 0; border-radius: 50%;
+      width: 16px; height: 16px; border: 0; border-radius: 50%;
       background: transparent; color: var(--ink-soft); padding: 0; line-height: 1;
     }
     .search-wrap { position: relative; }
     .suggest {
       position: absolute; left: 0; right: 0; top: calc(100% - 2px); z-index: 8;
       background: #fff; border: 1px solid #e5ded6; border-radius: 0 0 8px 8px;
-      max-height: 220px; overflow: auto; box-shadow: 0 8px 20px rgba(54,50,47,.08);
+      max-height: 224px; overflow: auto; box-shadow: 0 8px 24px rgba(54,50,47,.08);
     }
     .suggest button {
       display: block; width: 100%; text-align: left; border: 0;
-      background: #fff; padding: 8px 10px; font-weight: 600;
+      background: #fff; padding: 8px 16px; font-weight: 600;
     }
-    .suggest button:hover, .suggest button.active { background: #f4efe8; }
+    .suggest button:hover, .suggest button.active { background: var(--hover-film); }
     .note {
-      margin-top: 14px; padding: 10px 12px; border-radius: 8px;
-      background: #f4ebe0; color: #6a3b08; font-size: 13px;
+      margin-top: 16px; padding: 8px 16px; border-radius: var(--radius-sm);
+      background: var(--warn-bg); color: var(--warn-fg); font-size: 13px;
     }
-    .note.info { background: #eee9e3; color: var(--ink-soft); }
+    .note.info { background: var(--hover-film); color: var(--ink-soft); }
     .toast {
       position: fixed; right: 24px; bottom: 24px;
-      background: var(--ok); color: #fff; padding: 10px 14px;
-      border-radius: 8px; display: none; font-weight: 600;
+      background: var(--ok); color: #fff; padding: 8px 16px;
+      border-radius: var(--radius-md); display: none; font-weight: 700;
     }
-    .stub { color: var(--ink-soft); max-width: 640px; }
+    .stub { color: var(--ink-soft); max-width: var(--container-sm); }
     .stub h2 { margin: 0 0 8px; }
-    .toolbar { display: flex; gap: 12px; align-items: center; padding: 0 28px 12px; }
-    .toolbar .control { flex: 1; max-width: 480px; }
+    .toolbar { display: flex; gap: 16px; align-items: center; padding: 0 16px 16px; width: 100%; max-width: var(--container-lg); margin-inline: auto; }
+    .toolbar .field { flex: 1; min-width: 0; max-width: none; margin: 0; }
+    .toolbar .control { flex: 1; max-width: none; }
     .pager { margin-left: auto; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
     table.sp-table {
-      width: 100%; border-collapse: collapse; background: var(--paper);
-      border: 1px solid #ece6de; border-radius: 16px; overflow: hidden;
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
       table-layout: auto;
     }
     .sp-table th, .sp-table td {
-      text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line);
+      text-align: left; padding: 8px 16px; border-bottom: 1px solid var(--line);
       font-size: 14px; vertical-align: middle;
     }
-    .sp-table th { color: var(--muted); font-weight: 600; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+    .sp-table th { color: var(--ink-soft); font-weight: 700; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
     .sp-table tr:last-child td { border-bottom: 0; }
     .sp-table tbody tr { cursor: pointer; }
-    .sp-table tbody tr:hover { background: #f4efe8; }
+    .sp-table tbody tr:hover { background: var(--hover-film); }
     .sp-table.plain tbody tr { cursor: default; }
     .sp-table .id { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
     .tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 3px 8px; border-radius: 999px;
-      background: #eee9e3; font-size: 12px; font-weight: 600; margin-right: 4px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 4px 8px; border-radius: 999px;
+      background: var(--hover-film); font-size: 12px; font-weight: 700; margin-right: 4px;
     }
-    .tag i { width: 7px; height: 7px; border-radius: 50%; background: #9a938d; }
+    .tag i { width: 8px; height: 8px; border-radius: 50%; background: #8b837c; }
     .tag.PRODUCTION i { background: #cf7f36; }
     .tag.TEST i { background: #c5beb6; }
     .tag.MONITORING i { background: #6c655f; }
@@ -474,67 +841,115 @@
     .st.blocked i { background: var(--error); }
     .st.wait i { background: #cf7f36; }
     .metrics {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
     }
     .metric {
-      background: var(--paper); border: 1px solid #ece6de; border-radius: 16px; padding: 16px 18px;
+      grid-column: span 12;
+      background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px 24px;
     }
-    .metric b { display: block; font-size: 22px; font-weight: 700; margin-top: 6px; }
+    @media (min-width: 600px) {
+      .metric { grid-column: span 6; }
+    }
+    @media (min-width: 900px) {
+      .metric { grid-column: span 3; }
+    }
+    .metric b { display: block; font-size: 24px; font-weight: 700; margin-top: 8px; }
     .metric span { color: var(--muted); font-size: 13px; font-weight: 600; }
     .trend {
       display: inline-flex; margin-top: 8px; padding: 2px 8px; border-radius: 999px;
       font-size: 12px; font-weight: 600;
     }
-    .trend.ok { background: #e3f2e8; color: var(--ok); }
-    .trend.warn { background: #efe4d6; color: #6a3b08; }
-    .trend.neutral { background: #eee9e3; color: var(--ink-soft); }
+    .trend.ok { background: rgba(34,140,70,.12); color: var(--ok); }
+    .trend.warn { background: var(--warn-bg); color: var(--warn-fg); }
+    .trend.neutral { background: var(--hover-film); color: var(--ink-soft); }
     .chart-card { margin-bottom: 16px; }
     .bars {
-      display: flex; align-items: flex-end; gap: 6px; height: 120px; margin-top: 12px;
+      display: flex; align-items: flex-end; gap: 8px; min-height: 120px; margin-top: 16px;
     }
     .bars i {
       flex: 1; background: #fde8e4; border-radius: 4px; min-height: 4px;
     }
     .bars i.peak { background: var(--coral); }
-    .settings-form { max-width: 560px; }
+    .settings-form { max-width: var(--container-sm); width: 100%; }
     .empty-msg { text-align: center; padding: 48px 16px; color: var(--ink-soft); font-weight: 600; }
-    @media (max-width: 1100px) {
-      .metrics { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 900px) {
-      .grid-2, .grid-id, .form-page .grid-2, .form-page .grid-2.chips, .form-page .grid-id { grid-template-columns: 1fr; }
-      .span-rest { grid-column: 1 / -1; }
-      .metrics { grid-template-columns: 1fr; }
-      .ttl-pair { width: 100%; max-width: var(--field-w); }
-    }
 
-    body.is-ia .wizard { max-width: 560px; }
+    body.is-ia #screen-sp-create .form-page { max-width: var(--container-md); }
+    body.is-ia .wizard { max-width: var(--container-md); }
+    body.is-ia [data-panel] {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
+      width: 100%;
+    }
+    @media (min-width: 900px) {
+      body.is-ia [data-panel] { gap: 24px; }
+    }
+    body.is-ia [data-panel] > .later-hint {
+      grid-column: 1 / -1;
+      max-width: none;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    body.is-ia [data-panel] > .card {
+      grid-column: 1 / span 12;
+      margin-top: 0;
+      min-width: 0;
+      height: auto;
+    }
+    @media (min-width: 768px) {
+      body.is-ia [data-panel] > .card.card-scope {
+        grid-column: span 6;
+      }
+    }
+    @media (min-width: 900px) {
+      body.is-ia [data-panel] > .card:not(.card-wide) {
+        grid-column: span 6;
+      }
+    }
+    @media (min-width: 1200px) {
+      body.is-ia [data-panel] > .card.card-scope {
+        grid-column: span 4;
+      }
+    }
+    body.is-ia [data-panel] > .card.card-wide,
+    body.is-ia [data-panel] > article:only-of-type {
+      grid-column: 1 / -1;
+    }
     body.is-ia .steps {
-      display: flex; gap: 16px; padding: 8px 28px 0; align-items: center;
-      border-bottom: 1px solid var(--line);
+      display: flex; gap: 8px; padding: 8px 16px 16px; align-items: center;
+      border-bottom: 0;
+      max-width: var(--container-md);
+      margin-inline: auto;
+      width: 100%;
     }
     body.is-ia .steps button {
-      border: 0; background: none; padding: 8px 4px 10px;
-      color: var(--ink-soft); font-weight: 600;
-      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      border: 0; background: none; padding: 8px 16px;
+      color: var(--text-disabled); font-weight: 700;
+      border-radius: var(--radius-md);
     }
-    body.is-ia .steps button.on { color: var(--ink); border-bottom-color: var(--coral); }
+    body.is-ia .steps button.on { color: var(--primary); background: var(--tab-active); }
     body.is-ia .steps button:disabled { opacity: .45; cursor: default; }
     body.is-ia .step-num {
       display: inline-grid; place-items: center;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: #eee9e3; font-size: 12px; margin-right: 6px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--hover-film); font-size: 12px; margin-right: 8px;
     }
-    body.is-ia .steps button.on .step-num { background: var(--coral); color: #fff; }
+    body.is-ia .steps button.on .step-num { background: var(--primary); color: #fff; }
     body.is-ia .facts {
-      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
     }
     body.is-ia .fact {
-      background: #f6f3ee; border-radius: 999px; padding: 6px 10px;
-      font-size: 13px; font-weight: 600; color: var(--ink-soft);
+      background: var(--hover-film); border-radius: var(--radius-sm); padding: 4px 8px;
+      font-size: 13px; font-weight: 700; color: var(--ink-soft);
     }
     body.is-ia .later-hint {
-      margin: 0 0 16px; color: var(--ink-soft); font-size: 14px; max-width: 640px;
+      margin: 0 0 4px; color: var(--ink-soft); font-size: 13px;
     }
   </style>
   <script>
@@ -568,7 +983,7 @@
   </script>
 </head>
 <body class="is-ia">
-  <p class="share-note"><b>OIDC-2540 · вариант IA</b> · создание: только необходимое · карточка: 5 зон · основные макеты без /variant-ia.html</p>
+  <p class="share-note"><b>OIDC-2540 · макет</b> · карточка: все поля и вкладки живой админки · создание: только необходимое</p>
   <div class="shell">
   <aside class="app-nav" id="appNav">
     <button class="brand" type="button" id="brandHome" title="К списку сервис-провайдеров">
@@ -615,7 +1030,7 @@
     <section class="app-screen" id="screen-sp-list">
       <header class="page-head">
         <h1>Сервис-провайдеры</h1>
-        <button class="btn btn-primary" type="button" id="createBtn">Создать клиента</button>
+        <button class="btn btn-accent" type="button" id="createBtn">Создать клиента</button>
       </header>
       <div class="toolbar">
         <input class="control" id="spSearch" placeholder="Название или идентификатор" />
@@ -650,24 +1065,28 @@
         </div>
         <div class="head-actions">
           <span class="dirty-hint" id="dirtyHint">Есть несохранённые изменения</span>
-          <button class="btn btn-ghost" id="cancelBtn" type="button" disabled>Отменить</button>
+          <button class="btn btn-text" id="cancelBtn" type="button" disabled>Отменить</button>
           <button class="btn btn-primary" id="saveBtn" type="button" disabled>Сохранить</button>
         </div>
       </header>
 
-      <nav class="tabs" id="tabs">
-        <button type="button" class="active" data-tab="overview">Обзор</button>
-        <button type="button" data-tab="login">Вход и возврат</button>
-        <button type="button" data-tab="security" id="tabKeys">Токены и криптография<span class="err-dot"></span></button>
-        <button type="button" data-tab="experience">Опыт абонента</button>
-        <button type="button" data-tab="ops">Эксплуатация</button>
+            <nav class="tabs" id="tabs">
+        <button type="button" class="active" data-tab="general">Основное<span class="err-dot"></span></button>
+        <button type="button" data-tab="access">Доступ<span class="err-dot"></span></button>
+        <button type="button" data-tab="keys" id="tabKeys">Учётные данные<span class="err-dot"></span></button>
+        <button type="button" data-tab="tokens">Токены<span class="err-dot"></span></button>
+        <button type="button" data-tab="crypto">Криптография<span class="err-dot"></span></button>
+        <button type="button" data-tab="other">Параметры OIDC<span class="err-dot"></span></button>
+        <button type="button" data-tab="admin">Администрирование<span class="err-dot"></span></button>
+        <button type="button" data-tab="userinfo">Настройки User Info<span class="err-dot"></span></button>
+        <button type="button" data-tab="authn">Authenticators<span class="err-dot"></span></button>
       </nav>
       </div>
 
       <div class="page form-page" id="panels">
-        <section data-panel="overview">
-          <p class="later-hint">Паспорт клиента. Токены, оформление и лимиты — на соседних вкладках, когда понадобятся.</p>
-<article class="card">
+
+        <section data-panel="general">
+          <article class="card">
             <div class="grid-id">
               <div class="logo-wrap">
                 <span class="label">Логотип</span>
@@ -691,8 +1110,8 @@
                 <input class="control" id="registered" type="text" value="01.07.2026 11:08" readonly tabindex="-1" />
                 <div class="hint">Момент регистрации, изменить нельзя</div>
               </div>
-              <div></div>
-              <div class="field span-2">
+              <div class="logo-wrap" aria-hidden="true"></div>
+              <div class="field span-rest">
                 <label class="label" for="clientId">Идентификатор клиента</label>
                 <div class="with-copy">
                   <input class="control" id="clientId" value="9f10dfe9-4617-44dd-ba69-317872ff0061" readonly tabindex="-1" />
@@ -700,290 +1119,46 @@
                 </div>
                 <div class="hint">Назначается при создании, изменить нельзя</div>
               </div>
-            </div>
-            <label class="check"><input type="checkbox" id="authBlocked" /> Запрещена аутентификация абонентов</label>
-          </article>
-        </section>
-        <section data-panel="login" hidden>
-          <p class="later-hint">Куда вернуть браузер и бэкенд после входа, выхода и уведомлений.</p>
-
-          <article class="card">
-            <h2>Redirect URI</h2>
-            <p class="hint">Адреса, на которые клиента можно вернуть после страницы авторизации</p>
-            <div class="repeat" data-kind="uri" style="margin-top:10px;">
-              <div class="repeat-rows">
-                <div class="list-row"><input class="control" value="https://nested-jwt-test-id.example.com/callback" /><button class="btn-icon" type="button">✕</button></div>
-              </div>
-              <p class="hint repeat-empty" hidden>Список пуст</p>
-              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
-            </div>
-          </article>
-          <article class="card">
-            <h2>Notify URI</h2>
-            <p class="hint">Обратные адреса для уведомлений в режиме ServerInitiated</p>
-            <div class="repeat" data-kind="uri" style="margin-top:10px;">
-              <div class="repeat-rows">
-                <div class="list-row"><input class="control" value="http://mcap-cluster.dev.m1.a1s/notify" /><button class="btn-icon" type="button">✕</button></div>
-              </div>
-              <p class="hint repeat-empty" hidden>Список пуст</p>
-              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
-            </div>
-          </article>
-          <article class="card">
-            <label class="check"><input type="checkbox" /> Доверенный сервис-провайдер (TSP)</label>
-            <label class="check"><input type="checkbox" /> Требовать регистрацию абонента в интерфейсе</label>
-            <div class="field wide" style="margin-top:14px;">
-              <label class="label">URI обогащения заголовком</label>
-              <input class="control" placeholder="http://" />
-              <div class="hint">Определение номера по заголовку. Только http://</div>
-            </div>
-          </article>
-        
-<article class="card">
-            
-            <div class="field wide">
-              <label class="label">Initiate Login URI</label>
-              <input class="control" placeholder="https://" />
-              <div class="hint">Адрес, с которого сервер инициирует вход на стороне клиента</div>
-            </div>
-            <h2 style="margin-top:18px;">Claims Redirect URI</h2>
-            <p class="hint">Куда вернуть клиента после сбора claims</p>
-            <div class="repeat" data-kind="uri">
-              <div class="repeat-rows"></div>
-              <p class="hint repeat-empty">Список пуст</p>
-              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
-            </div>
-            <h2 style="margin-top:18px;">Post-Logout Redirect URI</h2>
-            <p class="hint">Куда вернуть клиента после выхода</p>
-            <div class="repeat" data-kind="uri">
-              <div class="repeat-rows"></div>
-              <p class="hint repeat-empty">Список пуст</p>
-              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
-            </div>
-            <h2 style="margin-top:18px;">Request URI</h2>
-            <p class="hint">Адреса объектов запроса, которые использует клиент</p>
-            <div class="repeat" data-kind="uri">
-              <div class="repeat-rows"></div>
-              <p class="hint repeat-empty">Список пуст</p>
-              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
-            </div>
-            
-          </article>
-        </section>
-        <section data-panel="security" hidden>
-          <p class="later-hint">Как выдаём токены и чем подписываем. Значения «по умолчанию сервера» можно не трогать.</p>
-
-          <article class="card">
-            <h2>Аутентификация на token endpoint</h2>
-            <div class="radios">
-              <label><input type="radio" name="tokenAuth" checked /> Секрет через HTTP Basic</label>
-              <label><input type="radio" name="tokenAuth" /> Секрет в теле POST-запроса</label>
-              <label><input type="radio" name="tokenAuth" /> JWT, подписанный секретом</label>
-              <label><input type="radio" name="tokenAuth" /> JWT, подписанный приватным ключом</label>
-              <label><input type="radio" name="tokenAuth" /> Без аутентификации</label>
-            </div>
-            <label class="check"><input type="checkbox" data-reveal="secretWrap" /> Изменить секрет клиента</label>
-            <div class="field" id="secretWrap" hidden style="margin-top:12px;">
-              <label class="label">Новый секрет клиента</label>
-              <input class="control" type="password" autocomplete="new-password" />
-            </div>
-          </article>
-          <article class="card">
-            <h2>Набор публичных ключей</h2>
-            <div class="seg" data-seg="jwks">
-              <button type="button" class="on" data-mode="uri">По адресу</button>
-              <button type="button" data-mode="value">Значением</button>
-            </div>
-            <div class="field wide" style="margin-top:14px;" id="jwksUriWrap">
-              <input class="control" id="jwksUri" value="http://mcap-cluster.dev.m1.a1s/jwks" />
-              <div class="hint">JSON Web Key Set клиента — сервер должен иметь к нему доступ</div>
-            </div>
-            <div class="field wide" style="margin-top:14px; display:none;" id="jwksValWrap">
-              <textarea class="control" id="jwksVal">{
-  "keys": [
-    {
-      "kty": "RSA",
-      "use": "sig",
-      "alg": "RS256",
-      "kid": "45c0f68a-cc04-42ce-bcb2-ad8e485e3a9b",
-      "n": "l0XZTJskj6uX9zYkS9xsrFey625nTjf9...",
-      "e": "AQAB"
-    }
-  ]
-}</textarea>
-              <div class="hint" id="jwksHint">JSON в многострочном поле. На сервер уходит строка.</div>
-            </div>
-            <div style="margin-top:12px;"><button class="btn btn-ghost" type="button" id="demoError">Показать ошибку формата</button></div>
-          </article>
-          <article class="card">
-            <h2>Набор ключей шифрования</h2>
-            <div class="seg" data-seg="enc">
-              <button type="button" class="on" data-mode="uri">По адресу</button>
-              <button type="button" data-mode="value">Значением</button>
-            </div>
-            <div class="field wide" style="margin-top:14px;" id="encUriWrap">
-              <input class="control" value="http://idgw-load-dummy.dev.m1.a1s/jwks" />
-              <div class="hint">Ключи, которыми шифруются токены для клиента</div>
-            </div>
-            <div class="field wide" style="margin-top:14px; display:none;" id="encValWrap">
-              <textarea class="control" placeholder='{"keys":[]}'></textarea>
-              <div class="hint">JSON в многострочном поле. На сервер уходит строка.</div>
-            </div>
-          </article>
-        
-
-          <article class="card" data-tokens>
-            <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
-            <div class="ttl-row">
-              <div class="ttl-pair">
-                <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
-                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
-              </div>
-              <div class="ttl-pair">
-                <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
-                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
-              </div>
-            </div>
-            <label class="check"><input type="checkbox" checked data-tok="issueRefresh" onchange="oidcTok(this)" /> Выдавать refresh-токены</label>
-            <p class="hint">Добавляет клиенту область offline_access.</p>
-            <div class="token-extra is-hidden" data-tok="refreshBlock" hidden>
-              <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
-              <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
-              <label class="check"><input type="checkbox" checked data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
-              <div class="ttl-row">
-                <div class="ttl-pair">
-                  <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" /></div>
-                  <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              <div class="logo-wrap" aria-hidden="true"></div>
+              <div class="field span-rest">
+                <label class="label" for="tagSearch">Метки</label>
+                <div class="ac-box" id="tagBox">
+                  <input class="ac-input" id="tagSearch" placeholder="Добавить" autocomplete="off" />
+                  <button type="button" class="ac-chevron" tabindex="-1" aria-label="Открыть список"></button>
+                  <div class="suggest" id="tagSuggest" hidden></div>
                 </div>
               </div>
             </div>
-            <div class="ttl-row">
-              <div class="ttl-pair">
-                <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
-                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+            <div class="form-stack" style="margin-top:16px;">
+              <label class="check check-oneline"><input type="checkbox" id="authBlocked" /> Запрещена аутентификация абонентов</label>
+              <div class="field">
+                <label class="label" for="clientBlocked">Заблокирован</label>
+                <select class="control" id="clientBlocked">
+                  <option value="no" selected>Нет</option>
+                  <option value="yes">Да</option>
+                </select>
               </div>
-              <div class="ttl-pair">
-                <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
-                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>дни</option></select></div>
+              <div class="field">
+                <label class="label">Описание</label>
+                <textarea class="control" style="min-height:72px;font-family:var(--font);">nested-jwt-test-idgw</textarea>
+                <div class="hint">Человекочитаемое текстовое описание</div>
               </div>
             </div>
-            <label class="check"><input type="checkbox" checked /> Передавать JWKS URI сервис-провайдеру</label>
           </article>
-        
-
           <article class="card">
-            <p class="hint">«По умолчанию сервера» означает, что клиент не задаёт алгоритм и берёт общий параметр из настроек.</p>
-            <div class="grid-2 narrow" style="margin-top:12px;">
-              <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RS256</option><option>RS384</option><option>RS512</option><option>ES256</option><option>PS256</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>RSA-OAEP</option><option>RSA-OAEP-256</option><option>ECDH-ES</option><option>Не использовать</option></select></div>
-              <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option>По умолчанию сервера</option><option>A128CBC-HS256</option><option>A192CBC-HS384</option><option>A256GCM</option></select></div>
-              <div class="field"><label class="label">Метод PKCE</label><select class="control"><option>Не использовать</option><option>plain</option><option>S256</option></select></div>
-              <div class="field"><label class="label">Хеш номера телефона</label><select class="control"><option>Не использовать</option><option>SHA-256</option><option>SHA-512</option><option>HMAC-SHA-256</option></select></div>
-              <div class="field"><label class="label">Дополнительный ключ хеширования</label><input class="control" /></div>
-            </div>
-          </article>
-        
-        </section>
-        <section data-panel="experience" hidden>
-          <p class="later-hint">То, что видит абонент на экранах входа и согласия.</p>
-<article class="card">
-            <h2>Тексты сообщений <span>Белые списки bindingMessage и context</span></h2>
+            <h2>Тестовый период</h2>
             <div class="grid-2">
-              <div>
-                <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
-                <div class="field wide" style="margin-top:12px;">
-                  <label class="label">Допустимые bindingMessage</label>
-                  <div class="hint">Значения, которые клиент вправе передавать в параметре</div>
-                  <div class="repeat" data-kind="text" style="margin-top:8px;">
-                    <div class="repeat-rows"></div>
-                    <p class="hint repeat-empty">Список пуст</p>
-                    <button class="btn btn-ghost" type="button" data-add>Добавить</button>
-                  </div>
+              <div class="field">
+                <label class="label">Период обработан</label>
+                <input class="control" value="Нет" readonly tabindex="-1" />
+              </div>
+              <div class="field">
+                <span class="label">Действие</span>
+                <div class="radios inline">
+                  <label><input type="radio" name="blockStrategy" checked /> BLOCK</label>
+                  <label><input type="radio" name="blockStrategy" /> PRODUCTION</label>
                 </div>
               </div>
-              <div>
-                <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
-                <div class="field wide" style="margin-top:12px;">
-                  <label class="label">Допустимые context</label>
-                  <div class="repeat" data-kind="text" style="margin-top:8px;">
-                    <div class="repeat-rows"></div>
-                    <p class="hint repeat-empty">Список пуст</p>
-                    <button class="btn btn-ghost" type="button" data-add>Добавить</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-          
-<article class="card">
-            <h2>Оформление страниц <span>Оператор, дизайн, маска номера и ссылки</span></h2>
-            <div class="grid-2 narrow">
-              <div class="field">
-                <label class="label">Оператор</label>
-                <select class="control"><option>Default</option><option>TELE2</option><option>MEGAFON</option><option>MTS</option><option>BEELINE</option></select>
-              </div>
-              <div class="field">
-                <label class="label">Дизайн</label>
-                <select class="control"><option>TELE2_RUSSIA</option><option>MEGAFON_RUSSIA</option><option>DEFAULT</option></select>
-                <div class="hint">Зависит от оператора</div>
-              </div>
-              <div class="field">
-                <label class="label">Региональные настройки</label>
-                <select class="control"><option>--</option><option>RU-CENTRAL</option><option>RU-NORTH-WEST</option><option>RU-SIBERIA</option></select>
-              </div>
-              <div class="field">
-                <label class="label">Заголовок в дизайне</label>
-                <input class="control" value="MC Tele2" />
-              </div>
-            </div>
-            <div class="grid-2" style="margin-top:16px;">
-              <div class="field span-2">
-                <label class="check" style="margin:0;"><input type="checkbox" checked /> Маскировать номер на страницах входа</label>
-              </div>
-              <div class="field">
-                <label class="label">Маска номера</label>
-                <input class="control" value="+# (###) *****##" />
-              </div>
-              <div class="field">
-                <label class="label">Адрес политики</label>
-                <input class="control" />
-              </div>
-              <div class="field">
-                <label class="label">Домашний адрес</label>
-                <input class="control" />
-              </div>
-            </div>
-          </article>
-          
-
-          <article class="card">
-            <h2>Сообщения</h2>
-            <div class="field">
-              <label class="label">Заголовок согласия</label>
-              <input class="control" value="Разрешить доступ к данным?" />
-            </div>
-          </article>
-        
-
-          <article class="card">
-            <h2>Настройки User Info</h2>
-            <div class="field">
-              <label class="label">Endpoint</label>
-              <input class="control" value="/userinfo" />
-            </div>
-          </article>
-        
-
-          <article class="card"><h2>Authenticators</h2><p class="hint">Список не задан.</p></article>
-        
-        </section>
-        <section data-panel="ops" hidden>
-          <p class="later-hint">Лимиты, биллинг, админ-команды и служебные поля. Не нужны, чтобы клиент просто вошёл.</p>
-<article class="card">
-            <h2>Тестовый период <span>Ограничение числа запросов до перевода клиента в рабочий режим</span></h2>
-            <label class="check" style="margin:0 0 14px;"><input type="checkbox" /> Период обработан</label>
-            <div class="grid-2 narrow">
               <div class="field">
                 <label class="label" for="periodStart">Начало действия</label>
                 <input class="control" id="periodStart" type="datetime-local" value="2024-07-10T16:50" />
@@ -1002,18 +1177,18 @@
                 <input class="control" type="number" />
               </div>
               <div class="field">
-                <label class="label">Действие по достижению лимита</label>
-                <select class="control">
-                  <option>Заблокировать</option>
-                  <option>Перевести в PRODUCTION</option>
-                </select>
+                <label class="label">Запросов до действия AUTHORIZE</label>
+                <input class="control" value="" readonly tabindex="-1" />
+              </div>
+              <div class="field">
+                <label class="label">Запросов до действия USER_INFO</label>
+                <input class="control" value="" readonly tabindex="-1" />
               </div>
             </div>
           </article>
-          
-<article class="card">
-            <h2>Нагрузка, приоритет и биллинг</h2>
-            <div class="grid-2 narrow">
+          <article class="card">
+            <h2>Нагрузка и приоритет</h2>
+            <div class="grid-2">
               <div class="field">
                 <label class="label">Входной троттлинг ServerInitiated</label>
                 <input class="control" type="number" />
@@ -1028,20 +1203,151 @@
                 <label class="label">Приоритет</label>
                 <select class="control"><option>FIRST</option><option>SECOND</option><option>THIRD</option></select>
               </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Биллинг</h2>
+            <div class="grid-2">
               <div class="field">
                 <label class="label">Номер абонента для биллинга</label>
                 <input class="control" />
-                <div class="hint">Используется для тарификации</div>
+                <div class="hint">Для тарификации</div>
               </div>
               <div class="field">
                 <label class="label">Тип биллинга</label>
-                <select class="control"><option>NONE</option><option>PER_REQUEST</option><option>SUBSCRIPTION</option></select>
+                <select class="control">
+                  <option>NONE</option>
+                  <option>REQUEST_SENT</option>
+                  <option>CONSENT_RECEIVED</option>
+                  <option>PREMIUMINFO</option>
+                </select>
               </div>
             </div>
           </article>
-          
-<article class="card">
-            <h2>Программное обеспечение и контакты</h2>
+          <article class="card">
+            <h2>Redirect URI</h2>
+            <p class="hint">Адреса, на которые клиента можно вернуть после страницы авторизации</p>
+            <div class="repeat" data-kind="uri" style="margin-top:8px;">
+              <div class="repeat-rows"><div class="list-row"><input class="control" value="https://nested-jwt-test-id.example.com/callback" /><button class="btn-icon" type="button">✕</button></div></div>
+              <p class="hint repeat-empty" hidden>Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Notify URI</h2>
+            <p class="hint">Обратные адреса для уведомлений в режиме ServerInitiated</p>
+            <div class="repeat" data-kind="uri" style="margin-top:8px;">
+              <div class="repeat-rows"><div class="list-row"><input class="control" value="http://mcap-cluster.dev.m1.a1s/notify" /><button class="btn-icon" type="button">✕</button></div></div>
+              <p class="hint repeat-empty" hidden>Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Тексты сообщений</h2>
+            <label class="check"><input type="checkbox" /> Разрешить любой bindingMessage, без белого списка</label>
+            <div class="field" style="margin-top:8px;">
+              <label class="label">Допустимые bindingMessage</label>
+              <div class="repeat" data-kind="text" style="margin-top:8px;">
+                <div class="repeat-rows"></div>
+                <p class="hint repeat-empty">Список пуст</p>
+                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Context</h2>
+            <label class="check"><input type="checkbox" /> Разрешить любой context, без белого списка</label>
+            <div class="field" style="margin-top:8px;">
+              <label class="label">Допустимые context</label>
+              <div class="repeat" data-kind="text" style="margin-top:8px;">
+                <div class="repeat-rows"></div>
+                <p class="hint repeat-empty">Список пуст</p>
+                <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Доверие</h2>
+            <label class="check"><input type="checkbox" /> Доверенный сервис-провайдер (TSP)</label>
+            <label class="check"><input type="checkbox" /> Требовать регистрацию абонента в интерфейсе</label>
+            <div class="field" style="margin-top:16px;">
+              <label class="label">URI обогащения заголовком</label>
+              <input class="control" placeholder="http://" />
+              <div class="hint">Определение номера по заголовку. Только http://</div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Оформление страниц</h2>
+            <div class="grid-2">
+              <div class="field">
+                <label class="label">Оператор <span class="req">*</span></label>
+                <select class="control"><option>Default</option><option selected>TELE2</option><option>MEGAFON</option><option>MTS</option><option>BEELINE</option></select>
+              </div>
+              <div class="field">
+                <label class="label">Дизайн <span class="req">*</span></label>
+                <select class="control">
+                  <option>DEFAULT</option>
+                  <option>TELE2</option>
+                  <option selected>TELE2_RUSSIA</option>
+                  <option>TELE2_INTERNATIONAL</option>
+                  <option>TELE2_KZ</option>
+                  <option>TELE2_NEW</option>
+                  <option>BEELINE</option>
+                  <option>BEELINE_RUSSIA</option>
+                  <option>BEELINE_INTERNATIONAL</option>
+                  <option>MTS</option>
+                  <option>LIFE</option>
+                  <option>UMS</option>
+                  <option>VELCOM</option>
+                  <option>YOTA</option>
+                  <option>KCELL</option>
+                  <option>ALTEL_KZ</option>
+                </select>
+                <div class="hint">Зависит от оператора</div>
+              </div>
+              <div class="field">
+                <label class="label">Региональные настройки</label>
+                <select class="control"><option value="">—</option><option>ru</option><option>en</option></select>
+              </div>
+              <div class="field">
+                <label class="label">Заголовок в дизайне</label>
+                <input class="control" value="MC Tele2" />
+              </div>
+              <div class="field">
+                <label class="label">Маска номера</label>
+                <input class="control" value="+# (###) *****##" />
+                <div class="hint"># — цифра номера, * — маскирование</div>
+              </div>
+              <div class="field">
+                <label class="check" style="margin:0;"><input type="checkbox" checked /> Маскировать номер на страницах входа</label>
+              </div>
+              <div class="field">
+                <label class="label">Адрес политики</label>
+                <input class="control" placeholder="https://" />
+              </div>
+              <div class="field">
+                <label class="label">Домашний адрес</label>
+                <input class="control" placeholder="https://" />
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Сообщения на экранах</h2>
+            <p class="hint">Строки, которые абонент видит на страницах входа и согласия. В живой админке это вкладка Messages.</p>
+            <div class="grid-2" style="margin-top:8px;">
+              <div class="field">
+                <label class="label">Locale</label>
+                <select class="control"><option selected>ru</option><option>en</option></select>
+              </div>
+              <div class="field">
+                <label class="label">Заголовок согласия</label>
+                <input class="control" value="Разрешить доступ к данным?" />
+              </div>
+            </div>
+            <p class="hint" style="margin-top:16px;">Фраза <i>CLIENT_NAME</i> подменяется на имя клиента.</p>
+          </article>
+          <article class="card">
+            <h2>Программное обеспечение</h2>
             <div class="grid-2">
               <div class="field">
                 <label class="label">Идентификатор ПО</label>
@@ -1057,7 +1363,9 @@
                 <div class="hint">Подписанное третьей стороной заявление, фиксирует часть регистрационных данных</div>
               </div>
             </div>
-            <h2 style="margin-top:18px;">Контакты администраторов</h2>
+          </article>
+          <article class="card">
+            <h2>Контакты администраторов</h2>
             <div class="repeat" data-kind="contact">
               <div class="repeat-rows">
                 <div class="list-row">
@@ -1071,60 +1379,706 @@
               <button class="btn btn-ghost" type="button" data-add>Добавить</button>
             </div>
           </article>
-        
+        </section>
 
+        <section data-panel="access" hidden>
+          <article class="card card-wide">
+            <h2>Scope and LOA</h2>
+            <p class="hint">OAuth-области, которые клиент вправе запрашивать</p>
+            <table class="scope-table" style="margin-top:8px;">
+              <thead><tr><th>Scope</th><th>Enable</th><th>LOA2</th><th>LOA3</th><th>LOA4</th></tr></thead>
+              <tbody>
+              <tr><td><code>openid</code></td><td><input type="checkbox" checked disabled /></td><td><input type="checkbox" disabled /></td><td><input type="checkbox" disabled /></td><td><input type="checkbox" disabled /></td></tr>
+<tr><td><code>mc_authn</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_authz</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_identity_phonenumber</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_sign_document</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" disabled /></td><td><input type="checkbox" disabled /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_identity_signup</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_identity_nationalid</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_kyc_plain</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_kyc_hashed</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_atp</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>offline_access</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_email</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_taxid_rus</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_identity_basic</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_identity_basic_address</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_identity_full</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_bigdata</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_scoring</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_click_auth</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+<tr><td><code>mc_clickless_auth</code></td><td><input type="checkbox" checked /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
           <article class="card">
-            <label class="check"><input type="checkbox" id="adminSp" checked /> Административный сервис-провайдер</label>
-            <div id="adminEmpty" class="note info" hidden>Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
-            <div id="adminBlock">
-              <label class="check"><input type="checkbox" id="adminAll" /> Все сервис-провайдеры</label>
-              <div class="grid-2 chips" style="margin-top:14px;">
-              <div class="field">
-                <label class="label" for="clientSearch">Доступные клиенты</label>
-                <div class="chips" id="clientChips"></div>
-                <div class="search-wrap">
-                  <input class="control" id="clientSearch" placeholder="Начните вводить название" autocomplete="off" />
-                  <div class="suggest" id="clientSuggest" hidden></div>
-                </div>
-                <div class="hint">Начните вводить название</div>
-              </div>
-              <div class="field">
-                <label class="label" for="cmdSearch">Разрешённые команды</label>
-                <div class="chips" id="cmdChips"></div>
-                <div class="search-wrap">
-                  <input class="control" id="cmdSearch" placeholder="Начните вводить название" autocomplete="off" />
-                  <div class="suggest" id="cmdSuggest" hidden></div>
-                </div>
-                <div class="hint">Начните вводить название</div>
-              </div>
-              </div>
-              <div class="note">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
+            <h2>Grant Types</h2>
+            <div class="grant-grid">
+              <label class="check"><input type="checkbox" checked /> authorization code</label>
+              <label class="check"><input type="checkbox" /> client credentials</label>
+              <label class="check"><input type="checkbox" /> password</label>
+              <label class="check"><input type="checkbox" checked /> implicit</label>
+              <label class="check"><input type="checkbox" checked /> server initiated</label>
+              <label class="check"><input type="checkbox" /> redelegate</label>
+              <label class="check"><input type="checkbox" /> device</label>
             </div>
           </article>
-        
-<article class="card">
-            <h2>Default ACR Values</h2>
+          <article class="card">
+            <h2>Response Types <span class="nyi">NYI</span></h2>
+            <div class="grant-grid">
+              <label class="check"><input type="checkbox" checked /> code</label>
+              <label class="check"><input type="checkbox" checked /> mc_si_async_code</label>
+              <label class="check"><input type="checkbox" checked /> token</label>
+              <label class="check"><input type="checkbox" /> id_token</label>
+              <label class="check"><input type="checkbox" /> token id_token</label>
+              <label class="check"><input type="checkbox" /> code id_token</label>
+              <label class="check"><input type="checkbox" /> code token</label>
+              <label class="check"><input type="checkbox" /> code token id_token</label>
+            </div>
+          </article>
+          <article class="card">
+            <label class="check"><input type="checkbox" /> Implicit prompt none</label>
+            <p class="hint">Implicit work flow for response_type=code and prompt=none</p>
+            <label class="check"><input type="checkbox" /> Allow calls to the Introspection Endpoint?</label>
+            <div class="field" style="margin-top:16px;">
+              <span class="label">Subject Type</span>
+              <div class="radios inline">
+                <label><input type="radio" name="subjectType" checked /> Public</label>
+                <label><input type="radio" name="subjectType" /> Pairwise</label>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="field">
+              <label class="label">Sector Identifier URI</label>
+              <input class="control" placeholder="https://" autocomplete="off" />
+              <div class="hint">Sector Identifier for JavaScript</div>
+            </div>
+            <div class="field" style="margin-top:16px;">
+              <label class="label">IP Range</label>
+              <textarea class="control" style="min-height:72px;font-family:var(--mono);"></textarea>
+              <div class="hint">Список CIDR IPv4 через запятую. Например: 192.168.6.1/32, 192.168.6.1/31</div>
+            </div>
+          </article>
+        </section>
+
+        <section data-panel="keys" hidden>
+          <article class="card card-wide">
+            <h2>Аутентификация на token endpoint</h2>
+            <div class="radios">
+              <label><input type="radio" name="tokenAuth" checked /> Секрет через HTTP Basic</label>
+              <label><input type="radio" name="tokenAuth" /> Секрет в теле POST-запроса</label>
+              <label><input type="radio" name="tokenAuth" /> JWT, подписанный секретом</label>
+              <label><input type="radio" name="tokenAuth" /> JWT, подписанный приватным ключом</label>
+              <label><input type="radio" name="tokenAuth" /> Без аутентификации</label>
+            </div>
+            <label class="check"><input type="checkbox" data-reveal="secretWrap" /> Изменить секрет клиента</label>
+            <div id="secretWrap" hidden>
+              <div class="grid-2" style="margin-top:16px;">
+                <div class="field">
+                  <label class="label">Новый секрет клиента</label>
+                  <input class="control" type="password" autocomplete="new-password" />
+                </div>
+                <div class="field">
+                  <label class="label">Повторите секрет</label>
+                  <input class="control" type="password" autocomplete="new-password" />
+                </div>
+              </div>
+            </div>
+            <div class="field" style="margin-top:16px;">
+              <label class="label">Алгоритм подписи на token endpoint</label>
+              <select class="control"><option value="default" selected>Любой разрешённый</option><option value="HS256">HS256</option><option value="HS384">HS384</option><option value="HS512">HS512</option><option value="RS256">RS256</option><option value="RS384">RS384</option><option value="RS512">RS512</option><option value="PS256">PS256</option><option value="PS384">PS384</option><option value="PS512">PS512</option><option value="ES256">ES256</option><option value="ES384">ES384</option><option value="ES512">ES512</option></select>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Набор публичных ключей</h2>
+            <div class="seg" data-seg="jwks">
+              <button type="button" class="on" data-mode="uri">По адресу</button>
+              <button type="button" data-mode="value">Значением</button>
+            </div>
+            <div class="form-stack" style="margin-top:16px;">
+            <div class="field" id="jwksUriWrap">
+              <input class="control" id="jwksUri" value="http://mcap-cluster.dev.m1.a1s/jwks" />
+              <div class="hint">JSON Web Key Set клиента — сервер должен иметь к нему доступ</div>
+            </div>
+            <div class="field" style="display:none;" id="jwksValWrap">
+              <textarea class="control" id="jwksVal">{
+  "keys": [
+    {
+      "kty": "RSA",
+      "use": "sig",
+      "alg": "RS256",
+      "kid": "45c0f68a-cc04-42ce-bcb2-ad8e485e3a9b",
+      "n": "l0XZTJskj6uX9zYkS9xsrFey625nTjf9...",
+      "e": "AQAB"
+    }
+  ]
+}</textarea>
+              <div class="hint" id="jwksHint">JSON в многострочном поле. На сервер уходит строка.</div>
+            </div>
+            <div><button class="btn btn-ghost" type="button" id="demoError">Показать ошибку формата</button></div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Набор ключей шифрования</h2>
+            <div class="seg" data-seg="enc">
+              <button type="button" class="on" data-mode="uri">По адресу</button>
+              <button type="button" data-mode="value">Значением</button>
+            </div>
+            <div class="form-stack" style="margin-top:16px;">
+            <div class="field" id="encUriWrap">
+              <input class="control" id="encUri" value="http://idgw-load-dummy.dev.m1.a1s/jwks" />
+              <div class="hint">Ключи, которыми шифруются токены для клиента</div>
+            </div>
+            <div class="field" style="display:none;" id="encValWrap">
+              <textarea class="control" id="encVal">{
+  "keys": [
+    {
+      "kty": "RSA",
+      "use": "enc",
+      "alg": "RSA-OAEP-256",
+      "kid": "enc-45c0f68a-cc04-42ce-bcb2-ad8e485e3a9b",
+      "n": "l0XZTJskj6uX9zYkS9xsrFey625nTjf9...",
+      "e": "AQAB"
+    }
+  ]
+}</textarea>
+              <div class="hint" id="encHint">JSON в многострочном поле. На сервер уходит строка.</div>
+            </div>
+            </div>
+          </article>
+        </section>
+
+        <section data-panel="tokens" data-tokens hidden>
+          <article class="card">
+            <h2>Время жизни токенов</h2>
+            <label class="check"><input type="checkbox" data-tok="accessNever" onchange="oidcTok(this)" /> Access-токены не истекают</label>
+            <div class="ttl-row" style="margin-top:16px;">
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни access-токена</label><input class="control" type="number" value="600" data-tok="accessTtl" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="accessUnit"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              </div>
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни id-токена</label><input class="control" type="number" value="600" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Refresh-токены</h2>
+            <label class="check"><input type="checkbox" checked data-tok="issueRefresh" onchange="oidcTok(this)" /> Выдавать refresh-токены</label>
+            <p class="hint">Добавляет клиенту область offline_access.</p>
+            <div class="token-extra is-hidden" data-tok="refreshBlock" hidden>
+              <div class="check-row">
+                <label class="check"><input type="checkbox" checked /> Refresh-токены переиспользуются</label>
+                <label class="check"><input type="checkbox" checked /> Отзывать активные access-токены при обновлении</label>
+                <label class="check"><input type="checkbox" checked data-tok="refreshNever" onchange="oidcTok(this)" /> Refresh-токены не истекают</label>
+              </div>
+              <div class="ttl-row">
+                <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни refresh-токена</label><input class="control" type="number" value="600" data-tok="refreshTtl" disabled /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select" data-tok="refreshUnit" disabled><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              </div>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Код устройства и транспорт</h2>
+            <div class="ttl-stack">
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни кода устройства</label><input class="control" type="number" value="600" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              </div>
+              <div class="ttl-pair">
+                <div class="field"><label class="label">Время жизни транспортной транзакции</label><input class="control" type="number" value="1200" /></div>
+                <div class="field"><label class="label">Единица</label><select class="control unit-select"><option>секунды</option><option>минуты</option><option>часы</option></select></div>
+              </div>
+            </div>
+            <label class="check"><input type="checkbox" checked /> Передавать JWKS URI сервис-провайдеру</label>
+          </article>
+        </section>
+
+        <section data-panel="crypto" hidden>
+          <article class="card card-wide">
+            <p class="hint">«По умолчанию сервера» — клиент не задаёт алгоритм и берёт общий параметр из настроек.</p>
+            <div class="grid-3" style="margin-top:16px;">
+              <div class="field"><label class="label">Подпись объекта запроса</label><select class="control"><option value="default">По умолчанию сервера</option><option value="none">Не использовать</option><option value="HS256">HS256</option><option value="HS384">HS384</option><option value="HS512">HS512</option><option value="RS256" selected>RS256</option><option value="RS384">RS384</option><option value="RS512">RS512</option><option value="PS256">PS256</option><option value="PS384">PS384</option><option value="PS512">PS512</option><option value="ES256">ES256</option><option value="ES384">ES384</option><option value="ES512">ES512</option></select></div>
+              <div class="field"><label class="label">Подпись id-токена</label><select class="control"><option value="default" selected>По умолчанию сервера</option><option value="none">Не использовать</option><option value="HS256">HS256</option><option value="HS384">HS384</option><option value="HS512">HS512</option><option value="RS256">RS256</option><option value="RS384">RS384</option><option value="RS512">RS512</option><option value="PS256">PS256</option><option value="PS384">PS384</option><option value="PS512">PS512</option><option value="ES256">ES256</option><option value="ES384">ES384</option><option value="ES512">ES512</option></select></div>
+              <div class="field"><label class="label">Алгоритм шифрования id-токена</label><select class="control"><option value="default" selected>По умолчанию сервера</option><option value="none">Не использовать</option><option value="RSA1_5">RSA1_5</option><option value="RSA-OAEP">RSA-OAEP</option><option value="A128KW">A128KW</option><option value="A256KW">A256KW</option><option value="dir">dir</option><option value="ECDH-ES">ECDH-ES</option><option value="ECDH-ES+A128KW">ECDH-ES+A128KW</option><option value="ECDH-ES+A256KW">ECDH-ES+A256KW</option></select></div>
+              <div class="field"><label class="label">Метод шифрования id-токена</label><select class="control"><option value="default" selected>По умолчанию сервера</option><option value="none">Не использовать</option><option value="A128CBC+HS256">A128CBC+HS256</option><option value="A256CBC+HS512">A256CBC+HS512</option><option value="A128GCM">A128GCM</option><option value="A256GCM">A256GCM</option></select></div>
+              <div class="field"><label class="label">Метод PKCE</label>
+                <select class="control">
+                  <option value="default" selected>Не использовать</option>
+                  <option value="plain">plain</option>
+                  <option value="S256">S256</option>
+                </select>
+              </div>
+              <div class="field"><label class="label">Хеш номера телефона</label>
+                <select class="control">
+                  <option value="disabled" selected>Не использовать</option>
+                  <option>SHA-256</option><option>SHA-384</option><option>SHA-512</option>
+                  <option>SHA3-256</option><option>SHA3-384</option><option>SHA3-512</option>
+                </select>
+              </div>
+              <div class="field"><label class="label">Дополнительный ключ хеширования</label><input class="control" placeholder="Additional Key" /></div>
+            </div>
+          </article>
+        </section>
+
+        <section data-panel="other" hidden>
+          <article class="card">
+            <h2>Claims Redirect URI</h2>
+            <p class="hint">Куда вернуть клиента после сбора claims</p>
+            <div class="repeat" data-kind="uri" style="margin-top:8px;">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Post-Logout Redirect URI <span class='nyi'>NYI</span></h2>
+            <p class="hint">Куда вернуть клиента после выхода</p>
+            <div class="repeat" data-kind="uri" style="margin-top:8px;">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Request URI <span class='nyi'>NYI</span></h2>
+            <p class="hint">Адреса объектов запроса, которые использует клиент</p>
+            <div class="repeat" data-kind="uri" style="margin-top:8px;">
+              <div class="repeat-rows"></div>
+              <p class="hint repeat-empty">Список пуст</p>
+              <button class="btn btn-ghost" type="button" data-add>Добавить</button>
+            </div>
+          </article>
+          <article class="card">
+            <div class="field">
+              <label class="label">Initiate Login URI <span class="nyi">NYI</span></label>
+              <input class="control" placeholder="https://" />
+              <div class="hint">Адрес, с которого сервер инициирует вход на стороне клиента</div>
+            </div>
+            <div class="field" style="margin-top:16px;">
+              <label class="label">Default Max Age, с <span class="nyi">NYI</span></label>
+              <input class="control" type="number" value="60000" />
+              <div class="hint">Через сколько сервер переспросит абонента</div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Default ACR Values <span class="nyi">NYI</span></h2>
             <p class="hint">Контекст аутентификации по умолчанию</p>
-            <div class="repeat" data-kind="acr">
+            <div class="repeat" data-kind="acr" style="margin-top:8px;">
               <div class="repeat-rows"></div>
               <p class="hint repeat-empty">Список пуст</p>
               <button class="btn btn-ghost" type="button" data-add>Добавить</button>
             </div>
             <div class="field" style="margin-top:16px;">
-              <label class="label">Default Max Age, с</label>
-              <input class="control" type="number" value="60000" />
-              <div class="hint">Через сколько сервер переспросит абонента</div>
-            </div>
-            <div class="field" style="margin-top:14px;">
-              <span class="label">Тип приложения</span>
-              <div class="radios">
-                <label><input type="radio" name="appType" checked /> Веб</label>
-                <label><input type="radio" name="appType" /> Мобильное</label>
+              <span class="label">Тип приложения <span class="nyi">NYI</span></span>
+              <div class="radios inline">
+                <label><input type="radio" name="appType" /> Native</label>
+                <label><input type="radio" name="appType" checked /> Web</label>
               </div>
             </div>
-          
           </article>
         </section>
+
+        <section data-panel="admin" hidden>
+          <article class="card card-wide">
+            <label class="check"><input type="checkbox" id="adminSp" checked /> Административный сервис-провайдер</label>
+            <div id="adminEmpty" class="note info" hidden>Поля раздела недоступны, пока не включён флаг административного сервис-провайдера.</div>
+            <div id="adminBlock">
+              <label class="check"><input type="checkbox" id="adminAll" /> Все сервис-провайдеры</label>
+              <div class="picker-grid">
+              <div class="field">
+                <label class="label" for="clientSearch">Доступные клиенты</label>
+                <div class="ac-box" id="clientBox">
+                  <input class="ac-input" id="clientSearch" placeholder="Добавить" autocomplete="off" />
+                  <button type="button" class="ac-chevron" tabindex="-1" aria-label="Открыть список"></button>
+                  <div class="suggest" id="clientSuggest" hidden></div>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label" for="cmdSearch">Разрешённые команды</label>
+                <div class="ac-box" id="cmdBox">
+                  <input class="ac-input" id="cmdSearch" placeholder="Добавить" autocomplete="off" />
+                  <button type="button" class="ac-chevron" tabindex="-1" aria-label="Открыть список"></button>
+                  <div class="suggest" id="cmdSuggest" hidden></div>
+                </div>
+              </div>
+              </div>
+              <div class="note">Клиент сможет выполнять выбранные команды от имени указанных сервис-провайдеров.</div>
+            </div>
+          </article>
+        </section>
+
+        <section data-panel="userinfo" hidden>
+          <h2 class="later-hint">Claims по областям</h2>
+          <article class="card card-scope card-scope--foldable">
+            <h2>Scope mc_identity_nationalid</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>given_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>family_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>middle_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>birthdate</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>gender</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>sex</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier_authority</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier_authority_code</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier_date</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>document_type</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>birthplace</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>title</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>phone_number</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>email</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card card-scope">
+            <h2>Scope mc_identity_phonenumber</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>phone_number</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card card-scope">
+            <h2>Scope mc_email</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>email</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card card-scope">
+            <h2>Scope mc_taxid_rus</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>taxid</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card card-scope">
+            <h2>Scope mc_identity_basic</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>given_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>family_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card card-scope card-scope--foldable">
+            <h2>Scope mc_identity_basic_address</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>given_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>family_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>middle_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>sex</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>birthdate</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>email</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>phone_number</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>address</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>street_address</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>locality</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>postal_code</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>country</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>region</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>city</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>state</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>street</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>houseno_or_housename</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>apartment</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card card-scope card-scope--foldable">
+            <h2>Scope mc_identity_full</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>given_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>family_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>middle_name</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>sex</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>gender</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>birthdate</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>birthplace</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>email</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>phone_number</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>address</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>street_address</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>locality</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>postal_code</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>country</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>region</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>city</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>state</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>street</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>houseno_or_housename</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>apartment</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>document_type</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier_authority</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier_authority_code</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>national_identifier_date</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>title</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>updated_at</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card card-scope card-scope--foldable">
+            <h2>Scope mc_bigdata</h2>
+            <table class="claim-table">
+              <thead>
+                <tr><th>Claim</th><th>Allowed</th><th>Required</th></tr>
+                <tr class="claim-all"><td>Select all</td><td><input type="checkbox" class="js-claim-all" data-col="1" /></td><td><input type="checkbox" class="js-claim-all" data-col="2" /></td></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>sub</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>abroad_trips_avg_6m</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>abroad_trips_cnt_6m</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>abroad_trips_cnt_m</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>age_cat</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>auto_owners_probvk_used_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>business_owners_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>children_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>countries_travel</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>countries_travel_cnt</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>countries_travel_time</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>dacha_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_auto_service_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_autocredits_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_autoinsur_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_beauty_salon_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_beauty_salon_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_business_resource_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_business_resource_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_buying_car_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_buying_foreign_property_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_buying_land_country_property_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_buying_land_country_property_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_buying_property_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_buying_property_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_care_products_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_care_products_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_carsharing_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_carsharing_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_cashback_discounts_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_cashback_discounts_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_clothes_shoes_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_clothes_shoes_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_consumer_credits_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_credit_cards_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_debit_cards_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_delivery_food_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_deposits_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_dop_education_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_entertainment_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_entertainment_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_exhibitions_museums_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_exhibitions_museums_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_first_education_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_investicii_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_kasko_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_learn_lang_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_learn_lang_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_lifeinsur_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_microcredit_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_mortgages_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_online_cinema_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_online_cinema_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_property_insur_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_property_insur_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_property_rent_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_remittances_14d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_renovation_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_renovation_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_restaurants_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_restaurants_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_sport_clubs_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_sport_clubs_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_sport_goods_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_sport_goods_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_supermarkets</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_theaters_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_theaters_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_travel_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_travel_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_vzr_7d_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+                <tr><td><code>interest_in_vzr_m_ind</code></td><td><input type="checkbox" /></td><td><input type="checkbox" /></td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="card">
+            <h2>Подпись и шифрование User Info</h2>
+            <div class="stack-fields">
+              <div class="field">
+                <label class="label">User info source</label>
+                <select class="control">
+                  <option selected>/userinfo</option>
+                </select>
+                <div class="hint">Тип источника. Зависит от оператора. Список подставляется сервером.</div>
+              </div>
+              <div class="field"><label class="label">Подпись User Info</label><select class="control"><option value="default">По умолчанию сервера</option><option value="none">Не использовать</option><option value="HS256">HS256</option><option value="HS384">HS384</option><option value="HS512">HS512</option><option value="RS256" selected>RS256</option><option value="RS384">RS384</option><option value="RS512">RS512</option><option value="PS256">PS256</option><option value="PS384">PS384</option><option value="PS512">PS512</option><option value="ES256">ES256</option><option value="ES384">ES384</option><option value="ES512">ES512</option></select></div>
+              <div class="field"><label class="label">Алгоритм шифрования User Info</label><select class="control"><option value="default">По умолчанию сервера</option><option value="none">Не использовать</option><option value="RSA1_5">RSA1_5</option><option value="RSA-OAEP">RSA-OAEP</option><option value="A128KW">A128KW</option><option value="A256KW">A256KW</option><option value="dir">dir</option><option value="ECDH-ES">ECDH-ES</option><option value="ECDH-ES+A128KW">ECDH-ES+A128KW</option><option value="ECDH-ES+A256KW">ECDH-ES+A256KW</option><option value="RSA-OAEP-256" selected>RSA-OAEP-256</option></select></div>
+              <div class="field"><label class="label">Метод шифрования User Info</label><select class="control"><option value="default">По умолчанию сервера</option><option value="none">Не использовать</option><option value="A128CBC-HS256">A128CBC-HS256</option><option value="A256CBC-HS512">A256CBC-HS512</option><option value="A128GCM" selected>A128GCM</option><option value="A256GCM">A256GCM</option></select></div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Document types</h2>
+            <p class="hint">User Info только для абонентов с выбранным типом документа. Пустой список — без фильтра.</p>
+            <div class="doc-grid">
+              <label class="check"><input type="checkbox" /> RUSSIAN_ID</label>
+              <label class="check"><input type="checkbox" /> SIMPLE_ID</label>
+              <label class="check"><input type="checkbox" /> RESIDENT_PERMIT</label>
+              <label class="check"><input type="checkbox" /> FOREGEIN_ID</label>
+              <label class="check"><input type="checkbox" /> INTERNATIONAL_ID</label>
+              <label class="check"><input type="checkbox" /> USSR_ID</label>
+              <label class="check"><input type="checkbox" /> MILITARY_ID</label>
+              <label class="check"><input type="checkbox" /> TEMPORARY_RESIDENT_PERMIT</label>
+            </div>
+            <div class="grid-2" style="margin-top:16px;">
+              <div class="field">
+                <span class="label">Build formatted address</span>
+                <div class="bool-seg" data-bool="fmtAddr"><button type="button" data-on="false" class="on">False</button><button type="button" data-on="true">True</button></div>
+                <input type="checkbox" id="fmtAddr" class="visually-hidden" tabindex="-1" />
+                <p class="hint">Собирать address claims из частей, а не отдавать поле источника как есть</p>
+              </div>
+              <div class="field">
+                <span class="label">Check customer age</span>
+                <div class="bool-seg" data-bool="checkAge"><button type="button" data-on="false" class="on">False</button><button type="button" data-on="true">True</button></div>
+                <input type="checkbox" id="checkAge" class="visually-hidden" tabindex="-1" />
+                <p class="hint">Отдавать данные только если абоненту больше 18 лет</p>
+              </div>
+              <div class="field">
+                <span class="label">is_lost_stolen for KYC</span>
+                <div class="bool-seg" data-bool="kycLost"><button type="button" data-on="false">False</button><button type="button" data-on="true" class="on">True</button></div>
+                <input type="checkbox" id="kycLost" class="visually-hidden" tabindex="-1" checked />
+                <p class="hint">Добавить поле <b>is_lost_stolen</b> в ответ KYC</p>
+              </div>
+              <div class="field">
+                <span class="label">account_state for KYC</span>
+                <div class="bool-seg" data-bool="kycState"><button type="button" data-on="false">False</button><button type="button" data-on="true" class="on">True</button></div>
+                <input type="checkbox" id="kycState" class="visually-hidden" tabindex="-1" checked />
+                <p class="hint">Добавить поле <b>account_state</b> в ответ KYC</p>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Consent Settings</h2>
+            <div class="form-stack">
+            <span class="label">Check agreement</span>
+            <div class="radios">
+              <label><input type="radio" name="agreementCheck" value="WITHOUT_VALIDATION" checked /> WITHOUT_VALIDATION</label>
+              <label><input type="radio" name="agreementCheck" value="VALIDATE_KYC_RESULT" /> VALIDATE_KYC_RESULT</label>
+              <label><input type="radio" name="agreementCheck" value="VALIDATION_WITH_ID" /> VALIDATION_WITH_ID</label>
+            </div>
+              <div class="field" id="tosWrap" hidden>
+                <label class="label" for="tosUri">Terms of Service</label>
+                <input class="control" id="tosUri" type="url" placeholder="https://" />
+              </div>
+              <div class="field">
+                <label class="label" for="consentReason">Consent Reason</label>
+                <input class="control" id="consentReason" />
+              </div>
+              <div class="field">
+                <label class="label" for="consentEmail">Consent email</label>
+                <input class="control" id="consentEmail" type="text" placeholder="consent@example.com" />
+              </div>
+              <div class="field">
+                <label class="label" for="consentLogo">Consent logo</label>
+                <input class="control" id="consentLogo" type="url" placeholder="https://" />
+              </div>
+              <div class="field">
+                <span class="label">Multi consent enable</span>
+                <div class="bool-seg" data-bool="multiConsentEn"><button type="button" data-on="false" class="on">False</button><button type="button" data-on="true">True</button></div>
+                <input type="checkbox" id="multiConsentEn" class="visually-hidden" tabindex="-1" />
+                <div class="hint">Показать текст multi consent и отправить данные в ConsentServer</div>
+              </div>
+              <div class="field">
+                <span class="label">Pop-up consent display</span>
+                <div class="bool-seg" data-bool="popupConsent"><button type="button" data-on="false" class="on">False</button><button type="button" data-on="true">True</button></div>
+                <input type="checkbox" id="popupConsent" class="visually-hidden" tabindex="-1" />
+                <div class="hint">Показать соглашение во всплывающем окне на той же странице</div>
+              </div>
+              <div class="field">
+                <label class="label">Multi consent text</label>
+                <textarea class="control" id="multiConsentText" style="min-height:72px;font-family:var(--font);"></textarea>
+                <div class="hint">Текст должен содержать ссылку вида '[link]consent[/link]'. HTML разрешён.</div>
+              </div>
+              <div class="field">
+                <label class="label" for="multiConsentUrl">Multi Consent URL</label>
+                <input class="control" id="multiConsentUrl" type="url" placeholder="https://" />
+              </div>
+              <div class="field">
+                <label class="label" for="clientComment">Client comment</label>
+                <textarea class="control" id="clientComment" style="min-height:72px;font-family:var(--font);"></textarea>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section data-panel="authn" hidden>
+          <article class="card card-wide">
+            <h2>Authentication priority for LOA2</h2>
+            <p class="hint">Если включена Seamless-аутентификация, она всегда выполняется с нулевым приоритетом, до остальных методов.</p>
+            <p class="hint">Следующий приоритет — аутентификация через апплет.</p>
+            <p class="hint">Последний приоритет — один из доступных методов без апплета.</p>
+            <p class="hint">Для Seamless и OTP нужны дополнительные условия.</p>
+          </article>
+          <article class="card">
+            <label class="check"><input type="checkbox" /> Seamless authentication</label>
+            <p class="hint">Включить seamless-аутентификацию</p>
+            <label class="check"><input type="radio" name="authenticators" /> Only Seamless authentication</label>
+            <p class="hint">Использовать только Seamless</p>
+            <label class="check"><input type="checkbox" /> LOA3 as LOA2</label>
+            <p class="hint">Принудительно LoA2 для запросов LoA3</p>
+          </article>
+          <article class="card">
+            <h2>Authenticators</h2>
+            <p class="hint">Список методов подставляется сервером.</p>
+            <label class="check"><input type="radio" name="authenticators" /> SMS+URL authentication</label>
+            <p class="hint">Включить аутентификацию SMS+URL</p>
+            <label class="check"><input type="radio" name="authenticators" /> USSD authentication</label>
+            <p class="hint">Включить USSD-аутентификацию</p>
+            <div class="field" style="margin-top:16px;">
+              <label class="label">DisplayText ValidityPeriod</label>
+              <input class="control" />
+            </div>
+          </article>
+        </section>
+
       </div>
     </section>
 
@@ -1134,10 +2088,10 @@
       <header class="page-head">
         <div class="title-row"><h1>Новый клиент</h1></div>
         <div class="head-actions">
-          <button class="btn btn-ghost" id="createCancel" type="button">Отменить</button>
-          <button class="btn btn-ghost" id="createBack" type="button" hidden>Назад</button>
+          <button class="btn btn-text" id="createCancel" type="button">Отменить</button>
+          <button class="btn btn-text" id="createBack" type="button" hidden>Назад</button>
           <button class="btn btn-primary" id="createNext" type="button" disabled>Далее</button>
-          <button class="btn btn-primary" id="createSave" type="button" disabled>Создать</button>
+          <button class="btn btn-accent" id="createSave" type="button" disabled>Создать</button>
         </div>
       </header>
       <nav class="steps" id="createSteps">
@@ -1149,21 +2103,23 @@
         <p class="later-hint">Сейчас только то, без чего клиент не появится. Оформление, токены, биллинг и ключи — после создания, в карточке.</p>
         <div id="wiz1" class="wizard">
           <article class="card">
-            <div class="field">
-              <label class="label" for="newName">Название клиента <span class="req">*</span></label>
-              <input class="control" id="newName" />
-              <div class="hint">Человекочитаемое имя приложения</div>
-            </div>
-            <div class="field" style="margin-top:16px;">
-              <label class="label" for="newId">Идентификатор клиента</label>
-              <input class="control" id="newId" />
-              <div class="hint">Оставьте пустым — сервер сгенерирует сам</div>
-            </div>
-            <div class="field" style="margin-top:16px;">
-              <span class="label">Тип приложения</span>
-              <div class="radios">
-                <label><input type="radio" name="newAppType" checked /> Веб</label>
-                <label><input type="radio" name="newAppType" /> Мобильное</label>
+            <div class="grid-2">
+              <div class="field">
+                <label class="label" for="newName">Название клиента <span class="req">*</span></label>
+                <input class="control" id="newName" />
+                <div class="hint">Человекочитаемое имя приложения</div>
+              </div>
+              <div class="field">
+                <label class="label" for="newId">Идентификатор клиента</label>
+                <input class="control" id="newId" />
+                <div class="hint">Оставьте пустым — сервер сгенерирует сам</div>
+              </div>
+              <div class="field">
+                <span class="label">Тип приложения</span>
+                <div class="radios inline">
+                  <label><input type="radio" name="newAppType" checked /> Веб</label>
+                  <label><input type="radio" name="newAppType" /> Мобильное</label>
+                </div>
               </div>
             </div>
           </article>
@@ -1172,7 +2128,7 @@
           <article class="card">
             <h2>Redirect URI</h2>
             <p class="hint">Адрес, на который вернуть клиента после страницы авторизации. Можно добавить позже на вкладке «Вход и возврат».</p>
-            <div class="repeat" data-kind="uri" style="margin-top:10px;">
+            <div class="repeat" data-kind="uri" style="margin-top:8px;">
               <div class="repeat-rows"></div>
               <p class="hint repeat-empty">Список пуст</p>
               <button class="btn btn-ghost" type="button" data-add>Добавить</button>
@@ -1184,7 +2140,7 @@
 <section class="app-screen" id="screen-subs" hidden>
       <header class="page-head"><h1>Абоненты</h1></header>
       <div class="toolbar">
-        <div class="field" style="flex:1; max-width:420px; margin:0;">
+        <div class="field" style="flex:1; margin:0;">
           <label class="label" for="subSearch">Поиск</label>
           <input class="control" id="subSearch" placeholder="Номер абонента" />
         </div>
@@ -1214,7 +2170,7 @@
     <section class="app-screen" id="screen-logs" hidden>
       <header class="page-head"><h1>Журналы</h1></header>
       <div class="toolbar">
-        <div class="field" style="flex:1; max-width:420px; margin:0;">
+        <div class="field" style="flex:1; margin:0;">
           <label class="label" for="logSearch">Поиск</label>
           <input class="control" id="logSearch" placeholder="Номер абонента или событие" />
         </div>
@@ -1257,7 +2213,7 @@
           </article>
         </div>
         <div id="anReports" hidden>
-          <div class="head-actions" style="justify-content:flex-end; margin-bottom:12px;">
+          <div class="head-actions" style="justify-content:flex-end; margin-bottom:16px;">
             <button class="btn btn-primary" type="button" id="anCollect">Собрать отчёт</button>
           </div>
           <table class="sp-table plain">
@@ -1281,40 +2237,44 @@
       <div class="page">
         <article class="card settings-form">
           <h2>Параметры сервера</h2>
-          <p class="hint" style="margin:-8px 0 16px;">Действуют на всех клиентов. Клиент может сузить их у себя, но не расширить.</p>
-          <div class="field">
-            <label class="label" for="issuer">Издатель (issuer)</label>
-            <input class="control" id="issuer" value="https://oidc.a1s.ru" />
-            <div class="hint">Значение поля iss в выдаваемых токенах</div>
-          </div>
-          <div class="field" style="margin-top:16px;">
-            <label class="label" for="signAlg">Алгоритм подписи по умолчанию</label>
-            <select class="control" id="signAlg">
-              <option selected>RS256</option>
-              <option>ES256</option>
-              <option>PS256</option>
-            </select>
-          </div>
-          <div class="field" style="margin-top:16px;">
-            <label class="label" for="jwksTtl">Кэш JWKS, с</label>
-            <input class="control" id="jwksTtl" type="number" value="3600" />
-          </div>
-          <div class="field" style="margin-top:16px;">
-            <label class="label" for="sessTtl">Время жизни сессии, с</label>
-            <input class="control" id="sessTtl" type="number" value="86400" />
-          </div>
-          <h2 style="margin-top:22px;">Требования безопасности</h2>
-          <label class="check"><input type="checkbox" id="reqPkce" checked /> Требовать PKCE от всех клиентов</label>
-          <label class="check"><input type="checkbox" id="allowDevice" /> Разрешить device flow</label>
-          <div class="field" style="margin-top:16px;">
-            <label class="label" for="supportMail">Почта поддержки</label>
-            <input class="control" id="supportMail" type="email" value="support@a1s.ru" />
-            <div class="hint">Показывается абоненту на экране ошибки</div>
+          <p class="hint" style="margin:0 0 16px;">Действуют на всех клиентов. Клиент может сузить их у себя, но не расширить.</p>
+          <div class="grid-2">
+            <div class="field">
+              <label class="label" for="issuer">Издатель (issuer)</label>
+              <input class="control" id="issuer" value="https://oidc.a1s.ru" />
+              <div class="hint">Значение поля iss в выдаваемых токенах</div>
+            </div>
+            <div class="field">
+              <label class="label" for="signAlg">Алгоритм подписи по умолчанию</label>
+              <select class="control" id="signAlg">
+                <option selected>RS256</option>
+                <option>ES256</option>
+                <option>PS256</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="jwksTtl">Кэш JWKS, с</label>
+              <input class="control" id="jwksTtl" type="number" value="3600" />
+            </div>
+            <div class="field">
+              <label class="label" for="sessTtl">Время жизни сессии, с</label>
+              <input class="control" id="sessTtl" type="number" value="86400" />
+            </div>
+            <div class="field">
+              <label class="label" for="supportMail">Почта поддержки</label>
+              <input class="control" id="supportMail" type="email" value="support@a1s.ru" />
+              <div class="hint">Показывается абоненту на экране ошибки</div>
+            </div>
+            <div class="field">
+              <span class="label">Требования безопасности</span>
+              <label class="check"><input type="checkbox" id="reqPkce" checked /> Требовать PKCE от всех клиентов</label>
+              <label class="check"><input type="checkbox" id="allowDevice" /> Разрешить device flow</label>
+            </div>
           </div>
           <div class="note">Смена издателя разорвёт действующие сессии: клиентам придётся заново пройти авторизацию.</div>
           <div class="head-actions" style="margin-top:16px;">
             <button class="btn btn-primary" type="button" id="setSave" disabled>Сохранить</button>
-            <button class="btn btn-ghost" type="button" id="setCancel" disabled>Отменить</button>
+            <button class="btn btn-text" type="button" id="setCancel" disabled>Отменить</button>
           </div>
         </article>
       </div>
@@ -1451,6 +2411,10 @@
       logoImg.src = "https://m-c.tele2.ru/oidc/resources/images/byclient/tele2/logo.png";
       document.getElementById("logoBtnCard").classList.remove("is-empty");
       document.getElementById("logoClearCard").hidden = false;
+      if (window.tagPicker) {
+        window.tagPicker.setSelected(c.tags || []);
+        document.getElementById("cardTags").innerHTML = tagsHtml(c.tags || []);
+      }
       snapshot = snap();
       setDirty(false);
     }
@@ -1458,8 +2422,8 @@
       hideAll();
       cardEl.hidden = false;
       fillCard(c);
-      document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b.dataset.tab === "overview"));
-      document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== "overview"; });
+      document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b.dataset.tab === "general"));
+      document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== "general"; });
     }
     function setCreateStep(n) {
       const s1 = n === 1;
@@ -1649,20 +2613,48 @@
       document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== btn.dataset.tab; });
     });
 
-    const fields = document.querySelectorAll("#screen-sp input, #screen-sp select, #screen-sp textarea");
     const saveBtn = document.getElementById("saveBtn");
     const cancelBtn = document.getElementById("cancelBtn");
     const dirtyHint = document.getElementById("dirtyHint");
     let snapshot = "";
-    const snap = () => [...fields].map((el) => el.type === "checkbox" ? el.checked : el.value).join("\n");
-    const setDirty = (v) => {
+    const snapField = (el) => {
+      if (el.type === "checkbox") return el.checked ? "1" : "0";
+      return el.value;
+    };
+    const formFields = () => [...document.querySelectorAll("#screen-sp input, #screen-sp select, #screen-sp textarea")].filter((el) => {
+      if (el.type === "radio" || el.type === "file" || el.type === "button" || el.type === "hidden") return false;
+      if (el.classList.contains("ac-input")) return false;
+      return true;
+    });
+    const snap = () => formFields().map(snapField).join("\n");
+    const restoreFields = (raw) => {
+      const vals = raw.split("\n");
+      formFields().forEach((el, i) => {
+        const v = vals[i];
+        if (el.type === "checkbox") el.checked = v === "1" || v === "true";
+        else if (v != null) el.value = v;
+        el.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    };
+    const tabForEl = (el) => el.closest("[data-panel]")?.dataset.panel || null;
+    const markTabDirty = (tabId) => {
+      if (!tabId) return;
+      document.querySelector(`#tabs button[data-tab="${tabId}"]`)?.classList.add("has-dirty");
+    };
+    const setDirty = (v, tabId) => {
       saveBtn.disabled = !v;
       cancelBtn.disabled = !v;
       dirtyHint.classList.toggle("show", v);
+      if (v) markTabDirty(tabId || document.querySelector("#tabs button.active")?.dataset.tab);
+      else document.querySelectorAll("#tabs button.has-dirty").forEach((b) => b.classList.remove("has-dirty"));
+    };
+    const syncDirty = (e) => {
+      const dirty = snap() !== snapshot;
+      setDirty(dirty, dirty ? tabForEl(e.target) : null);
     };
     snapshot = snap();
-    document.getElementById("screen-sp").addEventListener("input", () => setDirty(snap() !== snapshot));
-    document.getElementById("screen-sp").addEventListener("change", () => setDirty(snap() !== snapshot));
+    document.getElementById("screen-sp").addEventListener("input", syncDirty);
+    document.getElementById("screen-sp").addEventListener("change", syncDirty);
     const toast = document.getElementById("toast");
     let toastTimer = 0;
     function showToast(msg) {
@@ -1756,14 +2748,21 @@
     syncAllTokens();
 
     const COMMANDS = ["activate","deactivate","changepin","checkstatus","resetpin","reactivatepin","resetblockedpin","block","unblock","status"];
-    function bindPicker({ input, suggest, chips, options, selected, onChange }) {
+    const TAG_OPTIONS = ["PRODUCTION", "TEST", "MONITORING"];
+    function bindPicker({ box, input, suggest, options, selected, onChange }) {
       const state = { selected: [...selected] };
       const renderChips = () => {
-        chips.innerHTML = state.selected.map((v, i) => `<span class="chip">${v}<button type="button" data-i="${i}" aria-label="Убрать">✕</button></span>`).join("");
+        [...box.querySelectorAll(":scope > .chip")].forEach((n) => n.remove());
+        state.selected.forEach((v, i) => {
+          const span = document.createElement("span");
+          span.className = "chip";
+          span.innerHTML = `${String(v).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]))}<button type="button" data-i="${i}" aria-label="Убрать">✕</button>`;
+          input.before(span);
+        });
       };
       const showSuggest = (q) => {
         if (input.disabled) { suggest.hidden = true; return; }
-        const needle = q.trim().toLowerCase();
+        const needle = (q || "").trim().toLowerCase();
         const hits = options.filter((o) => !state.selected.includes(o) && (!needle || o.toLowerCase().includes(needle))).slice(0, 12);
         suggest.innerHTML = hits.map((h) => `<button type="button" class="suggest-item">${h}</button>`).join("");
         suggest.hidden = !hits.length;
@@ -1780,18 +2779,30 @@
         showSuggest("");
         onChange?.();
       });
-      chips.addEventListener("click", (e) => {
+      box.addEventListener("click", (e) => {
         const b = e.target.closest("button[data-i]");
-        if (!b) return;
-        state.selected.splice(+b.dataset.i, 1);
-        renderChips();
-        onChange?.();
+        if (b) {
+          state.selected.splice(+b.dataset.i, 1);
+          renderChips();
+          onChange?.();
+          return;
+        }
+        if (e.target.closest(".ac-chevron")) {
+          input.focus();
+          showSuggest(input.value);
+        }
       });
       document.addEventListener("click", (e) => {
-        if (!input.closest(".search-wrap").contains(e.target)) suggest.hidden = true;
+        if (!box.contains(e.target)) suggest.hidden = true;
       });
       renderChips();
-      return state;
+      return {
+        selected: state.selected,
+        setSelected(vals) {
+          state.selected.splice(0, state.selected.length, ...vals);
+          renderChips();
+        }
+      };
     }
     function bindAdmin(ids) {
       const sync = () => {
@@ -1805,33 +2816,44 @@
       sync();
     }
     const clientNames = () => CLIENTS.map((c) => c.name);
+    window.tagPicker = bindPicker({
+      box: document.getElementById("tagBox"),
+      input: document.getElementById("tagSearch"),
+      suggest: document.getElementById("tagSuggest"),
+      options: TAG_OPTIONS,
+      selected: ["PRODUCTION"],
+      onChange: () => {
+        document.getElementById("cardTags").innerHTML = tagsHtml(window.tagPicker.selected);
+        setDirty(true);
+      }
+    });
     bindPicker({
+      box: document.getElementById("clientBox"),
       input: document.getElementById("clientSearch"),
       suggest: document.getElementById("clientSuggest"),
-      chips: document.getElementById("clientChips"),
       options: clientNames(),
       selected: ["nested-jwt-test-idgw", "AggregatorTest"],
       onChange: () => setDirty(true)
     });
     bindPicker({
+      box: document.getElementById("cmdBox"),
       input: document.getElementById("cmdSearch"),
       suggest: document.getElementById("cmdSuggest"),
-      chips: document.getElementById("cmdChips"),
       options: COMMANDS,
-      selected: ["activate", "deactivate", "checkstatus", "status"],
+      selected: ["activate", "deactivate"],
       onChange: () => setDirty(true)
     });
     if (document.getElementById("newClientSearch")) bindPicker({
+      box: document.getElementById("newClientSearch").closest(".ac-box") || document.getElementById("newClientSearch").closest(".search-wrap"),
       input: document.getElementById("newClientSearch"),
       suggest: document.getElementById("newClientSuggest"),
-      chips: document.getElementById("newClientChips"),
       options: clientNames(),
       selected: []
     });
     if (document.getElementById("newCmdSearch")) bindPicker({
+      box: document.getElementById("newCmdSearch").closest(".ac-box") || document.getElementById("newCmdSearch").closest(".search-wrap"),
       input: document.getElementById("newCmdSearch"),
       suggest: document.getElementById("newCmdSuggest"),
-      chips: document.getElementById("newCmdChips"),
       options: COMMANDS,
       selected: []
     });
@@ -1843,6 +2865,52 @@
       search: document.getElementById("clientSearch"),
       suggest: document.getElementById("clientSuggest")
     });
+    document.querySelectorAll(".claim-table").forEach((table) => {
+      table.querySelectorAll(".js-claim-all").forEach((cb) => {
+        cb.addEventListener("change", () => {
+          const col = Number(cb.dataset.col);
+          table.querySelectorAll("tbody tr").forEach((tr) => {
+            const box = tr.children[col] && tr.children[col].querySelector("input[type=checkbox]");
+            if (box && !box.disabled) box.checked = cb.checked;
+          });
+          setDirty(true, table.closest("[data-panel]")?.dataset.panel);
+        });
+      });
+    });
+    const SCOPE_FOLD_VISIBLE = 3;
+    document.querySelectorAll(".card-scope--foldable").forEach((card) => {
+      const tbody = card.querySelector(".claim-table tbody");
+      if (!tbody) return;
+      const rows = [...tbody.querySelectorAll("tr")];
+      if (rows.length <= SCOPE_FOLD_VISIBLE) return;
+      rows.slice(SCOPE_FOLD_VISIBLE).forEach((tr) => tr.classList.add("claim-row-more"));
+      card.classList.add("is-folded");
+      const hidden = rows.length - SCOPE_FOLD_VISIBLE;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-text scope-fold-btn";
+      const setLabel = (folded) => {
+        btn.innerHTML = folded
+          ? `Показать все (${hidden})<span class="scope-fold-chevron" aria-hidden="true"></span>`
+          : `Свернуть<span class="scope-fold-chevron is-up" aria-hidden="true"></span>`;
+        btn.setAttribute("aria-expanded", folded ? "false" : "true");
+      };
+      setLabel(true);
+      btn.addEventListener("click", () => {
+        const folding = !card.classList.contains("is-folded");
+        card.classList.toggle("is-folded");
+        setLabel(card.classList.contains("is-folded"));
+        if (folding) {
+          const head = card.querySelector("h2");
+          if (head) {
+            head.setAttribute("tabindex", "-1");
+            card.scrollIntoView({ block: "start", behavior: "smooth" });
+            requestAnimationFrame(() => head.focus({ preventScroll: true }));
+          }
+        }
+      });
+      card.querySelector(".claim-table").after(btn);
+    });
     if (document.getElementById("newAdminSp")) bindAdmin({
       flag: document.getElementById("newAdminSp"),
       all: document.getElementById("newAdminAll"),
@@ -1851,20 +2919,46 @@
       search: document.getElementById("newClientSearch"),
       suggest: document.getElementById("newClientSuggest")
     });
+    function wireBoolSegs() {
+      document.querySelectorAll("[data-bool]").forEach((seg) => {
+        const field = document.getElementById(seg.dataset.bool);
+        if (!field) return;
+        const sync = () => {
+          seg.querySelectorAll("button").forEach((b) => {
+            b.classList.toggle("on", (b.dataset.on === "true") === !!field.checked);
+          });
+        };
+        seg.addEventListener("click", (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          field.checked = b.dataset.on === "true";
+          sync();
+          field.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        field.addEventListener("change", sync);
+        sync();
+      });
+    }
+    wireBoolSegs();
+    function syncTos() {
+      const wrap = document.getElementById("tosWrap");
+      if (!wrap) return;
+      const picked = document.querySelector('input[name="agreementCheck"]:checked');
+      wrap.hidden = !picked || picked.value !== "VALIDATION_WITH_ID";
+    }
+    document.querySelectorAll('input[name="agreementCheck"]').forEach((r) => r.addEventListener("change", syncTos));
+    syncTos();
     saveBtn.onclick = () => {
       snapshot = snap();
       setDirty(false);
       showToast("Изменения сохранены");
     };
     cancelBtn.onclick = () => {
-      const vals = snapshot.split("\n");
-      fields.forEach((el, i) => {
-        if (el.type === "checkbox") el.checked = vals[i] === "true";
-        else el.value = vals[i] ?? el.value;
-      });
+      restoreFields(snapshot);
       document.getElementById("adminSp").dispatchEvent(new Event("change"));
       document.getElementById("adminAll").dispatchEvent(new Event("change"));
       syncAllTokens();
+      syncTos();
       setDirty(false);
     };
 
@@ -1877,7 +2971,9 @@
     });
 
     function wireJwksSeg(seg, uriId, valId) {
-      document.querySelector(seg).addEventListener("click", (e) => {
+      const el = document.querySelector(seg);
+      if (!el) return;
+      el.addEventListener("click", (e) => {
         const b = e.target.closest("button");
         if (!b) return;
         e.currentTarget.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
@@ -1993,8 +3089,8 @@
     }
 
     document.getElementById("demoError").onclick = () => {
-      document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b.dataset.tab === "security"));
-      document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== "security"; });
+      document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b.dataset.tab === "keys"));
+      document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== "keys"; });
       document.querySelector("[data-seg=jwks] [data-mode=value]").click();
       document.getElementById("jwksVal").classList.add("error");
       const hint = document.getElementById("jwksHint");
