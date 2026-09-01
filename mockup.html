@@ -879,17 +879,36 @@
     body.is-ia #screen-sp-create .form-page { max-width: var(--container-md); }
     body.is-ia .wizard { max-width: var(--container-md); }
     body.is-ia [data-panel] {
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
+      display: flex;
+      flex-direction: column;
       gap: 16px;
-      align-items: start;
+      align-items: stretch;
       width: 100%;
     }
     @media (min-width: 900px) {
       body.is-ia [data-panel] { gap: 24px; }
     }
+    body.is-ia .panel-cols {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+      align-items: flex-start;
+    }
+    @media (min-width: 900px) {
+      body.is-ia .panel-cols { gap: 24px; }
+    }
+    body.is-ia .panel-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    @media (min-width: 900px) {
+      body.is-ia .panel-col { gap: 24px; }
+    }
+    body.is-ia .panel-col > .card { margin-top: 0; }
     body.is-ia [data-panel] > .later-hint {
-      grid-column: 1 / -1;
       max-width: none;
       margin: 0;
       font-size: 16px;
@@ -897,29 +916,9 @@
       color: var(--primary);
     }
     body.is-ia [data-panel] > .card {
-      grid-column: 1 / span 12;
       margin-top: 0;
       min-width: 0;
-      height: auto;
-    }
-    @media (min-width: 768px) {
-      body.is-ia [data-panel] > .card.card-scope {
-        grid-column: span 6;
-      }
-    }
-    @media (min-width: 900px) {
-      body.is-ia [data-panel] > .card:not(.card-wide) {
-        grid-column: span 6;
-      }
-    }
-    @media (min-width: 1200px) {
-      body.is-ia [data-panel] > .card.card-scope {
-        grid-column: span 4;
-      }
-    }
-    body.is-ia [data-panel] > .card.card-wide,
-    body.is-ia [data-panel] > article:only-of-type {
-      grid-column: 1 / -1;
+      width: 100%;
     }
     body.is-ia .steps {
       display: flex; gap: 8px; padding: 8px 16px 16px; align-items: center;
@@ -2287,6 +2286,72 @@
     const NAMES = ["nested-jwt-test-idgw","Личный кабинет абонента","Мобильное приложение","Портал самообслуживания","AggregatorTest","Ростелеком","Банк — вход по номеру","Госуслуги (пилот)","test sms","LoadTestClient2","openvpn-test-tele2","kyc_validation","Витрина партнёра","Смарт-ТВ приложение","Колл-центр","Интеграция CRM","Терминал самообслуживания","Партнёрский API","1abcdefgqweqweqweqweqwww","no_validation"];
     const MAP = {а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"c",ч:"ch",ш:"sh",щ:"sch",ы:"y",э:"e",ю:"yu",я:"ya",ъ:"",ь:""};
     function pad(n) { return String(n).padStart(2, "0"); }
+    function panelColCount(panel) {
+      if (window.matchMedia("(min-width: 1200px)").matches && panel.dataset.panel === "userinfo") return 3;
+      if (window.matchMedia("(min-width: 900px)").matches) return 2;
+      return 1;
+    }
+    function unwrapPanel(panel) {
+      panel.querySelectorAll(".panel-cols").forEach((wrap) => {
+        const cols = [...wrap.querySelectorAll(".panel-col")];
+        const max = Math.max(0, ...cols.map((col) => col.childElementCount));
+        for (let i = 0; i < max; i += 1) {
+          cols.forEach((col) => {
+            if (col.firstElementChild) wrap.parentNode.insertBefore(col.firstElementChild, wrap);
+          });
+        }
+        wrap.remove();
+      });
+    }
+    function layoutPanel(panel) {
+      unwrapPanel(panel);
+      const cols = panelColCount(panel);
+      if (cols === 1) return;
+
+      const items = [...panel.children];
+      const frag = document.createDocumentFragment();
+      let bucket = null;
+      let idx = 0;
+
+      const flush = () => {
+        if (!bucket) return;
+        const wrap = document.createElement("div");
+        wrap.className = "panel-cols";
+        bucket.forEach((col) => wrap.appendChild(col));
+        frag.appendChild(wrap);
+        bucket = null;
+        idx = 0;
+      };
+
+      items.forEach((child) => {
+        if (child.matches(".card") && !child.classList.contains("card-wide")) {
+          if (!bucket) {
+            bucket = Array.from({ length: cols }, () => {
+              const col = document.createElement("div");
+              col.className = "panel-col";
+              return col;
+            });
+          }
+          bucket[idx % cols].appendChild(child);
+          idx += 1;
+        } else {
+          flush();
+          frag.appendChild(child);
+        }
+      });
+      flush();
+
+      panel.textContent = "";
+      while (frag.firstChild) panel.appendChild(frag.firstChild);
+    }
+    let panelLayoutTimer = 0;
+    function layoutAllPanels() {
+      document.querySelectorAll("body.is-ia [data-panel]").forEach(layoutPanel);
+    }
+    function schedulePanelLayout() {
+      clearTimeout(panelLayoutTimer);
+      panelLayoutTimer = setTimeout(layoutAllPanels, 120);
+    }
     function slug(s) {
       let out = "";
       for (const ch of s.toLowerCase()) out += MAP[ch] ?? ch;
@@ -2611,6 +2676,7 @@
       if (!btn) return;
       document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("active", b === btn));
       document.querySelectorAll("[data-panel]").forEach((p) => { p.hidden = p.dataset.panel !== btn.dataset.tab; });
+      schedulePanelLayout();
     });
 
     const saveBtn = document.getElementById("saveBtn");
@@ -3098,6 +3164,9 @@
       hint.textContent = "Неверный формат поля";
       document.getElementById("tabKeys").classList.add("has-error");
     };
+
+    layoutAllPanels();
+    window.addEventListener("resize", schedulePanelLayout);
   </script>
 </body>
 </html>
